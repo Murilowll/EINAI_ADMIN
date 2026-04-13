@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einai CRM</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- TELA DE LOGIN -->
+    <div id="login-view" class="view active login-bg">
+        <div class="login-box card">
+            <div class="login-header">
+                <h1>Einai</h1>
+                <p class="text-muted">Acesso ao Painel Administrativo</p>
+            </div>
+            <div id="login-error" class="alert hidden">Credenciais inválidas.</div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="username" placeholder="admin@einai.com" required>
+                </div>
+                <div class="form-group" style="position: relative;">
+                    <label>Senha</label>
+                    <input type="password" id="password" required style="padding-right: 2.5rem;">
+                    <button type="button" id="toggle-password" class="btn-icon toggle-password-btn" tabindex="-1" title="Mostrar senha">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" style="margin-top: 0.5rem; padding: 0.875rem; font-size: 1rem;">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TELA DE CARREGAMENTO -->
+    <div id="loading-view" class="view hidden flex-center" style="flex-direction: column; gap: 1rem;">
+        <div class="spinner"></div>
+        <p class="text-muted">Carregando seus dados...</p>
+    </div>
+
+    <!-- LAYOUT PRINCIPAL (APP) -->
+    <div id="app-view" class="view hidden">
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+        
+        <aside class="sidebar">
+            <h2 class="text-primary sidebar-title">Einai CRM</h2>
+            <nav class="sidebar-nav">
+                <a href="#" data-target="dashboard-section" class="nav-item active">Dashboard</a>
+                <a href="#" data-target="clientes-section" class="nav-item">Clientes</a>
+                <a href="#" data-target="turmas-section" class="nav-item">Turmas</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" id="btn-logout" class="nav-item text-danger">Sair</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <button id="mobile-menu-btn" class="btn btn-outline mobile-menu-btn" style="margin-bottom: 1.5rem;">☰ Menu</button>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="header-between">
+                    <h1>Visão Geral</h1>
+                    <p class="text-muted" id="dash-date"></p>
+                </div>
+                <div class="grid-cards">
+                    <div class="card summary-card">
+                        <p class="text-muted">Total de Clientes</p>
+                        <h2 id="dash-total-clients">0</h2>
+                    </div>
+                    <div class="card summary-card">
+                        <p class="text-muted">Turmas Ativas</p>
+                        <h2 id="dash-total-classes">0</h2>
+                    </div>
+                    <div class="card summary-card">
+                        <p class="text-muted">Alunos Matriculados</p>
+                        <h2 id="dash-active-students">0</h2>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid mt-4">
+                    <div class="card">
+                        <h3 class="card-title">Crescimento de Clientes</h3>
+                        <div class="chart-container">
+                            <canvas id="clientsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Acesso Rápido</h3>
+                        <div class="shortcuts-list">
+                            <button class="shortcut-btn" onclick="openNewClientModal()">
+                                <span>👤</span> Novo Cliente
+                            </button>
+                            <button class="shortcut-btn" onclick="openNewClassModal()">
+                                <span>🎓</span> Nova Turma
+                            </button>
+                            <button class="shortcut-btn" onclick="document.querySelector('[data-target=\'clientes-section\']').click()">
+                                <span>🔍</span> Buscar Cliente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CLIENTES -->
+            <section id="clientes-section" class="content-section">
+                <div class="header-between">
+                    <h1>Gestão de Clientes</h1>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button id="btn-new-client" class="btn btn-primary" onclick="openNewClientModal()">+ Novo Cliente</button>
+                        <button id="btn-export-selected" class="btn btn-outline hidden">Exportar Selecionados</button>
+                        <button id="btn-export-clients" class="btn btn-outline">Exportar Tudo (CSV)</button>
+                    </div>
+                </div>
+                <div class="card table-container">
+                    <div class="search-bar" style="display: flex; gap: 1rem;">
+                        <input type="text" id="search-client" placeholder="Buscar por nome ou e-mail..." style="flex: 1;">
+                        <select id="filter-class" style="width: auto; min-width: 150px; cursor: pointer;">
+                            <option value="">Todas as Turmas</option>
+                            <option value="unassigned">Sem Turma</option>
+                        </select>
+                        <select id="filter-tag" style="width: auto; min-width: 150px; cursor: pointer;">
+                            <option value="">Todas as Tags</option>
+                        </select>
+                        <select id="sort-client" style="width: auto; min-width: 150px; cursor: pointer;">
+                            <option value="newest">Mais Recentes</option>
+                            <option value="oldest">Mais Antigos</option>
+                            <option value="az">A-Z</option>
+                        </select>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;"><input type="checkbox" id="select-all-clients" style="cursor: pointer; width: 1.1rem; height: 1.1rem;"></th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Telefone</th>
+                                <th>Tags</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-tbody">
+                            <!-- Renderizado via JS -->
+                        </tbody>
+                    </table>
+                    <div id="pagination-container" class="pagination"></div>
+                </div>
+            </section>
+
+            <!-- TURMAS (DRAG & DROP) -->
+            <section id="turmas-section" class="content-section">
+                <div class="header-between">
+                    <h1>Gestão de Turmas</h1>
+                    <button class="btn btn-primary" onclick="openNewClassModal()">+ Nova Turma</button>
+                </div>
+                <div class="search-bar" style="margin-bottom: 1rem; border-radius: 0.5rem; border: 1px solid var(--border-color); background: white;">
+                    <input type="text" id="search-class" placeholder="Buscar turma por nome..." style="border: none; box-shadow: none;">
+                </div>
+                <div id="classes-accordion" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Renderizado via JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL DE PERFIL DO CLIENTE -->
+    <div id="client-modal" class="modal-overlay hidden">
+        <div class="modal card">
+            <div class="modal-header">
+                <h2 id="modal-client-name">Perfil</h2>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="btn-edit-client" class="btn btn-outline" onclick="openEditClientModal()" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Editar</button>
+                    <button id="btn-delete-client" class="btn" onclick="deleteClient()" style="padding: 0.25rem 0.75rem; font-size: 0.875rem; background: #fee2e2; color: var(--danger);">Excluir</button>
+                    <button id="close-modal" class="btn-icon">&times;</button>
+                </div>
+            </div>
+            <div id="modal-body" class="modal-body grid-2">
+                <!-- Renderizado via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVO CLIENTE -->
+    <div id="new-client-modal" class="modal-overlay hidden">
+        <div class="modal card">
+            <div class="modal-header">
+                <h2 id="form-client-title">Novo Cliente</h2>
+                <button id="close-new-client-modal" class="btn-icon" onclick="closeNewClientModal()">&times;</button>
+            </div>
+            <form id="new-client-form" class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" id="nc-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" id="nc-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF</label>
+                        <input type="text" id="nc-cpf" placeholder="000.000.000-00" maxlength="14" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone (WhatsApp)</label>
+                        <input type="text" id="nc-phone" placeholder="(00) 00000-0000" maxlength="15" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Empresa</label>
+                        <input type="text" id="nc-company">
+                    </div>
+                    <div class="form-group">
+                        <label>Cargo</label>
+                        <input type="text" id="nc-role">
+                    </div>
+                    <div class="form-group">
+                        <label>Turma</label>
+                        <select id="nc-class">
+                            <option value="unassigned">Sem Turma</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-span-2">
+                        <label>Endereço Completo</label>
+                        <input type="text" id="nc-address" placeholder="Rua, Número, Bairro, Cidade - Estado">
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" id="btn-submit-client" class="btn btn-primary w-100">Cadastrar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL NOVA/EDITAR TURMA -->
+    <div id="class-modal" class="modal-overlay hidden">
+        <div class="modal card">
+            <div class="modal-header">
+                <h2 id="form-class-title">Nova Turma</h2>
+                <button class="btn-icon" onclick="closeClassModal()">&times;</button>
+            </div>
+            <form id="class-form" class="modal-body">
+                <div class="form-group">
+                    <label>Nome da Turma</label>
+                    <input type="text" id="class-name" required>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" id="btn-submit-class" class="btn btn-primary w-100">Salvar Turma</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
