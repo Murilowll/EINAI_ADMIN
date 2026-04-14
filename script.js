@@ -167,6 +167,37 @@ window.showToast = function(message, type = 'success') {
     }, 3500);
 };
 
+// --- MODAL DE CONFIRMAÇÃO ---
+let confirmActionCallback = null;
+
+window.openConfirmModal = function(title, message, onConfirm) {
+    document.getElementById('confirm-title').innerText = title;
+    document.getElementById('confirm-message').innerText = message;
+    confirmActionCallback = onConfirm;
+    document.getElementById('confirm-modal').classList.remove('hidden');
+};
+
+window.closeConfirmModal = function() {
+    document.getElementById('confirm-modal').classList.add('hidden');
+    confirmActionCallback = null;
+};
+
+document.getElementById('btn-confirm-action')?.addEventListener('click', async () => {
+    if (confirmActionCallback) {
+        const btn = document.getElementById('btn-confirm-action');
+        const originalText = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = 'Aguarde...';
+        try {
+            await confirmActionCallback();
+        } finally {
+            btn.disabled = false;
+            btn.innerText = originalText;
+            window.closeConfirmModal();
+        }
+    }
+});
+
 // --- FUNÇÃO PARA COPIAR TEXTO ---
 window.copyToClipboard = async function(text) {
     try {
@@ -569,21 +600,24 @@ window.removeTag = async function(tag) {
     window.openClientModal(client.id);
 };
 
-window.deleteClient = async function() {
+window.deleteClient = function() {
     if (!state.selectedClientId) return;
     
-    const confirmDelete = confirm("Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.");
-    if (confirmDelete) {
-        try {
-            await deleteDoc(doc(db, "clients", state.selectedClientId));
-            document.getElementById('client-modal').classList.add('hidden');
-            state.selectedClientId = null;
-            window.showToast("Cliente excluído com sucesso!", "success");
-        } catch (error) {
-            console.error("Erro ao deletar cliente:", error);
-            window.showToast("Erro ao excluir o cliente.", "error");
+    window.openConfirmModal(
+        "Excluir Cliente",
+        "Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.",
+        async () => {
+            try {
+                await deleteDoc(doc(db, "clients", state.selectedClientId));
+                document.getElementById('client-modal').classList.add('hidden');
+                state.selectedClientId = null;
+                window.showToast("Cliente excluído com sucesso!", "success");
+            } catch (error) {
+                console.error("Erro ao deletar cliente:", error);
+                window.showToast("Erro ao excluir o cliente.", "error");
+            }
         }
-    }
+    );
 };
 
 document.getElementById('close-modal').addEventListener('click', () => {
@@ -652,6 +686,7 @@ function renderClassesList() {
         const actionsHtml = isUnassigned ? 
             `<button class="btn btn-outline" onclick="exportCSV('${cls.id}', '${cls.name}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Exportar</button>` :
             `
+            <button class="btn btn-outline" onclick="openAddClientsToClassModal('${cls.id}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--primary-color); border-color: var(--primary-color);">+ Alunos</button>
             <button class="btn btn-outline" onclick="openEditClassModal('${cls.id}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Editar</button>
             <button class="btn btn-outline text-danger" onclick="deleteClass('${cls.id}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-color: #fca5a5;">Excluir</button>
             <button class="btn btn-outline" onclick="exportCSV('${cls.id}', '${cls.name}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Exportar</button>
@@ -673,6 +708,7 @@ function renderClassesList() {
                     const cName = c.name || 'Sem Nome';
                     const inits = window.getInitials(cName);
                     const bg = window.getAvatarColor(cName);
+                    const removeBtnHtml = isUnassigned ? '' : `<button class="btn-icon" onclick="removeClientFromClass('${c.id}', '${cls.name.replace(/'/g, "\\'")}'); event.stopPropagation();" title="Remover da turma" style="color: var(--danger); font-size: 1.5rem; margin-left: 0.5rem; line-height: 1;">&times;</button>`;
                     return `
                     <div class="client-list-item" style="cursor: pointer;" onclick="window.openClientModal('${c.id}')">
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -682,7 +718,10 @@ function renderClassesList() {
                                 <span class="text-muted" style="font-size: 0.8rem;">${c.email}</span>
                             </div>
                         </div>
-                        <div>${(c.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                        <div style="display: flex; align-items: center;">
+                            <div>${(c.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                            ${removeBtnHtml}
+                        </div>
                     </div>
                 `}).join('')}
             </div>
@@ -742,21 +781,40 @@ document.getElementById('class-form')?.addEventListener('submit', async (e) => {
     }
 });
 
-window.deleteClass = async function(id) {
-    const confirmDelete = confirm("Tem certeza que deseja excluir esta turma? Os alunos nela ficarão 'Sem Turma'.");
-    if (confirmDelete) {
-        try {
-            await deleteDoc(doc(db, "classes", id));
-            const classClients = state.clients.filter(c => c.classId === id);
-            for (const c of classClients) {
-                await updateDoc(doc(db, "clients", c.id), { classId: 'unassigned' });
+window.deleteClass = function(id) {
+    window.openConfirmModal(
+        "Excluir Turma",
+        "Tem certeza que deseja excluir esta turma? Os alunos nela ficarão 'Sem Turma'.",
+        async () => {
+            try {
+                await deleteDoc(doc(db, "classes", id));
+                const classClients = state.clients.filter(c => c.classId === id);
+                for (const c of classClients) {
+                    await updateDoc(doc(db, "clients", c.id), { classId: 'unassigned' });
+                }
+                window.showToast("Turma excluída com sucesso!", "success");
+            } catch (error) {
+                console.error("Erro ao deletar turma:", error);
+                window.showToast("Erro ao excluir turma.", "error");
             }
-            window.showToast("Turma excluída com sucesso!", "success");
-        } catch (error) {
-            console.error("Erro ao deletar turma:", error);
-            window.showToast("Erro ao excluir turma.", "error");
         }
-    }
+    );
+};
+
+window.removeClientFromClass = function(clientId, className) {
+    window.openConfirmModal(
+        "Remover da Turma",
+        `Deseja remover este aluno da turma "${className}"? Ele ficará 'Sem Turma'.`,
+        async () => {
+            try {
+                await updateDoc(doc(db, "clients", clientId), { classId: 'unassigned' });
+                window.showToast("Aluno removido da turma.", "success");
+            } catch (error) {
+                console.error("Erro ao remover aluno da turma:", error);
+                window.showToast("Erro ao remover aluno.", "error");
+            }
+        }
+    );
 };
 
 // --- EXPORTAÇÃO CSV GLOBAL ---
@@ -852,3 +910,118 @@ function updateGrowthChart() {
         });
     }
 }
+
+// --- ADICIONAR ALUNOS À TURMA ---
+let currentAddingClassId = null;
+let selectedClientsToAdd = new Set();
+
+window.openAddClientsToClassModal = function(classId) {
+    currentAddingClassId = classId;
+    selectedClientsToAdd.clear();
+    const cls = state.classes.find(c => c.id === classId);
+    if (!cls) return;
+    
+    document.getElementById('add-clients-modal-title').innerText = `Adicionar Alunos: ${cls.name}`;
+    document.getElementById('search-client-for-class').value = '';
+    
+    renderClientsToAddList();
+    
+    document.getElementById('add-clients-to-class-modal').classList.remove('hidden');
+};
+
+window.closeAddClientsToClassModal = function() {
+    document.getElementById('add-clients-to-class-modal').classList.add('hidden');
+    currentAddingClassId = null;
+};
+
+function renderClientsToAddList() {
+    const listContainer = document.getElementById('add-clients-list');
+    const searchTerm = (document.getElementById('search-client-for-class')?.value || '').toLowerCase();
+    
+    listContainer.innerHTML = '';
+    
+    // Mostra clientes que NÃO estão nesta turma
+    const availableClients = state.clients.filter(c => c.classId !== currentAddingClassId && (c.name || '').toLowerCase().includes(searchTerm));
+    
+    if (availableClients.length === 0) {
+        listContainer.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--text-muted);">Nenhum aluno encontrado ou todos já estão nesta turma.</div>';
+        return;
+    }
+    
+    availableClients.forEach(c => {
+        const item = document.createElement('label');
+        item.style.display = 'flex';
+        item.style.alignItems = 'center';
+        item.style.gap = '1rem';
+        item.style.padding = '0.75rem 1rem';
+        item.style.borderBottom = '1px solid var(--border-color)';
+        item.style.cursor = 'pointer';
+        item.style.transition = 'background 0.2s';
+        
+        item.onmouseover = () => item.style.backgroundColor = '#f9fafb';
+        item.onmouseout = () => item.style.backgroundColor = 'transparent';
+        
+        const isChecked = selectedClientsToAdd.has(c.id);
+        
+        // Se o cliente já está em outra turma, mostra um aviso
+        let currentClassTag = '';
+        if (c.classId && c.classId !== 'unassigned') {
+            const currentClass = state.classes.find(cls => cls.id === c.classId);
+            if (currentClass) {
+                currentClassTag = `<span class="tag" style="background-color: #fee2e2; color: #ef4444; margin-left: auto;">Já está em: ${currentClass.name}</span>`;
+            }
+        }
+        
+        item.innerHTML = `
+            <input type="checkbox" value="${c.id}" class="add-client-cb" style="width: 1.2rem; height: 1.2rem; cursor: pointer; flex-shrink: 0;" ${isChecked ? 'checked' : ''}>
+            <div style="display: flex; align-items: center; width: 100%;">
+                <div>
+                    <div style="font-weight: 500; color: var(--text-main);">${c.name || 'Sem Nome'}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">${c.email || '-'}</div>
+                </div>
+                ${currentClassTag}
+            </div>
+        `;
+        
+        const cb = item.querySelector('.add-client-cb');
+        cb.addEventListener('change', (e) => {
+            if (e.target.checked) selectedClientsToAdd.add(c.id);
+            else selectedClientsToAdd.delete(c.id);
+        });
+        
+        listContainer.appendChild(item);
+    });
+}
+
+document.getElementById('search-client-for-class')?.addEventListener('input', renderClientsToAddList);
+
+document.getElementById('btn-save-clients-to-class')?.addEventListener('click', async () => {
+    if (!currentAddingClassId) return;
+    if (selectedClientsToAdd.size === 0) {
+        window.showToast("Nenhum aluno selecionado.", "error");
+        return;
+    }
+    
+    const btn = document.getElementById('btn-save-clients-to-class');
+    const originalText = btn.innerText;
+    btn.disabled = true;
+    btn.innerText = 'Salvando...';
+    
+    try {
+        const batch = writeBatch(db);
+        selectedClientsToAdd.forEach(clientId => {
+            const clientRef = doc(db, "clients", clientId);
+            batch.update(clientRef, { classId: currentAddingClassId });
+        });
+        
+        await batch.commit();
+        window.showToast(`${selectedClientsToAdd.size} aluno(s) adicionado(s) à turma!`, "success");
+        window.closeAddClientsToClassModal();
+    } catch (error) {
+        console.error("Erro ao adicionar alunos à turma:", error);
+        window.showToast("Erro ao adicionar alunos.", "error");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = originalText;
+    }
+});
