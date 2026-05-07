@@ -19,8 +19,12 @@ const db = getFirestore(app);
 const state = {
     clients: [],
     classes: [],
+    deals: [], // Negócios do CRM
+    pipelines: [], // Funis/Quadros Kanban
+    currentPipelineId: null,
     selectedClientId: null,
     editingClientId: null,
+    editingDealId: null,
     selectedForExport: new Set()
 };
 
@@ -28,9 +32,11 @@ const state = {
 let initialLoadComplete = false;
 let classesLoaded = false;
 let clientsLoaded = false;
+let dealsLoaded = false;
+let pipelinesLoaded = false;
 
 function checkInitialLoad() {
-    if (!initialLoadComplete && classesLoaded && clientsLoaded) {
+    if (!initialLoadComplete && classesLoaded && clientsLoaded && dealsLoaded && pipelinesLoaded) {
         initialLoadComplete = true;
         document.getElementById('loading-view').classList.add('hidden');
         document.getElementById('app-view').classList.remove('hidden');
@@ -59,9 +65,22 @@ async function seedDatabaseIfNeeded() {
             { id: 't1', name: 'Introdução à PNL 55' },
             { id: 't2', name: 'Master em Inteligência Emocional' }
         ];
+        const defaultPipelines = [
+            { id: 'p1', name: 'Introdução à PNL' },
+            { id: 'p2', name: 'Treinamento SER' }
+        ];
+        
+        const defaultDeals = [
+            { id: 'd1', title: 'Consultoria In Company - Tech Inc', contactName: 'Ana Silva', value: '5000', crmTags: ['Quente', 'B2B'], stage: 'proposal', pipelineId: 'p1', createdAt: m4 },
+            { id: 'd2', title: 'Mentoria Individual', contactName: 'Carlos Eduardo', value: '1500', crmTags: ['Prioridade Alta'], stage: 'contact', pipelineId: 'p1', createdAt: m3 },
+            { id: 'd3', title: 'Inscrição Master - Turma 3', contactName: 'João Pedro', value: '2500', crmTags: ['Indicação'], stage: 'lead', pipelineId: 'p2', createdAt: m4 }
+        ];
+
         const batch = writeBatch(db);
         defaultClients.forEach(c => batch.set(doc(db, "clients", c.id), c));
         defaultClasses.forEach(c => batch.set(doc(db, "classes", c.id), c));
+        defaultPipelines.forEach(p => batch.set(doc(db, "pipelines", p.id), p));
+        defaultDeals.forEach(d => batch.set(doc(db, "deals", d.id), d));
         await batch.commit();
     }
 }
@@ -86,6 +105,32 @@ function setupRealtimeListeners() {
         if(document.getElementById('turmas-section').classList.contains('active')) renderClassesList();
         checkInitialLoad();
     }, (error) => console.error("Erro Realtime Clientes:", error));
+    
+    onSnapshot(collection(db, "deals"), (snapshot) => {
+        state.deals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        dealsLoaded = true;
+        if(document.getElementById('crm-section').classList.contains('active')) renderKanban();
+        checkInitialLoad();
+    }, (error) => console.error("Erro Realtime CRM:", error));
+
+    onSnapshot(collection(db, "pipelines"), async (snapshot) => {
+        if (snapshot.empty && state.deals.length > 0) {
+            // Migração segura para quem já tem CRM rodando
+            const batch = writeBatch(db);
+            batch.set(doc(db, "pipelines", "p1"), { name: 'Introdução à PNL' });
+            batch.set(doc(db, "pipelines", "p2"), { name: 'Treinamento SER' });
+            await batch.commit();
+            return;
+        }
+        state.pipelines = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        if (!state.currentPipelineId && state.pipelines.length > 0) {
+            state.currentPipelineId = state.pipelines[0].id;
+        }
+        pipelinesLoaded = true;
+        window.updatePipelineSelector();
+        if(document.getElementById('crm-section').classList.contains('active')) renderKanban();
+        checkInitialLoad();
+    }, (error) => console.error("Erro Realtime Pipelines:", error));
 }
 
 // --- SISTEMA DE AUTENTICAÇÃO E NAVEGAÇÃO ---
@@ -112,6 +157,8 @@ onAuthStateChanged(auth, async (user) => {
         initialLoadComplete = false;
         classesLoaded = false;
         clientsLoaded = false;
+        dealsLoaded = false;
+        pipelinesLoaded = false;
     }
 });
 
@@ -199,10 +246,10 @@ document.getElementById('btn-confirm-action')?.addEventListener('click', async (
 });
 
 // --- FUNÇÃO PARA COPIAR TEXTO ---
-window.copyToClipboard = async function(text) {
+window.copyToClipboard = async function(text, successMsg = "Copiado com sucesso!") {
     try {
         await navigator.clipboard.writeText(text);
-        window.showToast("E-mail copiado com sucesso!", "success");
+        window.showToast(successMsg, "success");
     } catch (err) {
         console.error("Erro ao copiar:", err);
         window.showToast("Erro ao copiar o texto.", "error");
@@ -226,6 +273,7 @@ document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
         if(targetId === 'dashboard-section') updateDashboard();
         if(targetId === 'clientes-section') renderClients();
         if(targetId === 'turmas-section') renderClassesList();
+        if(targetId === 'crm-section') renderKanban();
 
         // Fecha a sidebar no celular ao clicar em um link
         if (window.innerWidth <= 768) {
@@ -274,6 +322,33 @@ window.getAvatarColor = function(name) {
         hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
     return colors[Math.abs(hash) % colors.length];
+};
+
+// --- UTILITÁRIO PARA TAGS (COR EXCLUSIVA) ---
+window.renderTagHtml = function(tagName, removable = false) {
+    let style = '';
+    if (tagName === 'Inscrição Site') {
+        style = 'background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;'; // Azul destacado
+    }
+    const removeHtml = removable ? ` <span class="tag-remove" onclick="removeTag('${tagName}')">&times;</span>` : '';
+    return `<span class="tag" style="${style}">${tagName}${removeHtml}</span>`;
+};
+
+// --- UTILITÁRIO PARA CALCULAR IDADE ---
+window.calculateAge = function(birthDateString) {
+    if (!birthDateString || birthDateString.length !== 10) return null;
+    const [day, month, year] = birthDateString.split('/');
+    if (!day || !month || !year) return null;
+    
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
 };
 
 // --- GESTÃO DE CLIENTES ---
@@ -338,7 +413,7 @@ function renderClients() {
             </td>
             <td>${client.email || '-'}</td>
             <td>${client.phone || '-'}</td>
-            <td>${classTagHtml}${tags.map(t => `<span class="tag">${t}</span>`).join('')}</td>
+            <td>${classTagHtml}${tags.map(t => window.renderTagHtml(t)).join('')}</td>
         `;
         tr.addEventListener('click', () => window.openClientModal(client.id));
         tbody.appendChild(tr);
@@ -461,6 +536,14 @@ document.getElementById('nc-phone').addEventListener('input', function (e) {
     e.target.value = v.substring(0, 15); // Limita a 15 caracteres
 });
 
+document.getElementById('nc-birthdate')?.addEventListener('input', function (e) {
+    let v = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
+    if (v.length > 8) v = v.slice(0,8);
+    v = v.replace(/(\d{2})(\d)/, "$1/$2"); 
+    v = v.replace(/(\d{2})(\d)/, "$1/$2"); 
+    e.target.value = v;
+});
+
 // --- CADASTRAR NOVO CLIENTE ---
 window.openNewClientModal = function() {
     state.editingClientId = null;
@@ -486,6 +569,7 @@ window.openEditClientModal = function() {
     document.getElementById('nc-name').value = client.name || '';
     document.getElementById('nc-email').value = client.email || '';
     document.getElementById('nc-cpf').value = client.cpf || '';
+    document.getElementById('nc-birthdate').value = client.birthDate || '';
     document.getElementById('nc-phone').value = client.phone || '';
     document.getElementById('nc-company').value = client.company || '';
     document.getElementById('nc-role').value = client.role || '';
@@ -508,6 +592,7 @@ document.getElementById('new-client-form').addEventListener('submit', async (e) 
         name: document.getElementById('nc-name').value,
         email: document.getElementById('nc-email').value,
         cpf: document.getElementById('nc-cpf').value,
+        birthDate: document.getElementById('nc-birthdate').value,
         phone: document.getElementById('nc-phone').value,
         company: document.getElementById('nc-company').value,
         role: document.getElementById('nc-role').value,
@@ -551,14 +636,23 @@ window.openClientModal = function(clientId) {
         ? `<a href="https://wa.me/55${cleanPhone}" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 500;" title="Abrir conversa no WhatsApp">${client.phone} ↗</a>` 
         : '-';
 
+    let ageText = '';
+    if (client.birthDate) {
+        const age = window.calculateAge(client.birthDate);
+        if (age !== null && !isNaN(age)) {
+            ageText = ` <span class="text-muted">(${age} anos)</span>`;
+        }
+    }
+
     const body = document.getElementById('modal-body');
     body.innerHTML = `
         <div>
             <p class="text-muted mb-2">DADOS PESSOAIS</p>
             <p><strong>CPF:</strong> ${client.cpf}</p>
+            <p><strong>Nascimento:</strong> ${client.birthDate ? client.birthDate + ageText : '-'}</p>
             <p style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
                 <strong>E-mail:</strong> <span style="word-break: break-all;">${client.email}</span>
-                ${client.email ? `<button class="btn btn-outline" onclick="window.copyToClipboard('${client.email}')" style="padding: 0.15rem 0.5rem; font-size: 0.7rem; border-radius: 0.25rem;">Copiar</button>` : ''}
+                ${client.email ? `<button class="btn btn-outline" onclick="window.copyToClipboard('${client.email}', 'E-mail copiado com sucesso!')" style="padding: 0.15rem 0.5rem; font-size: 0.7rem; border-radius: 0.25rem;">Copiar</button>` : ''}
             </p>
             <p><strong>Telefone:</strong> ${phoneHtml}</p>
             <p><strong>Empresa:</strong> ${client.company} - ${client.role}</p>
@@ -567,7 +661,7 @@ window.openClientModal = function(clientId) {
         <div>
             <p class="text-muted mb-2">TAGS</p>
             <div id="tags-container" style="margin-bottom: 0.5rem;">
-                ${client.tags.map(t => `<span class="tag">${t} <span class="tag-remove" onclick="removeTag('${t}')">&times;</span></span>`).join('')}
+                ${client.tags.map(t => window.renderTagHtml(t, true)).join('')}
             </div>
             <input type="text" id="new-tag-input" placeholder="Nova tag + Enter...">
         </div>
@@ -719,7 +813,7 @@ function renderClassesList() {
                             </div>
                         </div>
                         <div style="display: flex; align-items: center;">
-                            <div>${(c.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                            <div>${(c.tags || []).map(t => window.renderTagHtml(t)).join('')}</div>
                             ${removeBtnHtml}
                         </div>
                     </div>
@@ -1025,3 +1119,262 @@ document.getElementById('btn-save-clients-to-class')?.addEventListener('click', 
         btn.innerText = originalText;
     }
 });
+
+// --- CRM (KANBAN DE VENDAS) ---
+
+const CRM_STAGES = [
+    { id: 'lead', title: 'Novos Leads', color: '#3b82f6' },        // Azul
+    { id: 'contact', title: 'Em Contato', color: '#f59e0b' },     // Laranja
+    { id: 'proposal', title: 'Em Negociação', color: '#8b5cf6' }, // Roxo
+    { id: 'won', title: 'Pago', color: '#10b981' },               // Verde
+    { id: 'lost', title: 'Perdidos', color: '#ef4444' }           // Vermelho
+];
+
+window.renderKanban = function() {
+    const board = document.getElementById('kanban-board');
+    if (!board) return;
+    board.innerHTML = '';
+
+    CRM_STAGES.forEach(stage => {
+        const column = document.createElement('div');
+        column.className = 'kanban-column';
+        column.dataset.stage = stage.id;
+        
+        // Filtra os negócios pela Pipeline atual. Se vieram do site (sem pipelineId), caem na 1ª pipeline.
+        const stageDeals = state.deals.filter(d => d.stage === stage.id && (d.pipelineId === state.currentPipelineId || (!d.pipelineId && state.pipelines.length > 0 && state.currentPipelineId === state.pipelines[0].id)));
+        
+        column.innerHTML = `
+            <div class="kanban-column-header" style="border-bottom-color: ${stage.color}">
+                <span>${stage.title}</span>
+                <span class="tag" style="margin:0; background: #e2e8f0; color: var(--text-main);">${stageDeals.length}</span>
+            </div>
+            <div class="kanban-cards-container" data-stage="${stage.id}">
+                ${stageDeals.map(deal => `
+                    <div class="kanban-card" draggable="true" data-id="${deal.id}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
+                            <div class="kanban-card-title">${deal.title}</div>
+                            <button type="button" class="btn-icon" onclick="openDealDetails('${deal.id}')" title="Ver Detalhes" style="font-size: 1rem; color: var(--text-muted); padding: 0; margin-top: -2px;">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            </button>
+                        </div>
+                        <div class="kanban-card-value">${deal.value ? 'R$ ' + parseFloat(deal.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '--'}</div>
+                        ${deal.crmTags && deal.crmTags.length > 0 ? `
+                            <div style="display: flex; gap: 0.25rem; flex-wrap: wrap;">
+                                ${deal.crmTags.map(t => `<span class="crm-tag">${t}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="kanban-card-contact">
+                            <div class="avatar" style="background-color: ${window.getAvatarColor(deal.contactName)}; width: 20px; height: 20px; font-size: 0.55rem;">${window.getInitials(deal.contactName)}</div>
+                            <span>${deal.contactName || 'Sem Contato'}</span>
+                        </div>
+                        ${deal.stage === 'won' ? `
+                            <button type="button" class="btn btn-outline w-100" onclick="exportarCarta('${deal.id}')" style="margin-top: 0.5rem; padding: 0.35rem; font-size: 0.75rem; border-color: #10b981; color: #10b981;">📄 Exportar Carta</button>
+                        ` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        board.appendChild(column);
+    });
+
+    // Configuração do Drag and Drop
+    const cards = board.querySelectorAll('.kanban-card');
+    const containers = board.querySelectorAll('.kanban-cards-container');
+
+    cards.forEach(card => {
+        card.addEventListener('dragstart', () => {
+            card.classList.add('dragging');
+        });
+        card.addEventListener('dragend', () => {
+            card.classList.remove('dragging');
+        });
+    });
+
+    containers.forEach(container => {
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            container.parentElement.classList.add('drag-over');
+        });
+        container.addEventListener('dragleave', () => {
+            container.parentElement.classList.remove('drag-over');
+        });
+        container.addEventListener('drop', async e => {
+            e.preventDefault();
+            container.parentElement.classList.remove('drag-over');
+            
+            const draggingCard = board.querySelector('.dragging');
+            if (draggingCard) {
+                const dealId = draggingCard.dataset.id;
+                const newStage = container.dataset.stage;
+                const deal = state.deals.find(d => d.id === dealId);
+                
+                if (deal && deal.stage !== newStage) {
+                    // Movemos localmente para feedback visual imediato
+                    container.appendChild(draggingCard);
+                    
+                    // Atualizamos no Firestore
+                    try {
+                        await updateDoc(doc(db, "deals", dealId), { stage: newStage });
+                    } catch(err) {
+                        console.error("Erro ao mover negócio", err);
+                        window.showToast("Erro ao atualizar o funil", "error");
+                        renderKanban(); // Reverte caso falhe
+                    }
+                }
+            }
+        });
+    });
+};
+
+window.copySubscriptionLink = function() {
+    const url = window.location.origin + window.location.pathname.replace('index.html', '') + 'inscricao.html';
+    window.copyToClipboard(url, "Link de inscrição copiado com sucesso!");
+};
+
+window.exportarCarta = function(dealId) {
+    // Função temporária até implementarmos a lógica da carta
+    window.showToast("A funcionalidade 'Exportar Carta' será implementada em breve!", "success");
+};
+
+window.updatePipelineSelector = function() {
+    const select = document.getElementById('pipeline-selector');
+    if (!select) return;
+    select.innerHTML = '';
+    state.pipelines.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name;
+        select.appendChild(opt);
+    });
+    if (state.currentPipelineId) select.value = state.currentPipelineId;
+};
+
+document.getElementById('pipeline-selector')?.addEventListener('change', (e) => {
+    state.currentPipelineId = e.target.value;
+    renderKanban();
+});
+
+window.openNewPipelineModal = function() {
+    document.getElementById('new-pipeline-form').reset();
+    document.getElementById('new-pipeline-modal').classList.remove('hidden');
+};
+window.closeNewPipelineModal = function() {
+    document.getElementById('new-pipeline-modal').classList.add('hidden');
+};
+document.getElementById('new-pipeline-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('np-name').value;
+    const docRef = await addDoc(collection(db, "pipelines"), { name });
+    state.currentPipelineId = docRef.id; // Troca direto pro funil novo
+    window.closeNewPipelineModal();
+    window.showToast("Kanban criado com sucesso!", "success");
+});
+
+window.openDealDetails = function(dealId) {
+    state.editingDealId = dealId;
+    const deal = state.deals.find(d => d.id === dealId);
+    if (!deal) return;
+    
+    document.getElementById('form-deal-title').innerText = 'Detalhes da Oportunidade';
+    document.getElementById('btn-submit-deal').innerText = 'Salvar Alterações';
+    document.getElementById('btn-delete-deal').classList.remove('hidden');
+    
+    document.getElementById('nd-title').value = deal.title || '';
+    document.getElementById('nd-contact').value = deal.contactName || '';
+    document.getElementById('nd-value').value = deal.value || '';
+    document.getElementById('nd-tags').value = (deal.crmTags || []).join(', ');
+    
+    const pipelineSelect = document.getElementById('nd-pipeline');
+    pipelineSelect.innerHTML = '';
+    state.pipelines.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name;
+        pipelineSelect.appendChild(opt);
+    });
+    pipelineSelect.value = deal.pipelineId || (state.pipelines.length > 0 ? state.pipelines[0].id : '');
+    
+    const classSelect = document.getElementById('nd-class');
+    classSelect.innerHTML = '<option value="unassigned">Não matricular ainda</option>';
+    state.classes.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        classSelect.appendChild(opt);
+    });
+    
+    const client = state.clients.find(c => c.email === deal.email || c.name === deal.contactName);
+    if (client && client.classId) {
+        classSelect.value = client.classId;
+    } else {
+        classSelect.value = 'unassigned';
+    }
+    
+    document.getElementById('new-deal-modal').classList.remove('hidden');
+};
+
+window.closeNewDealModal = function() {
+    document.getElementById('new-deal-modal').classList.add('hidden');
+};
+
+document.getElementById('new-deal-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btnSubmit = document.getElementById('btn-submit-deal');
+    const originalText = btnSubmit.innerText;
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = 'Salvando...';
+
+    const rawTags = document.getElementById('nd-tags').value;
+    const crmTags = rawTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
+    const selectedClass = document.getElementById('nd-class').value;
+    const selectedPipeline = document.getElementById('nd-pipeline').value;
+
+    const dealData = {
+        title: document.getElementById('nd-title').value,
+        contactName: document.getElementById('nd-contact').value,
+        value: document.getElementById('nd-value').value || 0,
+        crmTags: crmTags,
+        pipelineId: selectedPipeline
+    };
+
+    try {
+        if (state.editingDealId) {
+            const deal = state.deals.find(d => d.id === state.editingDealId);
+            if (selectedClass !== 'unassigned') {
+                dealData.stage = 'won'; // Se matriculou, ganha a oportunidade automaticamente no funil
+                const client = state.clients.find(c => c.email === deal.email || c.name === deal.contactName);
+                if (client && client.classId !== selectedClass) {
+                    await updateDoc(doc(db, "clients", client.id), { classId: selectedClass });
+                }
+            }
+            await updateDoc(doc(db, "deals", state.editingDealId), dealData);
+            window.showToast("Oportunidade atualizada!", "success");
+        }
+        window.closeNewDealModal();
+    } catch (error) {
+        console.error("Erro ao salvar oportunidade:", error);
+        window.showToast("Erro ao salvar oportunidade.", "error");
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = originalText;
+    }
+});
+
+window.deleteDeal = function() {
+    if (!state.editingDealId) return;
+    
+    window.openConfirmModal(
+        "Excluir Negócio",
+        "Tem certeza que deseja excluir esta oportunidade? Esta ação não pode ser desfeita.",
+        async () => {
+            try {
+                await deleteDoc(doc(db, "deals", state.editingDealId));
+                window.closeNewDealModal();
+                window.showToast("Negócio excluído com sucesso!", "success");
+            } catch (error) {
+                console.error("Erro ao deletar negócio:", error);
+                window.showToast("Erro ao excluir negócio.", "error");
+            }
+        }
+    );
+};

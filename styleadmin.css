@@ -119,6 +119,25 @@ textarea { resize: vertical; min-height: 80px; }
 .client-list-item:hover { background: #f9fafb; }
 .client-list-item:last-child { border-bottom: none; padding-bottom: 0; }
 
+/* CRM Kanban */
+.kanban-board { display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 1rem; align-items: flex-start; min-height: calc(100vh - 180px); }
+.kanban-column { flex: 0 0 320px; background: #f1f5f9; border-radius: 0.75rem; display: flex; flex-direction: column; max-height: 100%; border: 1px solid var(--border-color); transition: all 0.2s ease; }
+.kanban-column.drag-over { background: #e2e8f0; border: 2px dashed var(--primary-color); }
+.kanban-column-header { padding: 1rem; font-weight: 600; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid transparent; }
+.kanban-cards-container { padding: 1rem; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; min-height: 150px; }
+
+.kanban-card { background: var(--card-bg); padding: 1rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border-color); cursor: grab; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 0.5rem; }
+.kanban-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
+.kanban-card:active { cursor: grabbing; }
+.kanban-card.dragging { opacity: 0.5; transform: scale(0.95); }
+
+.kanban-card-title { font-weight: 600; color: var(--text-main); font-size: 0.95rem; line-height: 1.2; }
+.kanban-card-value { color: var(--primary-color); font-weight: 600; font-size: 0.9rem; }
+.kanban-card-contact { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.35rem; }
+
+/* Etiquetas Exclusivas de Vendas */
+.crm-tag { display: inline-flex; align-items: center; padding: 0.15rem 0.5rem; background: #fef08a; color: #854d0e; border-radius: 0.25rem; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.025em; }
+
 /* Modal */
 .modal-overlay { 
     position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); 

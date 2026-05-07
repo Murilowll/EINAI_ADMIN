@@ -1,0 +1,29 @@
+.hero-background {
+  height: 800px;
+  background-image: url("../../assets/img/HERO1.png") !important;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* ========== Otimizações Mobile ========== */
+@media (max-width: 768px) {
+  .hero-background {
+    height: auto !important;
+    min-height: 85vh;
+    padding-top: 100px;
+    padding-bottom: 60px;
+    background-position: 65% center !important;
+  }
+
+  /* Ajuste de fontes e botões no mobile */
+  h1.fw-bold {
+    font-size: 2rem !important;
+  }
+  h2.fw-bold {
+    font-size: 1.6rem !important;
+  }
+  .btn-amarelo-printcipal {
+    white-space: normal; /* Permite quebrar linha caso o texto do botão seja longo */
+  }
+}
