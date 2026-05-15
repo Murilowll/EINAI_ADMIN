@@ -109,7 +109,7 @@ function setupRealtimeListeners() {
     onSnapshot(collection(db, "deals"), (snapshot) => {
         state.deals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         dealsLoaded = true;
-        if(document.getElementById('crm-section')?.classList.contains('active')) renderKanban();
+        if(document.getElementById('crm-section').classList.contains('active')) renderKanban();
         checkInitialLoad();
     }, (error) => console.error("Erro Realtime CRM:", error));
 
@@ -128,7 +128,7 @@ function setupRealtimeListeners() {
         }
         pipelinesLoaded = true;
         window.updatePipelineSelector();
-        if(document.getElementById('crm-section')?.classList.contains('active')) renderKanban();
+        if(document.getElementById('crm-section').classList.contains('active')) renderKanban();
         checkInitialLoad();
     }, (error) => console.error("Erro Realtime Pipelines:", error));
 }
@@ -327,7 +327,7 @@ window.getAvatarColor = function(name) {
 // --- UTILITÁRIO PARA TAGS (COR EXCLUSIVA) ---
 window.renderTagHtml = function(tagName, removable = false) {
     let style = '';
-    if (tagName && tagName.startsWith('Inscrição')) {
+    if (tagName === 'Inscrição Site') {
         style = 'background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;'; // Azul destacado
     }
     const removeHtml = removable ? ` <span class="tag-remove" onclick="removeTag('${tagName}')">&times;</span>` : '';

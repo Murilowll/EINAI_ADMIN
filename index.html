@@ -1,127 +1,380 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>EINAI</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aboreto&amp;display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800&amp;display=swap">
-    <link rel="stylesheet" href="assets/css/Features-Image-icons.css">
-    <link rel="stylesheet" href="assets/css/forms-einai.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einai CRM</title>
+    <link rel="stylesheet" href="styleadmin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<body>
 
-<body style="background-color: #001523;">
-    <nav class="navbar navbar-expand-md bg-body py-3" style="background: transparent !important;color: var(--bs-light) !important;">
-        <div class="container"><img src="assets/img/EINAI.png" width="106" height="97"><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-2"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navcol-2" style="color: var(--bs-light) !important;">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="https://www.linkcurto.com.br/cae181">Sobre nós</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#">Cursos</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#treinamentos">Treinamentos</a></li>
-                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="display: none;">Dropdown </a>
-                        <div class="dropdown-menu"><a class="dropdown-item" href="#">First Item</a><a class="dropdown-item" href="#">Second Item</a><a class="dropdown-item" href="#">Third Item</a></div>
-                    </li>
-                </ul><a class="btn btn-primary ms-md-2 btn-nav-tope" role="button" href="https://www.linkcurto.com.br/cae181">Entre em contato</a>
+    <!-- TELA DE LOGIN -->
+    <div id="login-view" class="view active login-bg">
+        <div class="login-box card">
+            <div class="login-header">
+                <h1>Einai</h1>
+                <p class="text-muted">Acesso ao Painel Administrativo</p>
             </div>
+            <div id="login-error" class="alert hidden">Credenciais inválidas.</div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="username" placeholder="admin@einai.com" required>
+                </div>
+                <div class="form-group" style="position: relative;">
+                    <label>Senha</label>
+                    <input type="password" id="password" required style="padding-right: 2.5rem;">
+                    <button type="button" id="toggle-password" class="btn-icon toggle-password-btn" tabindex="-1" title="Mostrar senha">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" style="margin-top: 0.5rem; padding: 0.875rem; font-size: 1rem;">Entrar</button>
+            </form>
         </div>
-    </nav>
-    <section class="text-white py-4 py-xl-5">
-        <div class="container" style="min-width: 98%;">
-            <div class="border border-0 d-flex flex-column align-items-center p-4 py-5" style="background: linear-gradient(rgba(0,123,255,0.2), rgba(0,123,255,0.2)), url(&quot;assets/img/Flux_Dev_A_person_sitting_alone_on_a_mountain_viewed_from_behi_1%201.png&quot;) center / cover;height: 800px;min-width: 100%;border-radius: 40px;">
-                <div class="row">
-                    <div class="col-md-10 col-xl-8 text-center d-flex d-sm-flex d-md-flex justify-content-center align-items-center justify-content-md-start align-items-md-center justify-content-xl-center mx-auto">
-                        <div>
-                            <h1 class="fw-bold mb-3" style="font-family: Aboreto, serif;">São poucas as pessoas que vivem os seus sonhos, são poucas as pessoas que vivem como querem.&nbsp;</h1>
-                            <p class="mb-4">Você se lembra da última vez em que realizou um sonho? Da última vez que se fez feliz de verdade? O Instituto EINAI, possui uma equipe treinada e especializada para desenvolver técnicas específicas que contribuem no resgate das respostas que você procura.</p>
+    </div>
+
+    <!-- TELA DE CARREGAMENTO -->
+    <div id="loading-view" class="view hidden flex-center" style="flex-direction: column; gap: 1rem;">
+        <div class="spinner"></div>
+        <p class="text-muted">Carregando seus dados...</p>
+    </div>
+
+    <!-- LAYOUT PRINCIPAL (APP) -->
+    <div id="app-view" class="view hidden">
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+        
+        <aside class="sidebar">
+            <h2 class="text-primary sidebar-title">Einai CRM</h2>
+            <nav class="sidebar-nav">
+                <a href="#" data-target="dashboard-section" class="nav-item active">Dashboard</a>
+                <a href="#" data-target="clientes-section" class="nav-item">Clientes</a>
+                <a href="#" data-target="turmas-section" class="nav-item">Turmas</a>
+                <a href="#" data-target="crm-section" class="nav-item">CRM (Vendas)</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" id="btn-logout" class="nav-item text-danger">Sair</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <button id="mobile-menu-btn" class="btn btn-outline mobile-menu-btn" style="margin-bottom: 1.5rem;">☰ Menu</button>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="header-between">
+                    <h1>Visão Geral</h1>
+                    <p class="text-muted" id="dash-date"></p>
+                </div>
+                <div class="grid-cards">
+                    <div class="card summary-card">
+                        <p class="text-muted">Total de Clientes</p>
+                        <h2 id="dash-total-clients">0</h2>
+                    </div>
+                    <div class="card summary-card">
+                        <p class="text-muted">Turmas Ativas</p>
+                        <h2 id="dash-total-classes">0</h2>
+                    </div>
+                    <div class="card summary-card">
+                        <p class="text-muted">Alunos Matriculados</p>
+                        <h2 id="dash-active-students">0</h2>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid mt-4">
+                    <div class="card">
+                        <h3 class="card-title">Crescimento de Clientes</h3>
+                        <div class="chart-container">
+                            <canvas id="clientsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Acesso Rápido</h3>
+                        <div class="shortcuts-list">
+                            <button class="shortcut-btn" onclick="openNewClientModal()">
+                                <span>👤</span> Novo Cliente
+                            </button>
+                            <button class="shortcut-btn" onclick="openNewClassModal()">
+                                <span>🎓</span> Nova Turma
+                            </button>
+                            <button class="shortcut-btn" onclick="document.querySelector('[data-target=\'clientes-section\']').click()">
+                                <span>🔍</span> Buscar Cliente
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    <div class="container py-4 py-xl-5">
-        <div class="row gy-4 gy-md-0" style="background: #0C2836;border-radius: 50px;padding: 40px;">
-            <div class="col-md-6">
-                <div class="m-xl-5 p-xl-5"><img class="rounded img-fluid object-fit-cover w-100" style="min-height: 300px;" src="assets/img/EINAI.png"></div>
-            </div>
-            <div class="col-md-6 d-md-flex align-items-md-center">
-                <div style="max-width: 350px;">
-                    <h2 class="text-uppercase fw-bold color-white" style="font-family: Aboreto, serif;">Instituto Einai</h2>
-                    <p class="my-3 color-white">O Instituto EINAI, possui uma equipe treinada e especializada para desenvolver técnicas específicas que contribuem no resgate das respostas que você procura. Eles farão você conhecer as funções biológicas das emoções para que saiba usá-las a seu favor. Tudo isso, sob o comando do Head Trainer Anderson Avila - Trainer Master Practitioner em Programação Neurolinguística, Coaching Practitioner.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container py-4 py-xl-5">
-        <div class="row mb-5" id="treinamentos">
-            <div class="col-md-8 col-xl-6 text-center mx-auto">
-                <h2 class="color-white" style="font-family: Aboreto, serif;">Sente que chegou a hora de dar um basta?</h2>
-                <p class="color-blue">Veja nossos treinamentos e cursos que irão te ajudar</p>
-            </div>
-        </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/Group%2020.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">SER - EVOLUÇÃO E LIDERANÇA</h2>
-                    <p class="my-3" style="color: var(--bs-light);">O SER é um treinamento vivencial e transformador, de evolução humana e liderança, com situações baseadas em práticas comprovadas, que trarão à tona as suas emoções. Durante um final de semana, você irá entender a função biológica das quatro emoções que norteiam a nossa vida: Medo, Raiva, Tristeza e Alegria e ter consciência de como usá-las a seu favor.</p><a href="https://www.linkcurto.com.br/cae181" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.34%20(1).jpeg"></div>
-            </div>
-        </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.34.jpeg"></div>
-            </div>
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/Group%2020.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">SER JOVEM</h2>
-                    <p class="my-3" style="color: var(--bs-light);">Este é um treinamento que proporciona ao jovem uma nova consciência sobre as consequências de suas escolhas, sejam elas na vida escolar, na vida social, com os amigos, ou em casa. O SER Jovem desenvolve a interação social, introspecção, controle do estado interno, a importância do trabalho em equipe, a escolha de grupos com os valores passados pela família, dentre outros aspectos relevantes sobre a vida.</p><a href="https://www.linkcurto.com.br/cae181" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
-                </div>
-            </div>
-        </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/curso-tag.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">INTRODUÇÃO À PNL</h2>
-                    <p class="my-3" style="color: var(--bs-light);">No curso de introdução à PNL, o participante irá adquirir ferramentas para melhorar a sua comunicação, seja para venda de uma ideia, educação, negócios ou, até mesmo, melhorar a sua convivência com as pessoas. Permitirá, também, entender melhor a sua estrutura neuropsicológica no tocante a comportamentos, crenças, ações e reações.</p><a href="introducao-pnl.html" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33%20(2).jpeg"></div>
-            </div>
-        </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33%20(1).jpeg"></div>
-            </div>
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/curso-tag.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">PRACTITIONER</h2>
-                    <p class="my-3" style="color: var(--bs-light);">Proporcionar o desenvolvimento de habilidades para entender e influenciar pessoas de maneira ética e eficaz. Melhorar a comunicação. Obter novos comportamentos e conduzir relações comerciais e pessoais de uma forma mais satisfatória e prazerosa com ferramentas que ajudam a abordar e formular adequadamente qualquer objetivo.</p><a href="https://www.linkcurto.com.br/cae181" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
-                </div>
-            </div>
-        </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/curso-tag.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">COACHING</h2>
-                    <p class="my-3" style="color: var(--bs-light);">Desenvolva habilidades de alto impacto para entender e influenciar pessoas de forma ética e eficaz. Este curso de Coaching irá aprimorar drasticamente sua comunicação, permitindo que você adquira novos comportamentos e conduza relações comerciais e pessoais de maneira mais satisfatória. Aprenda ferramentas poderosas de coaching para abordar, formular e alcançar qualquer objetivo com clareza e precisão.</p><a href="https://www.linkcurto.com.br/cae181" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33.jpeg"></div>
-            </div>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/forms-einai.js"></script>
-</body>
+            </section>
 
+            <!-- CLIENTES -->
+            <section id="clientes-section" class="content-section">
+                <div class="header-between">
+                    <h1>Gestão de Clientes</h1>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button id="btn-new-client" class="btn btn-primary" onclick="openNewClientModal()">+ Novo Cliente</button>
+                        <button id="btn-export-selected" class="btn btn-outline hidden">Exportar Selecionados</button>
+                        <button id="btn-export-clients" class="btn btn-outline">Exportar Tudo (CSV)</button>
+                    </div>
+                </div>
+                <div class="card table-container">
+                    <div class="search-bar" style="display: flex; gap: 1rem;">
+                        <input type="text" id="search-client" placeholder="Buscar por nome ou e-mail..." style="flex: 1;">
+                        <select id="filter-class" style="width: auto; min-width: 150px; cursor: pointer;">
+                            <option value="">Todas as Turmas</option>
+                            <option value="unassigned">Sem Turma</option>
+                        </select>
+                        <select id="filter-tag" style="width: auto; min-width: 150px; cursor: pointer;">
+                            <option value="">Todas as Tags</option>
+                        </select>
+                        <select id="sort-client" style="width: auto; min-width: 150px; cursor: pointer;">
+                            <option value="newest">Mais Recentes</option>
+                            <option value="oldest">Mais Antigos</option>
+                            <option value="az">A-Z</option>
+                        </select>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;"><input type="checkbox" id="select-all-clients" style="cursor: pointer; width: 1.1rem; height: 1.1rem;"></th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Telefone</th>
+                                <th>Tags</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-tbody">
+                            <!-- Renderizado via JS -->
+                        </tbody>
+                    </table>
+                    <div id="pagination-container" class="pagination"></div>
+                </div>
+            </section>
+
+            <!-- TURMAS (DRAG & DROP) -->
+            <section id="turmas-section" class="content-section">
+                <div class="header-between">
+                    <h1>Gestão de Turmas</h1>
+                    <button class="btn btn-primary" onclick="openNewClassModal()">+ Nova Turma</button>
+                </div>
+                <div class="search-bar" style="margin-bottom: 1rem; border-radius: 0.5rem; border: 1px solid var(--border-color); background: white;">
+                    <input type="text" id="search-class" placeholder="Buscar turma por nome..." style="border: none; box-shadow: none;">
+                </div>
+                <div id="classes-accordion" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Renderizado via JS -->
+                </div>
+            </section>
+
+            <!-- CRM (KANBAN) -->
+            <section id="crm-section" class="content-section">
+                <div class="header-between">
+                    <h1>Oportunidades (CRM)</h1>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <select id="pipeline-selector" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color); background: white; outline: none; font-weight: 500;"></select>
+                        <button class="btn btn-outline" onclick="openNewPipelineModal()">+ Novo Funil</button>
+                    </div>
+                </div>
+                <div id="kanban-board" class="kanban-board mt-4">
+                    <!-- Renderizado via JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL DE PERFIL DO CLIENTE -->
+    <div id="client-modal" class="modal-overlay hidden">
+        <div class="modal card">
+            <div class="modal-header">
+                <h2 id="modal-client-name">Perfil</h2>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="btn-edit-client" class="btn btn-outline" onclick="openEditClientModal()" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Editar</button>
+                    <button id="btn-delete-client" class="btn" onclick="deleteClient()" style="padding: 0.25rem 0.75rem; font-size: 0.875rem; background: #fee2e2; color: var(--danger);">Excluir</button>
+                    <button id="close-modal" class="btn-icon">&times;</button>
+                </div>
+            </div>
+            <div id="modal-body" class="modal-body grid-2">
+                <!-- Renderizado via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVO CLIENTE -->
+    <div id="new-client-modal" class="modal-overlay hidden">
+        <div class="modal card">
+            <div class="modal-header">
+                <h2 id="form-client-title">Novo Cliente</h2>
+                <button id="close-new-client-modal" class="btn-icon" onclick="closeNewClientModal()">&times;</button>
+            </div>
+            <form id="new-client-form" class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" id="nc-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" id="nc-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF</label>
+                        <input type="text" id="nc-cpf" placeholder="000.000.000-00" maxlength="14" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone (WhatsApp)</label>
+                        <input type="text" id="nc-phone" placeholder="(00) 00000-0000" maxlength="15" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Empresa</label>
+                        <input type="text" id="nc-company">
+                    </div>
+                    <div class="form-group">
+                        <label>Cargo</label>
+                        <input type="text" id="nc-role">
+                    </div>
+                    <div class="form-group">
+                        <label>Turma</label>
+                        <select id="nc-class">
+                            <option value="unassigned">Sem Turma</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-span-2">
+                        <label>Endereço Completo</label>
+                        <input type="text" id="nc-address" placeholder="Rua, Número, Bairro, Cidade - Estado">
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" id="btn-submit-client" class="btn btn-primary w-100">Cadastrar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL NOVA/EDITAR TURMA -->
+    <div id="class-modal" class="modal-overlay hidden">
+        <div class="modal card">
+            <div class="modal-header">
+                <h2 id="form-class-title">Nova Turma</h2>
+                <button class="btn-icon" onclick="closeClassModal()">&times;</button>
+            </div>
+            <form id="class-form" class="modal-body">
+                <div class="form-group">
+                    <label>Nome da Turma</label>
+                    <input type="text" id="class-name" required>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" id="btn-submit-class" class="btn btn-primary w-100">Salvar Turma</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ADICIONAR CLIENTES À TURMA -->
+    <div id="add-clients-to-class-modal" class="modal-overlay hidden">
+        <div class="modal card" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="add-clients-modal-title">Adicionar Alunos</h2>
+                <button class="btn-icon" onclick="closeAddClientsToClassModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar" style="margin-bottom: 1rem; border-radius: 0.5rem; border: 1px solid var(--border-color); background: white; padding: 0.5rem;">
+                    <input type="text" id="search-client-for-class" placeholder="Buscar aluno..." style="border: none; box-shadow: none; padding: 0.5rem; width: 100%;">
+                </div>
+                <div id="add-clients-list" style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 0.5rem;">
+                    <!-- Renderizado via JS -->
+                </div>
+                <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="button" class="btn btn-outline" onclick="closeAddClientsToClassModal()">Cancelar</button>
+                    <button type="button" id="btn-save-clients-to-class" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMAÇÃO -->
+    <div id="confirm-modal" class="modal-overlay hidden">
+        <div class="modal card" style="max-width: 400px; text-align: center;">
+            <div class="modal-body">
+                <div style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem; line-height: 1;">&#9888;</div>
+                <h2 id="confirm-title" style="margin-bottom: 0.5rem;">Confirmação</h2>
+                <p id="confirm-message" class="text-muted" style="margin-bottom: 1.5rem;">Tem certeza?</p>
+                <div style="display: flex; justify-content: center; gap: 1rem;">
+                    <button class="btn btn-outline" onclick="closeConfirmModal()">Cancelar</button>
+                    <button id="btn-confirm-action" class="btn btn-primary" style="background-color: var(--danger); border-color: var(--danger);">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVO/EDITAR NEGÓCIO -->
+    <div id="new-deal-modal" class="modal-overlay hidden">
+        <div class="modal card">
+            <div class="modal-header">
+                <h2 id="form-deal-title">Nova Oportunidade</h2>
+                <div style="display: flex; gap: 1rem;">
+                    <button id="btn-delete-deal" class="btn hidden" onclick="deleteDeal()" style="padding: 0.25rem 0.75rem; font-size: 0.875rem; background: #fee2e2; color: var(--danger);">Excluir</button>
+                    <button class="btn-icon" onclick="closeNewDealModal()">&times;</button>
+                </div>
+            </div>
+            <form id="new-deal-form" class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group col-span-2">
+                        <label>Título da Oportunidade</label>
+                        <input type="text" id="nd-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome do Contato</label>
+                        <input type="text" id="nd-contact" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" id="nd-value" step="0.01">
+                    </div>
+                    <div class="form-group col-span-2">
+                        <label>Tags CRM (Separadas por vírgula)</label>
+                        <input type="text" id="nd-tags" placeholder="Ex: B2B, Prioridade Alta, Indicação">
+                    </div>
+                    <div class="form-group">
+                        <label>Funil / Kanban</label>
+                        <select id="nd-pipeline" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Matricular na Turma (Opcional)</label>
+                        <select id="nd-class">
+                            <option value="unassigned">Não matricular ainda</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" id="btn-submit-deal" class="btn btn-primary w-100">Salvar Oportunidade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL NOVO FUNIL (PIPELINE) -->
+    <div id="new-pipeline-modal" class="modal-overlay hidden">
+        <div class="modal card" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Novo Funil Kanban</h2>
+                <button class="btn-icon" onclick="closeNewPipelineModal()">&times;</button>
+            </div>
+            <form id="new-pipeline-form" class="modal-body">
+                <div class="form-group">
+                    <label>Nome do Funil</label>
+                    <input type="text" id="np-name" placeholder="Ex: Mentoria" required>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primary w-100">Criar Funil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="scriptadmin.js"></script>
+</body>
 </html>
