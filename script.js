@@ -327,8 +327,10 @@ window.getAvatarColor = function(name) {
 // --- UTILITÁRIO PARA TAGS (COR EXCLUSIVA) ---
 window.renderTagHtml = function(tagName, removable = false) {
     let style = '';
-    if (tagName === 'Inscrição Site') {
-        style = 'background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;'; // Azul destacado
+    if (tagName === 'Inscrição PNL') {
+        style = 'background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;'; // Azul
+    } else if (tagName === 'Inscrição SER') {
+        style = 'background-color: #fef08a; color: #854d0e; border: 1px solid #fde047;'; // Amarelo
     }
     const removeHtml = removable ? ` <span class="tag-remove" onclick="removeTag('${tagName}')">&times;</span>` : '';
     return `<span class="tag" style="${style}">${tagName}${removeHtml}</span>`;
@@ -1227,7 +1229,7 @@ window.renderKanban = function() {
 };
 
 window.copySubscriptionLink = function() {
-    const url = window.location.origin + window.location.pathname.replace('index.html', '') + 'inscricao.html';
+    const url = window.location.origin + window.location.pathname.replace('admin.html', '') + 'inscricao.html';
     window.copyToClipboard(url, "Link de inscrição copiado com sucesso!");
 };
 

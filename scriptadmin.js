@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, onSnapshot, writeBatch, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, onSnapshot, writeBatch, addDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCWughEoZ0eUB6298L9kpe-u1mzBuV3p3k",
@@ -16,11 +16,17 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// App secundário para criar usuários sem deslogar o admin atual
+const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+const secondaryAuth = getAuth(secondaryApp);
+
 const state = {
     clients: [],
     classes: [],
     deals: [], // Negócios do CRM
     pipelines: [], // Funis/Quadros Kanban
+    users: [], // Membros da equipe com acesso
+    currentUser: null, // Usuário atualmente logado
     currentPipelineId: null,
     selectedClientId: null,
     editingClientId: null,
@@ -34,12 +40,34 @@ let classesLoaded = false;
 let clientsLoaded = false;
 let dealsLoaded = false;
 let pipelinesLoaded = false;
+let usersLoaded = false;
 
 function checkInitialLoad() {
-    if (!initialLoadComplete && classesLoaded && clientsLoaded && dealsLoaded && pipelinesLoaded) {
+    if (!initialLoadComplete && classesLoaded && clientsLoaded && dealsLoaded && pipelinesLoaded && usersLoaded) {
         initialLoadComplete = true;
         document.getElementById('loading-view').classList.add('hidden');
         document.getElementById('app-view').classList.remove('hidden');
+    }
+}
+
+// --- SISTEMA DE ACESSOS (PERMISSÕES) ---
+function applyPermissions() {
+    if (!state.currentUser) return;
+    const perms = state.currentUser.permissions || [];
+    
+    // Ocultar/mostrar itens do menu conforme permissão
+    document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
+        if (link.id === 'btn-logout') return;
+        const target = link.getAttribute('data-target');
+        if (perms.includes(target)) link.style.display = 'block';
+        else link.style.display = 'none';
+    });
+
+    // Se a seção atual não é permitida, joga para a primeira permitida
+    const activeSection = document.querySelector('.content-section.active');
+    if (activeSection && !perms.includes(activeSection.id)) {
+        const firstAllowed = Array.from(document.querySelectorAll('.sidebar-nav .nav-item')).find(l => l.style.display === 'block');
+        if (firstAllowed) firstAllowed.click();
     }
 }
 
@@ -81,6 +109,20 @@ async function seedDatabaseIfNeeded() {
         defaultClasses.forEach(c => batch.set(doc(db, "classes", c.id), c));
         defaultPipelines.forEach(p => batch.set(doc(db, "pipelines", p.id), p));
         defaultDeals.forEach(d => batch.set(doc(db, "deals", d.id), d));
+        await batch.commit();
+    }
+
+    const settingsSnap = await getDocs(collection(db, "settings"));
+    if (settingsSnap.empty) {
+        const batch = writeBatch(db);
+        batch.set(doc(db, "settings", "course_ser"), {
+            date: "A definir", location: "Centro Mariápolis – São Leopoldo, RS", 
+            priceCentavos: 91900, priceText: "919,00"
+        });
+        batch.set(doc(db, "settings", "course_pnl"), {
+            date: "26, 27 e 28 de Agosto", location: "Centro Mariápolis – São Leopoldo, RS", 
+            priceCentavos: 47700, priceText: "477,00"
+        });
         await batch.commit();
     }
 }
@@ -131,6 +173,33 @@ function setupRealtimeListeners() {
         if(document.getElementById('crm-section')?.classList.contains('active')) renderKanban();
         checkInitialLoad();
     }, (error) => console.error("Erro Realtime Pipelines:", error));
+
+    onSnapshot(collection(db, "team"), (snapshot) => {
+        state.users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        usersLoaded = true;
+        
+        if (auth.currentUser) {
+            const myRecord = state.users.find(u => u.email === auth.currentUser.email);
+            if (myRecord) {
+                state.currentUser = myRecord;
+                applyPermissions();
+            } else if (state.users.length === 0 || auth.currentUser.email === 'admin@einai.com') {
+                state.currentUser = { permissions: ['dashboard-section', 'clientes-section', 'turmas-section', 'crm-section', 'site-section', 'usuarios-section'] };
+                applyPermissions();
+            } else {
+                window.showToast("Sua conta não possui permissões configuradas.", "error");
+                signOut(auth);
+            }
+        }
+        if(document.getElementById('usuarios-section')?.classList.contains('active')) renderUsers();
+        checkInitialLoad();
+    }, (error) => console.error("Erro Realtime Equipe:", error));
+
+    onSnapshot(collection(db, "settings"), (snapshot) => {
+        window.siteSettings = {};
+        snapshot.docs.forEach(doc => { window.siteSettings[doc.id] = doc.data(); });
+        if(document.getElementById('site-section')?.classList.contains('active')) window.renderSiteSettings();
+    }, (error) => console.error("Erro Realtime Settings:", error));
 }
 
 // --- SISTEMA DE AUTENTICAÇÃO E NAVEGAÇÃO ---
@@ -141,6 +210,19 @@ onAuthStateChanged(auth, async (user) => {
         // Exibe o carregamento enquanto busca os dados
         document.getElementById('app-view').classList.add('hidden');
         document.getElementById('loading-view').classList.remove('hidden');
+
+        // Garante a existência do primeiro admin no banco de dados na coleção "team"
+        try {
+            const teamSnap = await getDocs(collection(db, "team"));
+            if (teamSnap.empty) {
+                await addDoc(collection(db, "team"), {
+                    name: 'Administrador Principal',
+                    email: user.email,
+                    uid: user.uid,
+                    permissions: ['dashboard-section', 'clientes-section', 'turmas-section', 'crm-section', 'site-section', 'usuarios-section']
+                });
+            }
+        } catch(e) {}
 
         setupRealtimeListeners(); // INICIA A TELA PRIMEIRO!
         try {
@@ -159,6 +241,8 @@ onAuthStateChanged(auth, async (user) => {
         clientsLoaded = false;
         dealsLoaded = false;
         pipelinesLoaded = false;
+        usersLoaded = false;
+        state.currentUser = null;
     }
 });
 
@@ -274,6 +358,8 @@ document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
         if(targetId === 'clientes-section') renderClients();
         if(targetId === 'turmas-section') renderClassesList();
         if(targetId === 'crm-section') renderKanban();
+        if(targetId === 'site-section') window.renderSiteSettings();
+        if(targetId === 'usuarios-section') renderUsers();
 
         // Fecha a sidebar no celular ao clicar em um link
         if (window.innerWidth <= 768) {
@@ -304,6 +390,15 @@ function updateDashboard() {
     document.getElementById('dash-total-clients').innerText = state.clients.length;
     document.getElementById('dash-total-classes').innerText = state.classes.length;
     document.getElementById('dash-active-students').innerText = state.clients.filter(c => c.classId !== 'unassigned').length;
+
+    // Contagem de inscrições pelo site
+    const countPNL = state.clients.filter(c => c.tags && c.tags.includes('Inscrição PNL')).length;
+    const countSER = state.clients.filter(c => c.tags && c.tags.includes('Inscrição SER')).length;
+    const elPnl = document.getElementById('dash-source-pnl');
+    const elSer = document.getElementById('dash-source-ser');
+    if(elPnl) elPnl.innerText = countPNL;
+    if(elSer) elSer.innerText = countSER;
+
     updateGrowthChart();
 }
 
@@ -327,8 +422,12 @@ window.getAvatarColor = function(name) {
 // --- UTILITÁRIO PARA TAGS (COR EXCLUSIVA) ---
 window.renderTagHtml = function(tagName, removable = false) {
     let style = '';
-    if (tagName && tagName.startsWith('Inscrição')) {
-        style = 'background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;'; // Azul destacado
+    if (tagName === 'Inscrição PNL') {
+        style = 'background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;'; // Azul
+    } else if (tagName === 'Inscrição SER') {
+        style = 'background-color: #fef08a; color: #854d0e; border: 1px solid #fde047;'; // Amarelo
+    } else if (tagName && tagName.startsWith('Inscrição')) {
+        style = 'background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;'; // Padrão
     }
     const removeHtml = removable ? ` <span class="tag-remove" onclick="removeTag('${tagName}')">&times;</span>` : '';
     return `<span class="tag" style="${style}">${tagName}${removeHtml}</span>`;
@@ -713,6 +812,146 @@ window.deleteClient = function() {
         }
     );
 };
+
+// --- GESTÃO DE ACESSOS (USUÁRIOS) ---
+window.renderUsers = function() {
+    const tbody = document.getElementById('users-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    const sectionNames = {
+        'dashboard-section': 'Dashboard',
+        'clientes-section': 'Clientes',
+        'turmas-section': 'Turmas',
+        'crm-section': 'CRM',
+        'site-section': 'Site & Preços',
+        'usuarios-section': 'Acessos'
+    };
+
+    state.users.forEach(user => {
+        const tr = document.createElement('tr');
+        const permsHtml = (user.permissions || []).map(p => `<span class="tag">${sectionNames[p] || p}</span>`).join('');
+        tr.innerHTML = `
+            <td>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="avatar" style="background-color: ${window.getAvatarColor(user.name)};">${window.getInitials(user.name)}</div>
+                    <strong>${user.name}</strong>
+                </div>
+            </td>
+            <td>${user.email}</td>
+            <td>${permsHtml || '<span class="text-muted">Nenhuma</span>'}</td>
+            <td>
+                <button class="btn btn-outline" onclick="openEditUserModal('${user.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Editar</button>
+                <button class="btn btn-outline text-danger" onclick="deleteUser('${user.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-color: #fca5a5;">Excluir</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+};
+
+let editingUserId = null;
+
+window.openNewUserModal = function() {
+    editingUserId = null;
+    document.getElementById('form-user-title').innerText = 'Novo Acesso';
+    document.getElementById('user-form').reset();
+    document.getElementById('nu-password-group').style.display = 'block';
+    document.getElementById('nu-password').required = true;
+    document.getElementById('user-modal').classList.remove('hidden');
+};
+
+window.closeUserModal = function() { document.getElementById('user-modal').classList.add('hidden'); };
+
+window.openEditUserModal = function(id) {
+    editingUserId = id;
+    const user = state.users.find(u => u.id === id);
+    if(!user) return;
+    document.getElementById('form-user-title').innerText = 'Editar Permissões';
+    document.getElementById('nu-name').value = user.name || '';
+    document.getElementById('nu-email').value = user.email || '';
+    document.getElementById('nu-password-group').style.display = 'none'; // A senha não pode ser vista na edição
+    document.getElementById('nu-password').required = false;
+    document.querySelectorAll('.nu-perm').forEach(cb => cb.checked = (user.permissions || []).includes(cb.value));
+    document.getElementById('user-modal').classList.remove('hidden');
+};
+
+document.getElementById('user-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btnSubmit = document.getElementById('btn-submit-user');
+    const originalText = btnSubmit.innerText;
+    btnSubmit.disabled = true; btnSubmit.innerText = 'Salvando...';
+    
+    const name = document.getElementById('nu-name').value;
+    const email = document.getElementById('nu-email').value;
+    const password = document.getElementById('nu-password').value;
+    const permissions = Array.from(document.querySelectorAll('.nu-perm:checked')).map(cb => cb.value);
+
+    try {
+        if (editingUserId) {
+            await updateDoc(doc(db, "team", editingUserId), { name, email, permissions });
+            window.showToast("Acesso atualizado!", "success");
+        } else {
+            const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+            await signOut(secondaryAuth); // Desloga a conta secundária de criação
+            await addDoc(collection(db, "team"), { uid: userCredential.user.uid, name, email, permissions });
+            window.showToast("Novo acesso criado com sucesso!", "success");
+        }
+        window.closeUserModal();
+    } catch (error) {
+        if (error.code === 'auth/email-already-in-use') window.showToast("Este e-mail já está em uso.", "error");
+        else window.showToast("Erro ao salvar acesso.", "error");
+    } finally {
+        btnSubmit.disabled = false; btnSubmit.innerText = originalText;
+    }
+});
+
+window.deleteUser = function(id) {
+    const user = state.users.find(u => u.id === id);
+    if (user && user.email === auth.currentUser.email) return window.showToast("Você não pode excluir a si mesmo.", "error");
+    window.openConfirmModal("Excluir Acesso", "O usuário perderá o acesso ao painel imediatamente.", async () => {
+        await deleteDoc(doc(db, "team", id)); window.showToast("Acesso removido com sucesso!", "success");
+    });
+};
+
+// --- GESTÃO DE SITE E PREÇOS ---
+window.renderSiteSettings = function() {
+    const st = window.siteSettings || {};
+    if(st['course_ser']) {
+        document.getElementById('site-ser-date').value = st['course_ser'].date || '';
+        document.getElementById('site-ser-loc').value = st['course_ser'].location || '';
+        document.getElementById('site-ser-price').value = ((st['course_ser'].priceCentavos || 0) / 100).toFixed(2);
+    }
+    if(st['course_pnl']) {
+        document.getElementById('site-pnl-date').value = st['course_pnl'].date || '';
+        document.getElementById('site-pnl-loc').value = st['course_pnl'].location || '';
+        document.getElementById('site-pnl-price').value = ((st['course_pnl'].priceCentavos || 0) / 100).toFixed(2);
+    }
+};
+
+async function saveSiteConfig(courseId, btn, dateId, locId, priceId) {
+    const originalText = btn.innerText;
+    btn.innerText = 'Salvando...'; btn.disabled = true;
+    try {
+        const priceNum = parseFloat(document.getElementById(priceId).value);
+        const data = {
+            date: document.getElementById(dateId).value,
+            location: document.getElementById(locId).value,
+            priceCentavos: Math.round(priceNum * 100),
+            priceText: priceNum.toLocaleString('pt-BR', {minimumFractionDigits: 2})
+        };
+        await setDoc(doc(db, "settings", courseId), data, { merge: true });
+        window.showToast("Configurações atualizadas!", "success");
+    } catch(e) {
+        window.showToast("Erro ao salvar", "error");
+    } finally {
+        btn.innerText = originalText; btn.disabled = false;
+    }
+}
+
+document.getElementById('form-site-ser')?.addEventListener('submit', (e) => { e.preventDefault();
+    saveSiteConfig('course_ser', e.target.querySelector('button'), 'site-ser-date', 'site-ser-loc', 'site-ser-price'); });
+document.getElementById('form-site-pnl')?.addEventListener('submit', (e) => { e.preventDefault();
+    saveSiteConfig('course_pnl', e.target.querySelector('button'), 'site-pnl-date', 'site-pnl-loc', 'site-pnl-price'); });
 
 document.getElementById('close-modal').addEventListener('click', () => {
     document.getElementById('client-modal').classList.add('hidden');
@@ -1227,7 +1466,7 @@ window.renderKanban = function() {
 };
 
 window.copySubscriptionLink = function() {
-    const url = window.location.origin + window.location.pathname.replace('index.html', '') + 'inscricao.html';
+    const url = window.location.origin + window.location.pathname.replace('admin.html', '') + 'inscricao.html';
     window.copyToClipboard(url, "Link de inscrição copiado com sucesso!");
 };
 
