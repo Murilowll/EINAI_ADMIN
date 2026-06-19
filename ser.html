@@ -559,7 +559,8 @@
                 <h2 class="fw-bolder color-white">Garanta sua vaga na próxima turma!</h2>
                 <p class="my-3 color-white" style="color: #deaa4d;font-size: 20px;font-weight: 500;"> Três noites, um novo jeito de pensar, agir e se comunicar com o mundo. </p>
                 <h2 class="fw-bolder color-white mt-3" id="dynamic-date-ser">Carregando data...</h2>
-                <h5 class="color-white mb-4"><br><strong>Local:</strong> <span id="dynamic-location-ser">Carregando local...</span></h5><a class="btn btn-primary btn-lg mt-5 mb-4 btn-amarelo-printcipal color-white" role="button" href="#inscricao-section">QUERO APRENDER ESSAS TÉCNICAS </a>
+                <h5 class="color-white mb-4"><br><strong>Local:</strong> <span id="dynamic-location-ser">Carregando local...</span></h5>
+                <h3 class="color-white" style="margin-top: 3rem;margin-bottom: 5rem; font-weight: 700;">Investimento: R$ <span id="dynamic-price-ser">Carregando...</span></h3><br><a class="btn btn-primary btn-lg mb-4 btn-amarelo-printcipal color-white" role="button" href="#inscricao-section">QUERO APRENDER ESSAS TÉCNICAS </a>
             </div>
         </div>
       </div>
@@ -816,7 +817,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
 
         const firebaseConfig = {
@@ -914,6 +915,7 @@
                     if(data.date && document.getElementById('dynamic-date-ser')) document.getElementById('dynamic-date-ser').innerText = data.date;
                     if(data.location && document.getElementById('dynamic-location-ser')) document.getElementById('dynamic-location-ser').innerText = data.location;
                     if(data.priceText && document.getElementById('dynamic-price-display')) document.getElementById('dynamic-price-display').innerText = data.priceText;
+                    if(data.priceText && document.getElementById('dynamic-price-ser')) document.getElementById('dynamic-price-ser').innerText = data.priceText;
                     if(data.priceCentavos) currentPriceCentavos = data.priceCentavos;
                 }
             } catch(e) { console.error("Erro ao carregar configurações", e); }
