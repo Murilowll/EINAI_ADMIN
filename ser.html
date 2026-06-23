@@ -960,6 +960,31 @@
                   await addDoc(clientsRef, clientData);
               }
 
+              let targetPipelineId = 'p2';
+              const urlParams = new URLSearchParams(window.location.search);
+              const urlPipelineId = urlParams.get('pipeline') || urlParams.get('funnel') || urlParams.get('funil') || urlParams.get('p');
+              
+              if (urlPipelineId) {
+                  targetPipelineId = urlPipelineId;
+              } else {
+                  try {
+                      const pipelinesRef = collection(db, "pipelines");
+                      const pipeSnap = await getDocs(pipelinesRef);
+                      const pipeFound = pipeSnap.docs.find(doc => {
+                          const name = (doc.data().name || "").toLowerCase();
+                          return name.includes("ser");
+                      });
+                      if (pipeFound) {
+                          targetPipelineId = pipeFound.id;
+                      } else {
+                          const newPipe = await addDoc(pipelinesRef, { name: "Treinamento SER" });
+                          targetPipelineId = newPipe.id;
+                      }
+                  } catch(e) {
+                      console.error("Erro ao buscar pipeline", e);
+                  }
+              }
+
               const dealData = {
                   title: `Inscrição SER - ${check.data.nome}`,
                   contactName: check.data.nome,
@@ -968,7 +993,7 @@
                   value: 0, 
                   crmTags: check.data.motivos,
                   stage: 'lead', 
-                  pipelineId: 'p2',
+                  pipelineId: targetPipelineId,
                   createdAt: new Date().toISOString()
               };
               

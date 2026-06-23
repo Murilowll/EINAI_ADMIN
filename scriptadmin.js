@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, onSnapshot, writeBatch, addDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -184,7 +184,7 @@ function setupRealtimeListeners() {
                 state.currentUser = myRecord;
                 applyPermissions();
             } else if (state.users.length === 0 || auth.currentUser.email === 'admin@einai.com') {
-                state.currentUser = { permissions: ['dashboard-section', 'clientes-section', 'turmas-section', 'crm-section', 'site-section', 'usuarios-section'] };
+                state.currentUser = { permissions: ['dashboard-section', 'clientes-section', 'turmas-section', 'crm-section', 'site-section', 'usuarios-section', 'configs-section'] };
                 applyPermissions();
             } else {
                 window.showToast("Sua conta não possui permissões configuradas.", "error");
@@ -219,7 +219,7 @@ onAuthStateChanged(auth, async (user) => {
                     name: 'Administrador Principal',
                     email: user.email,
                     uid: user.uid,
-                    permissions: ['dashboard-section', 'clientes-section', 'turmas-section', 'crm-section', 'site-section', 'usuarios-section']
+                    permissions: ['dashboard-section', 'clientes-section', 'turmas-section', 'crm-section', 'site-section', 'usuarios-section', 'configs-section']
                 });
             }
         } catch(e) {}
@@ -262,18 +262,44 @@ document.getElementById('btn-logout').addEventListener('click', () => {
     signOut(auth);
 });
 
+// --- DARK MODE ---
+const isDarkMode = localStorage.getItem('einai-dark-mode') === 'true';
+if (isDarkMode) document.body.classList.add('dark-mode');
+
+document.getElementById('btn-dark-mode')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('einai-dark-mode', document.body.classList.contains('dark-mode'));
+});
+
+// --- ESQUECI A SENHA ---
+document.getElementById('btn-forgot-password')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('username').value;
+    if (!email) {
+        window.showToast("Preencha o e-mail primeiro para redefinir a senha.", "error");
+        return;
+    }
+    try {
+        await sendPasswordResetEmail(auth, email);
+        window.showToast("E-mail de redefinição enviado! Verifique sua caixa de entrada.", "success");
+    } catch (error) {
+        window.showToast("Erro: E-mail não encontrado ou inválido.", "error");
+    }
+});
+
 // --- MOSTRAR/OCULTAR SENHA ---
 document.getElementById('toggle-password')?.addEventListener('click', function() {
     const pwdInput = document.getElementById('password');
-    const icon = this.querySelector('svg');
+    const icon = this.querySelector('i');
     if (pwdInput.type === 'password') {
         pwdInput.type = 'text';
         this.title = 'Ocultar senha';
-        icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+        icon.className = 'ph ph-eye-slash';
     } else {
         pwdInput.type = 'password';
         this.title = 'Mostrar senha';
-        icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+        icon.className = 'ph ph-eye';
     }
 });
 
@@ -345,7 +371,7 @@ document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const currentLink = e.currentTarget;
-        if(currentLink.id === 'btn-logout') return;
+        if(currentLink.id === 'btn-logout' || currentLink.id === 'btn-dark-mode') return;
         
         document.querySelectorAll('.sidebar-nav .nav-item').forEach(l => l.classList.remove('active'));
         currentLink.classList.add('active');
@@ -360,6 +386,7 @@ document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
         if(targetId === 'crm-section') renderKanban();
         if(targetId === 'site-section') window.renderSiteSettings();
         if(targetId === 'usuarios-section') renderUsers();
+        if(targetId === 'configs-section') window.renderConfigsSettings();
 
         // Fecha a sidebar no celular ao clicar em um link
         if (window.innerWidth <= 768) {
@@ -418,6 +445,34 @@ window.getAvatarColor = function(name) {
     }
     return colors[Math.abs(hash) % colors.length];
 };
+
+function validateCPF(cpf) {
+    cpf = cpf.replace(/\D/g, '');
+    if (cpf.length !== 11) return false;
+    if (/^(\d)\1+$/.test(cpf)) return false;
+    let soma = 0;
+    let resto;
+    for (let i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i-1, i)) * (11 - i);
+    resto = (soma * 10) % 11;
+    if ((resto === 10) || (resto === 11)) resto = 0;
+    if (resto !== parseInt(cpf.substring(9, 10))) return false;
+    soma = 0;
+    for (let i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i-1, i)) * (12 - i);
+    resto = (soma * 10) % 11;
+    if ((resto === 10) || (resto === 11)) resto = 0;
+    if (resto !== parseInt(cpf.substring(10, 11))) return false;
+    return true;
+}
+
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+function validatePhone(phone) {
+    const clean = phone.replace(/\D/g, '');
+    return clean.length >= 10 && clean.length <= 11;
+}
 
 // --- UTILITÁRIO PARA TAGS (COR EXCLUSIVA) ---
 window.renderTagHtml = function(tagName, removable = false) {
@@ -496,7 +551,7 @@ function renderClients() {
         if (client.classId && client.classId !== 'unassigned') {
             const clientClass = state.classes.find(cls => cls.id === client.classId);
             if (clientClass) {
-                classTagHtml = `<span class="tag" style="background-color: #e0e7ff; color: #4338ca;">🎓 ${clientClass.name}</span>`;
+                classTagHtml = `<span class="tag" style="background-color: #e0e7ff; color: #4338ca;"><i class="ph ph-graduation-cap" style="margin-right: 0.25rem;"></i> ${clientClass.name}</span>`;
             }
         }
 
@@ -576,13 +631,17 @@ document.getElementById('select-all-clients')?.addEventListener('change', (e) =>
 });
 
 function updateExportSelectedBtn() {
-    const btn = document.getElementById('btn-export-selected');
-    if (!btn) return;
+    const btnExport = document.getElementById('btn-export-selected');
+    const btnDelete = document.getElementById('btn-bulk-delete');
+    if (!btnExport || !btnDelete) return;
     if (state.selectedForExport.size > 0) {
-        btn.classList.remove('hidden');
-        btn.innerText = `Exportar Selecionados (${state.selectedForExport.size})`;
+        btnExport.classList.remove('hidden');
+        btnExport.innerText = `Exportar Selecionados (${state.selectedForExport.size})`;
+        btnDelete.classList.remove('hidden');
+        btnDelete.innerText = `Excluir Selecionados (${state.selectedForExport.size})`;
     } else {
-        btn.classList.add('hidden');
+        btnExport.classList.add('hidden');
+        btnDelete.classList.add('hidden');
     }
     
     const checkboxes = document.querySelectorAll('.client-select-cb');
@@ -590,6 +649,29 @@ function updateExportSelectedBtn() {
     const selectAllCb = document.getElementById('select-all-clients');
     if (selectAllCb) selectAllCb.checked = allChecked;
 }
+
+document.getElementById('btn-bulk-delete')?.addEventListener('click', () => {
+    if (state.selectedForExport.size === 0) return;
+    window.openConfirmModal(
+        "Excluir Múltiplos Clientes",
+        `Tem certeza que deseja excluir ${state.selectedForExport.size} clientes? Esta ação não pode ser desfeita.`,
+        async () => {
+            try {
+                const batch = writeBatch(db);
+                state.selectedForExport.forEach(id => {
+                    batch.delete(doc(db, "clients", id));
+                });
+                await batch.commit();
+                state.selectedForExport.clear();
+                updateExportSelectedBtn();
+                window.showToast("Clientes excluídos com sucesso!", "success");
+            } catch (error) {
+                console.error("Erro na exclusão em lote:", error);
+                window.showToast("Erro ao excluir os clientes.", "error");
+            }
+        }
+    );
+});
 
 const resetPaginationAndRender = () => { currentClientPage = 1; renderClients(); };
 document.getElementById('search-client').addEventListener('input', resetPaginationAndRender);
@@ -626,6 +708,31 @@ document.getElementById('nc-cpf').addEventListener('input', function (e) {
     v = v.replace(/(\d{3})(\d)/, '$1.$2'); // Ponto após os 6 primeiros
     v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Hífen antes dos últimos 2 dígitos
     e.target.value = v.substring(0, 14); // Limita a 14 caracteres
+});
+
+document.getElementById('nc-cep')?.addEventListener('input', function (e) {
+    let v = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
+    v = v.replace(/^(\d{5})(\d)/, '$1-$2'); // Hífen após os 5 primeiros
+    e.target.value = v.substring(0, 9); // Limita a 9 caracteres
+});
+
+document.getElementById('nc-cep')?.addEventListener('blur', async function (e) {
+    const cep = e.target.value.replace(/\D/g, '');
+    if (cep.length === 8) {
+        try {
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await res.json();
+            if (!data.erro) {
+                const addressInput = document.getElementById('nc-address');
+                addressInput.value = `${data.logradouro}, , ${data.bairro}, ${data.localidade} - ${data.uf}`;
+                addressInput.focus();
+            } else {
+                window.showToast('CEP não encontrado.', 'error');
+            }
+        } catch (err) {
+            window.showToast('Erro ao buscar CEP.', 'error');
+        }
+    }
 });
 
 document.getElementById('nc-phone').addEventListener('input', function (e) {
@@ -668,6 +775,7 @@ window.openEditClientModal = function() {
     document.getElementById('nc-name').value = client.name || '';
     document.getElementById('nc-email').value = client.email || '';
     document.getElementById('nc-cpf').value = client.cpf || '';
+    document.getElementById('nc-cep').value = client.cep || '';
     document.getElementById('nc-birthdate').value = client.birthDate || '';
     document.getElementById('nc-phone').value = client.phone || '';
     document.getElementById('nc-company').value = client.company || '';
@@ -682,17 +790,39 @@ window.openEditClientModal = function() {
 
 document.getElementById('new-client-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const name = document.getElementById('nc-name').value;
+    const email = document.getElementById('nc-email').value.trim();
+    const cpf = document.getElementById('nc-cpf').value;
+    const phone = document.getElementById('nc-phone').value;
+
+    if (!validateEmail(email)) {
+        window.showToast("E-mail com formato inválido.", "error");
+        return;
+    }
+
+    if (!validateCPF(cpf)) {
+        window.showToast("CPF inválido. Verifique os dígitos.", "error");
+        return;
+    }
+
+    if (!validatePhone(phone)) {
+        window.showToast("Telefone inválido. Deve conter DDD e número completo.", "error");
+        return;
+    }
+
     const btnSubmit = document.getElementById('btn-submit-client');
     const originalText = btnSubmit.innerText;
     btnSubmit.disabled = true;
     btnSubmit.innerText = 'Salvando...';
 
     const clientData = {
-        name: document.getElementById('nc-name').value,
-        email: document.getElementById('nc-email').value,
-        cpf: document.getElementById('nc-cpf').value,
+        name: name,
+        email: email,
+        cpf: cpf,
+        cep: document.getElementById('nc-cep').value,
         birthDate: document.getElementById('nc-birthdate').value,
-        phone: document.getElementById('nc-phone').value,
+        phone: phone,
         company: document.getElementById('nc-company').value,
         role: document.getElementById('nc-role').value,
         classId: document.getElementById('nc-class').value,
@@ -731,8 +861,9 @@ window.openClientModal = function(clientId) {
     
     // Limpa o telefone para o link do WhatsApp (apenas números) e adiciona o 55 (Brasil)
     const cleanPhone = client.phone ? client.phone.replace(/\D/g, '') : '';
+    const welcomeMsg = encodeURIComponent(`Olá ${client.name}! Tudo bem? Sou do Instituto EINAI.`);
     const phoneHtml = cleanPhone 
-        ? `<a href="https://wa.me/55${cleanPhone}" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 500;" title="Abrir conversa no WhatsApp">${client.phone} ↗</a>` 
+        ? `<a href="https://wa.me/55${cleanPhone}?text=${welcomeMsg}" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 500;" title="Abrir conversa no WhatsApp com mensagem de boas-vindas">${client.phone} ↗</a>` 
         : '-';
 
     let ageText = '';
@@ -1374,6 +1505,19 @@ window.renderKanban = function() {
     if (!board) return;
     board.innerHTML = '';
 
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.kanban-card:not(.dragging)')];
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
     CRM_STAGES.forEach(stage => {
         const column = document.createElement('div');
         column.className = 'kanban-column';
@@ -1382,13 +1526,45 @@ window.renderKanban = function() {
         // Filtra os negócios pela Pipeline atual. Se vieram do site (sem pipelineId), caem na 1ª pipeline.
         const stageDeals = state.deals.filter(d => d.stage === stage.id && (d.pipelineId === state.currentPipelineId || (!d.pipelineId && state.pipelines.length > 0 && state.currentPipelineId === state.pipelines[0].id)));
         
+        // Ordena por posição vertical de forma ascendente (ou createdAt caso não exista posição)
+        stageDeals.sort((a, b) => {
+            const posA = a.position !== undefined ? a.position : 999999;
+            const posB = b.position !== undefined ? b.position : 999999;
+            if (posA !== posB) return posA - posB;
+            return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
+        });
+        
         column.innerHTML = `
             <div class="kanban-column-header" style="border-bottom-color: ${stage.color}">
                 <span>${stage.title}</span>
                 <span class="tag" style="margin:0; background: #e2e8f0; color: var(--text-main);">${stageDeals.length}</span>
             </div>
             <div class="kanban-cards-container" data-stage="${stage.id}">
-                ${stageDeals.map(deal => `
+                ${stageDeals.map(deal => {
+                    const client = state.clients.find(c => (deal.email && c.email === deal.email) || c.name === deal.contactName);
+                    const phone = client ? client.phone : deal.phone;
+                    let whatsappBtn = '';
+                    if (phone) {
+                        const cleanPhone = phone.replace(/\D/g, '');
+                        const pipeline = state.pipelines.find(p => p.id === deal.pipelineId);
+                        const pipelineName = pipeline ? pipeline.name : 'treinamento';
+                        const welcomeMsg = encodeURIComponent(`Olá ${deal.contactName}! Tudo bem? Sou do Instituto EINAI e gostaria de conversar sobre o seu interesse no ${pipelineName}.`);
+                        whatsappBtn = `
+                        <a href="https://wa.me/55${cleanPhone}?text=${welcomeMsg}" target="_blank" onclick="event.stopPropagation();" class="kanban-whatsapp-btn" title="Chamar no WhatsApp com mensagem de boas-vindas" style="display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: #25d366; color: white; text-decoration: none; border: 1px solid #128c7e; transition: transform 0.2s;">
+                            <i class="ph ph-whatsapp-logo" style="font-size: 1rem;"></i>
+                        </a>
+                        `;
+                    }
+                    const sellerHtml = deal.responsibleName ? `
+                        <div class="kanban-card-seller" style="font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.2rem; margin-top: 0.25rem;">
+                            <i class="ph ph-user" style="font-size: 0.8rem; color: var(--primary-color);"></i> Vendedor: <strong>${deal.responsibleName}</strong>
+                        </div>
+                    ` : `
+                        <div class="kanban-card-seller text-muted" style="font-size: 0.75rem; font-style: italic; margin-top: 0.25rem;">
+                            Sem vendedor designado
+                        </div>
+                    `;
+                    return `
                     <div class="kanban-card" draggable="true" data-id="${deal.id}">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
                             <div class="kanban-card-title">${deal.title}</div>
@@ -1402,15 +1578,19 @@ window.renderKanban = function() {
                                 ${deal.crmTags.map(t => `<span class="crm-tag">${t}</span>`).join('')}
                             </div>
                         ` : ''}
-                        <div class="kanban-card-contact">
-                            <div class="avatar" style="background-color: ${window.getAvatarColor(deal.contactName)}; width: 20px; height: 20px; font-size: 0.55rem;">${window.getInitials(deal.contactName)}</div>
-                            <span>${deal.contactName || 'Sem Contato'}</span>
+                        ${sellerHtml}
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; border-top: 1px solid var(--border-color); padding-top: 0.5rem;">
+                            <div class="kanban-card-contact" style="margin: 0;">
+                                <div class="avatar" style="background-color: ${window.getAvatarColor(deal.contactName)}; width: 20px; height: 20px; font-size: 0.55rem;">${window.getInitials(deal.contactName)}</div>
+                                <span style="font-size: 0.8rem; font-weight: 500;">${deal.contactName || 'Sem Contato'}</span>
+                            </div>
+                            ${whatsappBtn}
                         </div>
                         ${deal.stage === 'won' ? `
-                            <button type="button" class="btn btn-outline w-100" onclick="exportarCarta('${deal.id}')" style="margin-top: 0.5rem; padding: 0.35rem; font-size: 0.75rem; border-color: #10b981; color: #10b981;">📄 Exportar Carta</button>
+                            <button type="button" class="btn btn-outline w-100" onclick="openDealDetails('${deal.id}')" style="margin-top: 0.5rem; padding: 0.35rem; font-size: 0.75rem; border-color: #10b981; color: #10b981; font-weight: 600;">✉️ Enviar Carta por E-mail</button>
                         ` : ''}
                     </div>
-                `).join('')}
+                `}).join('')}
             </div>
         `;
         board.appendChild(column);
@@ -1433,6 +1613,15 @@ window.renderKanban = function() {
         container.addEventListener('dragover', e => {
             e.preventDefault();
             container.parentElement.classList.add('drag-over');
+            const draggingCard = board.querySelector('.dragging');
+            if (draggingCard) {
+                const afterElement = getDragAfterElement(container, e.clientY);
+                if (afterElement == null) {
+                    container.appendChild(draggingCard);
+                } else {
+                    container.insertBefore(draggingCard, afterElement);
+                }
+            }
         });
         container.addEventListener('dragleave', () => {
             container.parentElement.classList.remove('drag-over');
@@ -1445,20 +1634,26 @@ window.renderKanban = function() {
             if (draggingCard) {
                 const dealId = draggingCard.dataset.id;
                 const newStage = container.dataset.stage;
-                const deal = state.deals.find(d => d.id === dealId);
                 
-                if (deal && deal.stage !== newStage) {
-                    // Movemos localmente para feedback visual imediato
-                    container.appendChild(draggingCard);
-                    
-                    // Atualizamos no Firestore
-                    try {
-                        await updateDoc(doc(db, "deals", dealId), { stage: newStage });
-                    } catch(err) {
-                        console.error("Erro ao mover negócio", err);
-                        window.showToast("Erro ao atualizar o funil", "error");
-                        renderKanban(); // Reverte caso falhe
-                    }
+                // Mapeia todos os cards na coluna de destino para salvar a ordem
+                const cardsInColumn = [...container.querySelectorAll('.kanban-card')];
+                
+                try {
+                    const batch = writeBatch(db);
+                    cardsInColumn.forEach((cardEl, index) => {
+                        const cardIdInCol = cardEl.dataset.id;
+                        const dealRef = doc(db, "deals", cardIdInCol);
+                        if (cardIdInCol === dealId) {
+                            batch.update(dealRef, { stage: newStage, position: index });
+                        } else {
+                            batch.update(dealRef, { position: index });
+                        }
+                    });
+                    await batch.commit();
+                } catch(err) {
+                    console.error("Erro ao reordenar negócios:", err);
+                    window.showToast("Erro ao atualizar ordenação do funil.", "error");
+                    renderKanban(); // Reverte caso falhe
                 }
             }
         });
@@ -1533,6 +1728,16 @@ window.openDealDetails = function(dealId) {
     });
     pipelineSelect.value = deal.pipelineId || (state.pipelines.length > 0 ? state.pipelines[0].id : '');
     
+    const responsibleSelect = document.getElementById('nd-responsible');
+    responsibleSelect.innerHTML = '<option value="">Ninguém designado</option>';
+    state.users.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u.name;
+        opt.textContent = u.name;
+        responsibleSelect.appendChild(opt);
+    });
+    responsibleSelect.value = deal.responsibleName || '';
+    
     const classSelect = document.getElementById('nd-class');
     classSelect.innerHTML = '<option value="unassigned">Não matricular ainda</option>';
     state.classes.forEach(c => {
@@ -1542,12 +1747,67 @@ window.openDealDetails = function(dealId) {
         classSelect.appendChild(opt);
     });
     
-    const client = state.clients.find(c => c.email === deal.email || c.name === deal.contactName);
-    if (client && client.classId) {
-        classSelect.value = client.classId;
+    const client = state.clients.find(c => (deal.email && c.email === deal.email) || c.name === deal.contactName);
+    
+    const clientInfoCard = document.getElementById('nd-client-info-card');
+    if (client) {
+        document.getElementById('nd-client-email').innerText = client.email || 'Não informado';
+        
+        const phoneLink = document.getElementById('nd-client-phone');
+        if (client.phone) {
+            phoneLink.innerText = client.phone;
+            const cleanPhone = client.phone.replace(/\D/g, '');
+            const pipeline = state.pipelines.find(p => p.id === deal.pipelineId);
+            const pipelineName = pipeline ? pipeline.name : 'treinamento';
+            const welcomeMsg = encodeURIComponent(`Olá ${deal.contactName}! Tudo bem? Sou do Instituto EINAI e gostaria de conversar sobre o seu interesse no ${pipelineName}.`);
+            phoneLink.href = `https://wa.me/55${cleanPhone}?text=${welcomeMsg}`;
+        } else {
+            phoneLink.innerText = 'Não informado';
+            phoneLink.href = '#';
+        }
+        
+        clientInfoCard.classList.remove('hidden');
+        classSelect.value = client.classId || 'unassigned';
     } else {
+        clientInfoCard.classList.add('hidden');
         classSelect.value = 'unassigned';
     }
+    
+    // Configura painel condicional de carta para estágio won (pago)
+    const letterPanel = document.getElementById('nd-letter-panel');
+    if (deal.stage === 'won' || classSelect.value !== 'unassigned') {
+        letterPanel.classList.remove('hidden');
+        
+        const isPnl = pipelineSelect.selectedOptions[0]?.text.toLowerCase().includes("pnl");
+        const settingsKey = isPnl ? 'course_pnl' : 'course_ser';
+        const courseSettings = window.siteSettings && window.siteSettings[settingsKey];
+        
+        document.getElementById('nd-letter-date').value = (deal.letterDate || (courseSettings ? courseSettings.date : '')) || '';
+        document.getElementById('nd-letter-loc').value = (deal.letterLoc || (courseSettings ? courseSettings.location : '')) || '';
+    } else {
+        letterPanel.classList.add('hidden');
+        document.getElementById('nd-letter-date').value = '';
+        document.getElementById('nd-letter-loc').value = '';
+    }
+
+    const togglePanel = () => {
+        if (classSelect.value !== 'unassigned') {
+            letterPanel.classList.remove('hidden');
+            const isPnl = pipelineSelect.selectedOptions[0]?.text.toLowerCase().includes("pnl");
+            const settingsKey = isPnl ? 'course_pnl' : 'course_ser';
+            const courseSettings = window.siteSettings && window.siteSettings[settingsKey];
+            if (!document.getElementById('nd-letter-date').value) {
+                document.getElementById('nd-letter-date').value = (courseSettings ? courseSettings.date : '') || '';
+            }
+            if (!document.getElementById('nd-letter-loc').value) {
+                document.getElementById('nd-letter-loc').value = (courseSettings ? courseSettings.location : '') || '';
+            }
+        } else if (deal.stage !== 'won') {
+            letterPanel.classList.add('hidden');
+        }
+    };
+    classSelect.onchange = togglePanel;
+    pipelineSelect.onchange = togglePanel;
     
     document.getElementById('new-deal-modal').classList.remove('hidden');
 };
@@ -1567,13 +1827,19 @@ document.getElementById('new-deal-form')?.addEventListener('submit', async (e) =
     const crmTags = rawTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
     const selectedClass = document.getElementById('nd-class').value;
     const selectedPipeline = document.getElementById('nd-pipeline').value;
+    const responsibleName = document.getElementById('nd-responsible').value;
+    const letterDate = document.getElementById('nd-letter-date').value;
+    const letterLoc = document.getElementById('nd-letter-loc').value;
 
     const dealData = {
         title: document.getElementById('nd-title').value,
         contactName: document.getElementById('nd-contact').value,
         value: document.getElementById('nd-value').value || 0,
         crmTags: crmTags,
-        pipelineId: selectedPipeline
+        pipelineId: selectedPipeline,
+        responsibleName: responsibleName,
+        letterDate: letterDate,
+        letterLoc: letterLoc
     };
 
     try {
@@ -1617,3 +1883,177 @@ window.deleteDeal = function() {
         }
     );
 };
+
+// --- CONFIGURAÇÕES DE EMAILJS E CARTAS ---
+window.renderConfigsSettings = function() {
+    const emailConfig = window.siteSettings && window.siteSettings['email_config'] || {};
+    const templates = window.siteSettings && window.siteSettings['letter_templates'] || {};
+
+    document.getElementById('config-service-id').value = emailConfig.serviceId || '';
+    document.getElementById('config-template-id').value = emailConfig.templateId || '';
+    document.getElementById('config-public-key').value = emailConfig.publicKey || '';
+
+    document.getElementById('config-template-pnl').value = templates.pnlTemplate || 
+        `Prezado(a) {nome},\n\nSua inscrição no curso Introdução à PNL foi confirmada com sucesso!\n\nInformações do Treinamento:\nData: {data}\nLocal: {local}\n\nEsperamos você lá!\n\nAbraços,\nInstituto EINAI`;
+    document.getElementById('config-template-ser').value = templates.serTemplate || 
+        `Prezado(a) {nome},\n\nSua inscrição no treinamento SER - Evolução e Liderança foi confirmada com sucesso!\n\nInformações do Treinamento:\nData: {data}\nLocal: {local}\n\nEsperamos você lá!\n\nAbraços,\nInstituto EINAI`;
+};
+
+document.getElementById('form-email-config')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    const originalText = btn.innerText;
+    btn.innerText = 'Salvando...'; btn.disabled = true;
+
+    try {
+        const serviceId = document.getElementById('config-service-id').value;
+        const templateId = document.getElementById('config-template-id').value;
+        const publicKey = document.getElementById('config-public-key').value;
+
+        await setDoc(doc(db, "settings", "email_config"), { serviceId, templateId, publicKey }, { merge: true });
+        window.showToast("Configurações do EmailJS salvas com sucesso!", "success");
+    } catch (err) {
+        console.error("Erro ao salvar config de e-mail:", err);
+        window.showToast("Erro ao salvar configurações.", "error");
+    } finally {
+        btn.innerText = originalText; btn.disabled = false;
+    }
+});
+
+document.getElementById('form-letter-templates')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    const originalText = btn.innerText;
+    btn.innerText = 'Salvando...'; btn.disabled = true;
+
+    try {
+        const pnlTemplate = document.getElementById('config-template-pnl').value;
+        const serTemplate = document.getElementById('config-template-ser').value;
+
+        await setDoc(doc(db, "settings", "letter_templates"), { pnlTemplate, serTemplate }, { merge: true });
+        window.showToast("Modelos de cartas salvos com sucesso!", "success");
+    } catch (err) {
+        console.error("Erro ao salvar templates de carta:", err);
+        window.showToast("Erro ao salvar modelos.", "error");
+    } finally {
+        btn.innerText = originalText; btn.disabled = false;
+    }
+});
+
+// --- GERAÇÃO DE PDF E ENVIO DO EMAILJS ---
+document.getElementById('btn-send-letter')?.addEventListener('click', async () => {
+    const dealId = state.editingDealId;
+    const deal = state.deals.find(d => d.id === dealId);
+    if (!deal) return;
+
+    const emailConfig = window.siteSettings && window.siteSettings['email_config'];
+    const templates = window.siteSettings && window.siteSettings['letter_templates'];
+
+    if (!emailConfig || !emailConfig.serviceId || !emailConfig.templateId || !emailConfig.publicKey) {
+        window.showToast("Configure as credenciais do EmailJS na aba de Configurações antes de enviar.", "error");
+        return;
+    }
+
+    const btn = document.getElementById('btn-send-letter');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner" style="margin-right: 0.5rem; animation: spin 1s linear infinite;"></i> Enviando...';
+
+    try {
+        const email = deal.email || (state.clients.find(c => c.name === deal.contactName)?.email);
+        if (!email) {
+            window.showToast("E-mail do cliente não encontrado.", "error");
+            btn.disabled = false; btn.innerHTML = originalText;
+            return;
+        }
+
+        const pipeline = state.pipelines.find(p => p.id === deal.pipelineId);
+        const isPnl = pipeline && pipeline.name.toLowerCase().includes("pnl");
+        
+        const letterDate = document.getElementById('nd-letter-date').value;
+        const letterLoc = document.getElementById('nd-letter-loc').value;
+
+        // Obter o template e substituir os marcadores
+        const templateText = isPnl 
+            ? (templates?.pnlTemplate || `Prezado(a) {nome},\n\nSua inscrição no curso Introdução à PNL foi confirmada com sucesso!\n\nInformações do Treinamento:\nData: {data}\nLocal: {local}\n\nEsperamos você lá!\n\nAbraços,\nInstituto EINAI`)
+            : (templates?.serTemplate || `Prezado(a) {nome},\n\nSua inscrição no treinamento SER - Evolução e Liderança foi confirmada com sucesso!\n\nInformações do Treinamento:\nData: {data}\nLocal: {local}\n\nEsperamos você lá!\n\nAbraços,\nInstituto EINAI`);
+
+        const parsedText = templateText
+            .replace(/{nome}/g, deal.contactName)
+            .replace(/{data}/g, letterDate)
+            .replace(/{local}/g, letterLoc);
+
+        // Gerar PDF usando jsPDF
+        const { jsPDF } = window.jspdf;
+        const docPdf = new jsPDF();
+        
+        // Configura fonte e margens
+        docPdf.setFont("helvetica", "normal");
+        docPdf.setFontSize(12);
+
+        // Título do documento
+        docPdf.setFont("helvetica", "bold");
+        docPdf.setFontSize(16);
+        docPdf.text("CONFIRMAÇÃO DE INSCRIÇÃO", 20, 30);
+        docPdf.line(20, 35, 190, 35); // Linha divisória
+
+        // Texto da carta
+        docPdf.setFont("helvetica", "normal");
+        docPdf.setFontSize(11);
+        const splitText = docPdf.splitTextToSize(parsedText, 170); // Largura útil de 170mm (210 - 20 - 20)
+        docPdf.text(splitText, 20, 50);
+
+        // Carregar logotipo e colocar no final do documento no canto direito
+        try {
+            const logoImg = await loadImage('assets/img/einai-logo2.png');
+            const logoW = 40;
+            const logoH = 15;
+            const logoX = 190 - logoW; // Canto direito
+            const logoY = 270 - logoH; // Canto inferior
+            docPdf.addImage(logoImg, 'PNG', logoX, logoY, logoW, logoH);
+        } catch (e) {
+            console.error("Não foi possível carregar o logotipo para o PDF:", e);
+        }
+
+        const pdfDataUri = docPdf.output('datauristring'); // data:application/pdf;base64,JVBERi0xLjQK...
+
+        // Inicializar EmailJS com a chave pública
+        emailjs.init(emailConfig.publicKey);
+
+        const templateParams = {
+            to_email: email,
+            to_name: deal.contactName,
+            subject: `Confirmado: Sua vaga no ${isPnl ? 'Introdução à PNL' : 'Treinamento SER'}!`,
+            message: `Olá ${deal.contactName},\n\nSua confirmação foi emitida com sucesso. O documento em PDF contendo as informações de data e local está em anexo a este e-mail.\n\nAtenciosamente,\nInstituto EINAI`,
+            attachment: pdfDataUri
+        };
+
+        await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateParams);
+        
+        // Atualiza o deal com os valores de data e local enviados na carta
+        await updateDoc(doc(db, "deals", dealId), {
+            letterDate: letterDate,
+            letterLoc: letterLoc,
+            letterSentAt: new Date().toISOString()
+        });
+
+        window.showToast("Carta de confirmação enviada com sucesso!", "success");
+    } catch (err) {
+        console.error("Erro ao gerar/enviar carta:", err);
+        window.showToast("Erro ao enviar e-mail. Verifique as credenciais e tente novamente.", "error");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+});
+
+// Função auxiliar para carregar a imagem do logotipo
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = (e) => reject(e);
+        img.src = src;
+    });
+}

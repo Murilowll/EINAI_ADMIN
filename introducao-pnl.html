@@ -1105,6 +1105,31 @@
                     await addDoc(clientsRef, clientData);
                 }
 
+                let targetPipelineId = 'p1';
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlPipelineId = urlParams.get('pipeline') || urlParams.get('funnel') || urlParams.get('funil') || urlParams.get('p');
+                
+                if (urlPipelineId) {
+                    targetPipelineId = urlPipelineId;
+                } else {
+                    try {
+                        const pipelinesRef = collection(db, "pipelines");
+                        const pipeSnap = await getDocs(pipelinesRef);
+                        const pipeFound = pipeSnap.docs.find(doc => {
+                            const name = (doc.data().name || "").toLowerCase();
+                            return name.includes("pnl");
+                        });
+                        if (pipeFound) {
+                            targetPipelineId = pipeFound.id;
+                        } else {
+                            const newPipe = await addDoc(pipelinesRef, { name: "Introdução à PNL" });
+                            targetPipelineId = newPipe.id;
+                        }
+                    } catch(e) {
+                        console.error("Erro ao buscar pipeline", e);
+                    }
+                }
+
                 const dealData = {
                     title: `Inscrição PNL - ${check.data.nome}`,
                     contactName: check.data.nome,
@@ -1113,7 +1138,7 @@
                     value: 0,
                     crmTags: check.data.motivos,
                     stage: 'lead',
-                    pipelineId: 'p1',
+                    pipelineId: targetPipelineId,
                     createdAt: new Date().toISOString()
                 };
 
