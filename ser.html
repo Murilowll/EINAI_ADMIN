@@ -41,6 +41,65 @@
             .btn-amarelo-printcipal { white-space: normal; }
         }
 
+        /* ========== Estilos de Vendas e Conversão ========== */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(222, 170, 77, 0.3) !important;
+        }
+        .promo-banner {
+            background: rgba(222, 170, 77, 0.12);
+            border: 1px solid rgba(222, 170, 77, 0.3);
+            border-radius: 50px;
+            padding: 8px 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.4; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.4; }
+        }
+        .pulse-dot {
+            display: inline-block;
+            font-size: 10px;
+            color: #ff4d4d;
+            animation: pulse 1.8s infinite ease-in-out;
+        }
+        .btn-amarelo-printcipal {
+            transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+        }
+        .btn-amarelo-printcipal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(222, 170, 77, 0.5) !important;
+        }
+        .btn-amarelo-printcipal:active {
+            transform: translateY(1px);
+        }
+        .badge-exclusive {
+            background: linear-gradient(135deg, #DEAA4D 0%, #B8860B 100%);
+            color: #000000;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(222, 170, 77, 0.3);
+        }
+
         /* ========== Estilos do Bloco de Inscrição ========== */
         #inscricao-section {
             --bg: #ffffff;
@@ -453,42 +512,42 @@
                 <h2 class="fw-bolder color-white">Qual foi o último final de semana que você dedicou a você mesmo?</h2>
             </div>
         </div>
-        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
             <div class="col" data-aos="fade-up" data-aos-delay="100">
-                <div class="card" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho" style="background-color: #022B54;"><img class="img-fluid" width="51" height="51" src="assets/img/icons/programaneuro.svg">
+                <div class="card h-100" style="background: #12362e;">
+                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="51" height="51" src="assets/img/icons/programaneuro.svg">
                         <h4 class="card-title">Desenvolvimento de Habilidades e Liderança:</h4>
                         <p class="card-text"> Torne-se um líder mais eficaz, seja no trabalho ou em sua vida pessoal.</p>
                     </div>
                 </div>
             </div>
             <div class="col" data-aos="fade-up" data-aos-delay="200">
-                <div class="card" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho" style="background-color: #022B54;"><img class="img-fluid" width="41" height="42" src="assets/img/icons/mapas%20e%20filtros.svg">
+                <div class="card h-100" style="background: #12362e;">
+                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="41" height="42" src="assets/img/icons/mapas%20e%20filtros.svg">
                         <h4 class="card-title"> Controle Emocional:</h4>
                         <p class="card-text">Conheça as quatro emoções principais que norteiam nossa vida — Medo, Raiva, Tristeza e Alegria e aprenda a controlá-las.</p>
                     </div>
                 </div>
             </div>
             <div class="col" data-aos="fade-up" data-aos-delay="300">
-                <div class="card" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho" style="background-color: #022B54;"><img class="img-fluid" width="63" height="63" src="assets/img/icons/rapport.svg">
+                <div class="card h-100" style="background: #12362e;">
+                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="63" height="63" src="assets/img/icons/rapport.svg">
                         <h4 class="card-title">Capacidade de Superação:</h4>
                         <p class="card-text">Supere bloqueios emocionais e mentais, e desenvolva habilidades para lidar com desafios e obstáculos.</p>
                     </div>
                 </div>
             </div>
             <div class="col" data-aos="fade-up" data-aos-delay="400">
-                <div class="card" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho" style="background-color: #022B54;"><img class="img-fluid" width="50" height="51" src="assets/img/icons/sistemas.svg">
+                <div class="card h-100" style="background: #12362e;">
+                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="50" height="51" src="assets/img/icons/sistemas.svg">
                         <h4 class="card-title">Relações Interpessoais e Intrapessoais:</h4>
                         <p class="card-text">Aprenda a melhorar seus relacionamentos e a comunicar-se de maneira mais eficaz, com mais confiança e assertividade.</p>
                     </div>
                 </div>
             </div>
             <div class="col" data-aos="fade-up" data-aos-delay="500">
-                <div class="card" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho" style="background-color: #022B54;"><img class="img-fluid" width="50" height="51" src="assets/img/icons/calibragem.svg">
+                <div class="card h-100" style="background: #12362e;">
+                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="50" height="51" src="assets/img/icons/calibragem.svg">
                         <h4 class="card-title">Realização de Objetivos</h4>
                         <p class="card-text">Desenvolva um plano prático para alcançar seus objetivos, com foco em soluções e resultados concretos.</p>
                     </div>
@@ -506,14 +565,14 @@
         </div>
         <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-4">
             <div class="col" data-aos="flip-up" data-aos-delay="100">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img width="49" height="49" src="assets/img/icons/check.svg">
                         <p class="card-text">Lidar com a ansiedade, insegurança e timidez.</p>
                     </div>
                 </div>
             </div>
             <div class="col" data-aos="flip-up" data-aos-delay="200">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body d-flex p-4 card-2-green" style="background-color: #022B54;"><img width="49" height="49" src="assets/img/icons/check.svg">
                         <h4 class="card-title"></h4>
                         <p class="card-text">Desbloquear seu verdadeiro potencial, promovendo harmonia e realização.</p>
@@ -521,7 +580,7 @@
                 </div>
             </div>
             <div class="col" data-aos="flip-up" data-aos-delay="300">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img class="img-fluid" width="49" height="49" src="assets/img/icons/check.svg">
                         <h4 class="card-title"></h4>
                         <p class="card-text">Criar soluções para situações complexas e desafiadoras.</p>
@@ -529,7 +588,7 @@
                 </div>
             </div>
             <div class="col" data-aos="flip-up" data-aos-delay="400">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img class="img-fluid" width="49" height="49" src="assets/img/icons/check.svg">
                         <h4 class="card-title"></h4>
                         <p class="card-text">Capacidade para estabelecer relacionamentos <br>interpessoal e intrapessoal.</p>
@@ -554,13 +613,67 @@
     </div>
     <section class="w-100 py-4 py-xl-5" style="background-color: #022B54; overflow: hidden;">
       <div class="container">
-        <div class="row mb-5 mt-4 mt-md-5 pt-md-4 mx-0">
-            <div class="col-md-8 col-xl-6 text-center mx-auto p-4 p-md-5" style="background: linear-gradient(to bottom, rgba(255,255,255,0.52) 0%, transparent 100%);border-radius: 16px;" data-aos="fade-up">
-                <h2 class="fw-bolder color-white">Garanta sua vaga na próxima turma!</h2>
-                <p class="my-3 color-white" style="color: #deaa4d;font-size: 20px;font-weight: 500;"> Três noites, um novo jeito de pensar, agir e se comunicar com o mundo. </p>
-                <h2 class="fw-bolder color-white mt-3" id="dynamic-date-ser">Carregando data...</h2>
-                <h5 class="color-white mb-4"><br><strong>Local:</strong> <span id="dynamic-location-ser">Carregando local...</span></h5>
-                <h3 class="color-white" style="margin-top: 3rem;margin-bottom: 5rem; font-weight: 700;">Investimento: R$ <span id="dynamic-price-ser">Carregando...</span></h3><br><a class="btn btn-primary btn-lg mb-4 btn-amarelo-printcipal color-white" role="button" href="#inscricao-section">QUERO APRENDER ESSAS TÉCNICAS </a>
+        <div class="row mb-5 mt-4 mt-md-5 pt-md-4 mx-0 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-6 text-center p-4 p-md-5 glass-card" data-aos="fade-up">
+                <!-- Badge exclusiva -->
+                <div class="mb-3">
+                    <span class="badge-exclusive">Oferta Especial Ativa</span>
+                </div>
+                
+                <h2 class="fw-bolder color-white mb-2">Garanta sua vaga na próxima turma!</h2>
+                <p class="mb-4 color-white" style="color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 400;">
+                    Três noites, um novo jeito de pensar, agir e se comunicar com o mundo.
+                </p>
+                
+                <!-- Cronômetro de escassez -->
+                <div id="promo-banner-container" class="mb-4 d-none">
+                    <div class="promo-banner">
+                        <span class="pulse-dot">🔴</span>
+                        <span style="font-size: 14px;">A oferta especial termina em:</span>
+                        <strong id="promo-countdown" style="color: #DEAA4D; font-family: monospace; font-size: 1.15rem; letter-spacing: 0.5px;">00:00:00</strong>
+                    </div>
+                </div>
+
+                <!-- Detalhes do curso: Data & Local com design premium -->
+                <div class="d-flex flex-wrap justify-content-center gap-3 mb-4 text-white">
+                    <div class="d-flex align-items-center gap-2 px-3 py-2" style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                        <svg width="18" height="18" fill="none" stroke="#DEAA4D" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <span id="dynamic-date-ser" style="font-weight: 500; font-size: 14px;">Carregando data...</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 px-3 py-2" style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                        <svg width="18" height="18" fill="none" stroke="#DEAA4D" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span id="dynamic-location-ser" style="font-weight: 500; font-size: 14px;">Carregando local...</span>
+                    </div>
+                </div>
+
+                <!-- Valores e Conversão de Preço -->
+                <div class="my-4 py-2">
+                    <div id="old-price-container" class="d-none" style="color: rgba(255,255,255,0.55); font-size: 1.1rem; text-decoration: line-through; margin-bottom: 2px;">
+                        De R$ <span id="dynamic-old-price-ser">---,---</span>
+                    </div>
+                    <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+                        Por apenas <span style="color: #DEAA4D;">R$ <span id="dynamic-price-ser">Carregando...</span></span>
+                    </div>
+                    <div style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">
+                        ou em até <strong style="color: #ffffff;">12x de R$ <span id="installment-price-ser">---,---</span></strong> no cartão de crédito
+                    </div>
+                </div>
+
+                <a class="btn btn-primary btn-lg mb-3 btn-amarelo-printcipal color-white w-100 mt-2" role="button" href="#inscricao-section" style="max-width: 480px; font-weight: 700; font-size: 1.1rem; padding: 16px; border: none; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                    QUERO APRENDER ESSAS TÉCNICAS
+                </a>
+
+                <!-- Selos de Confiança -->
+                <div class="d-flex justify-content-center align-items-center gap-4 mt-3" style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">
+                    <div class="d-flex align-items-center gap-1">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <span>Pagamento 100% Seguro</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-1">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        <span>Garantia de 7 Dias</span>
+                    </div>
+                </div>
             </div>
         </div>
       </div>
@@ -907,6 +1020,33 @@
         let currentDealId = null;
         let currentPriceCentavos = 91900; // Valor de fallback
 
+        function startPromoCountdown(countdownElId, containerElId) {
+            const countdownEl = document.getElementById(countdownElId);
+            const containerEl = document.getElementById(containerElId);
+            if (!countdownEl || !containerEl) return;
+
+            function update() {
+                const now = new Date();
+                const target = new Date();
+                target.setHours(23, 59, 59, 999);
+                
+                let diffMs = target.getTime() - now.getTime();
+                if (diffMs < 0) {
+                    diffMs = 0;
+                }
+
+                const hrs = Math.floor(diffMs / 3600000);
+                const mins = Math.floor((diffMs % 3600000) / 60000);
+                const secs = Math.floor((diffMs % 60000) / 1000);
+
+                const pad = (n) => String(n).padStart(2, '0');
+                countdownEl.innerText = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+            }
+            
+            update();
+            setInterval(update, 1000);
+        }
+
         async function loadCourseSettings() {
             try {
                 const docSnap = await getDoc(doc(db, "settings", "course_ser"));
@@ -916,7 +1056,28 @@
                     if(data.location && document.getElementById('dynamic-location-ser')) document.getElementById('dynamic-location-ser').innerText = data.location;
                     if(data.priceText && document.getElementById('dynamic-price-display')) document.getElementById('dynamic-price-display').innerText = data.priceText;
                     if(data.priceText && document.getElementById('dynamic-price-ser')) document.getElementById('dynamic-price-ser').innerText = data.priceText;
-                    if(data.priceCentavos) currentPriceCentavos = data.priceCentavos;
+                    if(data.priceCentavos) {
+                        currentPriceCentavos = data.priceCentavos;
+                        if(document.getElementById('installment-price-ser')) {
+                            document.getElementById('installment-price-ser').innerText = (data.priceCentavos / 12 / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        }
+                    }
+                    
+                    // Preço antigo (riscado)
+                    if(data.oldPriceText && document.getElementById('dynamic-old-price-ser')) {
+                        document.getElementById('dynamic-old-price-ser').innerText = data.oldPriceText;
+                        document.getElementById('old-price-container').classList.remove('d-none');
+                    } else {
+                        document.getElementById('old-price-container').classList.add('d-none');
+                    }
+                    
+                    // Cronômetro promocional
+                    if(data.promoTimer) {
+                        document.getElementById('promo-banner-container').classList.remove('d-none');
+                        startPromoCountdown('promo-countdown', 'promo-banner-container');
+                    } else {
+                        document.getElementById('promo-banner-container').classList.add('d-none');
+                    }
                 }
             } catch(e) { console.error("Erro ao carregar configurações", e); }
         }

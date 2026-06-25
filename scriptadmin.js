@@ -1051,24 +1051,35 @@ window.renderSiteSettings = function() {
         document.getElementById('site-ser-date').value = st['course_ser'].date || '';
         document.getElementById('site-ser-loc').value = st['course_ser'].location || '';
         document.getElementById('site-ser-price').value = ((st['course_ser'].priceCentavos || 0) / 100).toFixed(2);
+        document.getElementById('site-ser-old-price').value = st['course_ser'].oldPriceCentavos ? ((st['course_ser'].oldPriceCentavos || 0) / 100).toFixed(2) : '';
+        document.getElementById('site-ser-promo-timer').checked = !!st['course_ser'].promoTimer;
     }
     if(st['course_pnl']) {
         document.getElementById('site-pnl-date').value = st['course_pnl'].date || '';
         document.getElementById('site-pnl-loc').value = st['course_pnl'].location || '';
         document.getElementById('site-pnl-price').value = ((st['course_pnl'].priceCentavos || 0) / 100).toFixed(2);
+        document.getElementById('site-pnl-old-price').value = st['course_pnl'].oldPriceCentavos ? ((st['course_pnl'].oldPriceCentavos || 0) / 100).toFixed(2) : '';
+        document.getElementById('site-pnl-promo-timer').checked = !!st['course_pnl'].promoTimer;
     }
 };
 
-async function saveSiteConfig(courseId, btn, dateId, locId, priceId) {
+async function saveSiteConfig(courseId, btn, dateId, locId, priceId, oldPriceId, promoTimerId) {
     const originalText = btn.innerText;
     btn.innerText = 'Salvando...'; btn.disabled = true;
     try {
         const priceNum = parseFloat(document.getElementById(priceId).value);
+        const oldPriceVal = document.getElementById(oldPriceId).value;
+        const oldPriceNum = oldPriceVal ? parseFloat(oldPriceVal) : null;
+        const promoTimer = document.getElementById(promoTimerId).checked;
+        
         const data = {
             date: document.getElementById(dateId).value,
             location: document.getElementById(locId).value,
             priceCentavos: Math.round(priceNum * 100),
-            priceText: priceNum.toLocaleString('pt-BR', {minimumFractionDigits: 2})
+            priceText: priceNum.toLocaleString('pt-BR', {minimumFractionDigits: 2}),
+            oldPriceCentavos: oldPriceNum ? Math.round(oldPriceNum * 100) : null,
+            oldPriceText: oldPriceNum ? oldPriceNum.toLocaleString('pt-BR', {minimumFractionDigits: 2}) : '',
+            promoTimer: promoTimer
         };
         await setDoc(doc(db, "settings", courseId), data, { merge: true });
         window.showToast("Configurações atualizadas!", "success");
@@ -1080,9 +1091,9 @@ async function saveSiteConfig(courseId, btn, dateId, locId, priceId) {
 }
 
 document.getElementById('form-site-ser')?.addEventListener('submit', (e) => { e.preventDefault();
-    saveSiteConfig('course_ser', e.target.querySelector('button'), 'site-ser-date', 'site-ser-loc', 'site-ser-price'); });
+    saveSiteConfig('course_ser', e.target.querySelector('button'), 'site-ser-date', 'site-ser-loc', 'site-ser-price', 'site-ser-old-price', 'site-ser-promo-timer'); });
 document.getElementById('form-site-pnl')?.addEventListener('submit', (e) => { e.preventDefault();
-    saveSiteConfig('course_pnl', e.target.querySelector('button'), 'site-pnl-date', 'site-pnl-loc', 'site-pnl-price'); });
+    saveSiteConfig('course_pnl', e.target.querySelector('button'), 'site-pnl-date', 'site-pnl-loc', 'site-pnl-price', 'site-pnl-old-price', 'site-pnl-promo-timer'); });
 
 document.getElementById('close-modal').addEventListener('click', () => {
     document.getElementById('client-modal').classList.add('hidden');
