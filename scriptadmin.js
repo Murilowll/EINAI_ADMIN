@@ -1044,6 +1044,14 @@ window.deleteUser = function(id) {
     });
 };
 
+window.toggleRedirectInputs = function(courseKey) {
+    const mode = document.getElementById(`site-${courseKey}-checkout-mode`).value;
+    const container = document.getElementById(`site-${courseKey}-links-container`);
+    if(container) {
+        container.style.display = mode === 'redirect' ? 'block' : 'none';
+    }
+};
+
 // --- GESTÃO DE SITE E PREÇOS ---
 window.renderSiteSettings = function() {
     const st = window.siteSettings || {};
@@ -1053,6 +1061,19 @@ window.renderSiteSettings = function() {
         document.getElementById('site-ser-price').value = ((st['course_ser'].priceCentavos || 0) / 100).toFixed(2);
         document.getElementById('site-ser-old-price').value = st['course_ser'].oldPriceCentavos ? ((st['course_ser'].oldPriceCentavos || 0) / 100).toFixed(2) : '';
         document.getElementById('site-ser-promo-timer').checked = !!st['course_ser'].promoTimer;
+        
+        document.getElementById('site-ser-installments').value = st['course_ser'].installments || 12;
+        document.getElementById('site-ser-installment-price').value = st['course_ser'].installmentPrice ? st['course_ser'].installmentPrice.toFixed(2) : '';
+        
+        const mode = st['course_ser'].checkoutMode || 'transparent';
+        document.getElementById('site-ser-checkout-mode').value = mode;
+        const links = st['course_ser'].redirectLinks || {};
+        document.getElementById('site-ser-link-1x').value = links.link1x || '';
+        document.getElementById('site-ser-link-3x').value = links.link3x || '';
+        document.getElementById('site-ser-link-6x').value = links.link6x || '';
+        document.getElementById('site-ser-link-10x').value = links.link10x || '';
+        document.getElementById('site-ser-link-12x').value = links.link12x || '';
+        window.toggleRedirectInputs('ser');
     }
     if(st['course_pnl']) {
         document.getElementById('site-pnl-date').value = st['course_pnl'].date || '';
@@ -1060,6 +1081,19 @@ window.renderSiteSettings = function() {
         document.getElementById('site-pnl-price').value = ((st['course_pnl'].priceCentavos || 0) / 100).toFixed(2);
         document.getElementById('site-pnl-old-price').value = st['course_pnl'].oldPriceCentavos ? ((st['course_pnl'].oldPriceCentavos || 0) / 100).toFixed(2) : '';
         document.getElementById('site-pnl-promo-timer').checked = !!st['course_pnl'].promoTimer;
+        
+        document.getElementById('site-pnl-installments').value = st['course_pnl'].installments || 12;
+        document.getElementById('site-pnl-installment-price').value = st['course_pnl'].installmentPrice ? st['course_pnl'].installmentPrice.toFixed(2) : '';
+        
+        const mode = st['course_pnl'].checkoutMode || 'transparent';
+        document.getElementById('site-pnl-checkout-mode').value = mode;
+        const links = st['course_pnl'].redirectLinks || {};
+        document.getElementById('site-pnl-link-1x').value = links.link1x || '';
+        document.getElementById('site-pnl-link-3x').value = links.link3x || '';
+        document.getElementById('site-pnl-link-6x').value = links.link6x || '';
+        document.getElementById('site-pnl-link-10x').value = links.link10x || '';
+        document.getElementById('site-pnl-link-12x').value = links.link12x || '';
+        window.toggleRedirectInputs('pnl');
     }
 };
 
@@ -1072,6 +1106,20 @@ async function saveSiteConfig(courseId, btn, dateId, locId, priceId, oldPriceId,
         const oldPriceNum = oldPriceVal ? parseFloat(oldPriceVal) : null;
         const promoTimer = document.getElementById(promoTimerId).checked;
         
+        const courseKey = courseId === 'course_ser' ? 'ser' : 'pnl';
+        const checkoutMode = document.getElementById(`site-${courseKey}-checkout-mode`).value;
+        const redirectLinks = {
+            link1x: document.getElementById(`site-${courseKey}-link-1x`).value.trim(),
+            link3x: document.getElementById(`site-${courseKey}-link-3x`).value.trim(),
+            link6x: document.getElementById(`site-${courseKey}-link-6x`).value.trim(),
+            link10x: document.getElementById(`site-${courseKey}-link-10x`).value.trim(),
+            link12x: document.getElementById(`site-${courseKey}-link-12x`).value.trim()
+        };
+
+        const installmentsNum = parseInt(document.getElementById(`site-${courseKey}-installments`).value) || 12;
+        const installmentPriceVal = document.getElementById(`site-${courseKey}-installment-price`).value;
+        const installmentPriceNum = installmentPriceVal ? parseFloat(installmentPriceVal) : null;
+
         const data = {
             date: document.getElementById(dateId).value,
             location: document.getElementById(locId).value,
@@ -1079,7 +1127,11 @@ async function saveSiteConfig(courseId, btn, dateId, locId, priceId, oldPriceId,
             priceText: priceNum.toLocaleString('pt-BR', {minimumFractionDigits: 2}),
             oldPriceCentavos: oldPriceNum ? Math.round(oldPriceNum * 100) : null,
             oldPriceText: oldPriceNum ? oldPriceNum.toLocaleString('pt-BR', {minimumFractionDigits: 2}) : '',
-            promoTimer: promoTimer
+            promoTimer: promoTimer,
+            checkoutMode: checkoutMode,
+            redirectLinks: redirectLinks,
+            installments: installmentsNum,
+            installmentPrice: installmentPriceNum
         };
         await setDoc(doc(db, "settings", courseId), data, { merge: true });
         window.showToast("Configurações atualizadas!", "success");

@@ -227,6 +227,43 @@
                                 <label>Valor do Investimento (R$)</label>
                                 <input type="number" step="0.01" id="site-ser-price" placeholder="Ex: 919.00" required>
                             </div>
+                            <div class="form-group">
+                                <label>Número Máximo de Parcelas (Ex: 12)</label>
+                                <input type="number" id="site-ser-installments" placeholder="Ex: 12" min="1" max="24" value="12" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Valor da Parcela (R$) (Opcional - Calculado se vazio)</label>
+                                <input type="number" step="0.01" id="site-ser-installment-price" placeholder="Ex: 79.90">
+                            </div>
+                            <div class="form-group">
+                                <label>Método de Checkout (Cartão)</label>
+                                <select id="site-ser-checkout-mode" onchange="toggleRedirectInputs('ser')">
+                                    <option value="transparent">Checkout Transparente (Cartão no Modal)</option>
+                                    <option value="redirect">Redirecionamento (Links de Pagamento)</option>
+                                </select>
+                            </div>
+                            <div id="site-ser-links-container" style="display: none; border-left: 2px solid var(--accent); padding-left: 0.75rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 1x (À Vista)</label>
+                                    <input type="text" id="site-ser-link-1x" placeholder="Link e-Rede para 1x">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 3x</label>
+                                    <input type="text" id="site-ser-link-3x" placeholder="Link e-Rede para 3x">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 6x</label>
+                                    <input type="text" id="site-ser-link-6x" placeholder="Link e-Rede para 6x">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 10x</label>
+                                    <input type="text" id="site-ser-link-10x" placeholder="Link e-Rede para 10x">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 12x</label>
+                                    <input type="text" id="site-ser-link-12x" placeholder="Link e-Rede para 12x">
+                                </div>
+                            </div>
                             <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
                                 <input type="checkbox" id="site-ser-promo-timer" style="width: auto; margin: 0;">
                                 <label for="site-ser-promo-timer" style="margin-bottom: 0;">Habilitar Cronômetro Promocional (Zera às 00h)</label>
@@ -252,6 +289,43 @@
                             <div class="form-group">
                                 <label>Valor do Investimento (R$)</label>
                                 <input type="number" step="0.01" id="site-pnl-price" placeholder="Ex: 477.00" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Número Máximo de Parcelas (Ex: 12)</label>
+                                <input type="number" id="site-pnl-installments" placeholder="Ex: 12" min="1" max="24" value="12" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Valor da Parcela (R$) (Opcional - Calculado se vazio)</label>
+                                <input type="number" step="0.01" id="site-pnl-installment-price" placeholder="Ex: 39.75">
+                            </div>
+                            <div class="form-group">
+                                <label>Método de Checkout (Cartão)</label>
+                                <select id="site-pnl-checkout-mode" onchange="toggleRedirectInputs('pnl')">
+                                    <option value="transparent">Checkout Transparente (Cartão no Modal)</option>
+                                    <option value="redirect">Redirecionamento (Links de Pagamento)</option>
+                                </select>
+                            </div>
+                            <div id="site-pnl-links-container" style="display: none; border-left: 2px solid var(--accent); padding-left: 0.75rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 1x (À Vista)</label>
+                                    <input type="text" id="site-pnl-link-1x" placeholder="Link e-Rede para 1x">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 3x</label>
+                                    <input type="text" id="site-pnl-link-3x" placeholder="Link e-Rede para 3x">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 6x</label>
+                                    <input type="text" id="site-pnl-link-6x" placeholder="Link e-Rede para 6x">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 10x</label>
+                                    <input type="text" id="site-pnl-link-10x" placeholder="Link e-Rede para 10x">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link de Pagamento - 12x</label>
+                                    <input type="text" id="site-pnl-link-12x" placeholder="Link e-Rede para 12x">
+                                </div>
                             </div>
                             <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
                                 <input type="checkbox" id="site-pnl-promo-timer" style="width: auto; margin: 0;">
@@ -328,6 +402,25 @@
                             </div>
                             <button type="submit" class="btn btn-primary mt-2">Salvar Templates</button>
                         </form>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <h2 class="card-title">Como Vincular sua Conta e-Rede (Itaú)</h2>
+                    <div style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main); margin-top: 1rem;">
+                        <ol style="padding-left: 1.25rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.5rem;"><strong>Acesse o Portal e-Rede:</strong> Entre no site oficial da <a href="https://www.userede.com.br/" target="_blank" style="color: var(--accent); text-decoration: underline;">e-Rede (Userede)</a> e faça login com as suas credenciais.</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Localize o Número de Filiação (PV):</strong> O PV (Ponto de Venda) é o seu identificador de estabelecimento. Ele fica visível no canto superior do painel da Rede.</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Gere o Token de Integração (API Key):</strong> No menu de configurações do portal da Rede, navegue até <strong>Integrações > Token de Produção</strong> e solicite a geração de um novo Token. Copie este valor.</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Configure no Firebase Functions:</strong> Abra o arquivo <code>index.js</code> da pasta do seu projeto e atualize as linhas 9 e 10 com os valores de PV e Token:
+                                <pre style="background: #f1f5f9; padding: 0.5rem 0.75rem; border-radius: 0.375rem; margin-top: 0.25rem; font-size: 0.8rem; overflow-x: auto;">const REDE_PV = "seu_pv_aqui";&#10;const REDE_TOKEN = "seu_token_aqui";</pre>
+                            </li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Envie as Atualizações:</strong> Abra o terminal na raiz do projeto Firebase e execute o deploy da função:
+                                <pre style="background: #f1f5f9; padding: 0.5rem 0.75rem; border-radius: 0.375rem; margin-top: 0.25rem; font-size: 0.8rem; overflow-x: auto;">firebase deploy --only functions</pre>
+                            </li>
+                        </ol>
+                        <div class="alert" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.825rem; border-radius: 0.5rem; padding: 0.75rem 1rem;">
+                            <strong>Dica de Segurança:</strong> Nunca coloque as credenciais da Rede diretamente no código-fonte das páginas HTML (front-end). O processamento é realizado no Firebase Cloud Functions (back-end) para garantir total sigilo dos seus dados de vendas e dos cartões dos alunos.
+                        </div>
                     </div>
                 </div>
             </section>
