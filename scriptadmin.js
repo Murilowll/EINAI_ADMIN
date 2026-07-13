@@ -57,16 +57,42 @@ function applyPermissions() {
     
     // Ocultar/mostrar itens do menu conforme permissão
     document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
-        if (link.id === 'btn-logout') return;
+        if (link.id === 'btn-logout' || link.classList.contains('dropdown-toggle')) return;
         const target = link.getAttribute('data-target');
-        if (perms.includes(target)) link.style.display = 'block';
+        if (perms.includes(target)) link.style.display = 'flex';
         else link.style.display = 'none';
     });
+
+    // Controlar visibilidade dos dropdowns: só mostra se tiver pelo menos um sub-item visível
+    document.querySelectorAll('.sidebar-nav .nav-dropdown').forEach(dropdown => {
+        const subItems = Array.from(dropdown.querySelectorAll('.sub-item'));
+        const hasVisibleSubItem = subItems.some(item => item.style.display === 'flex');
+        
+        if (hasVisibleSubItem) {
+            dropdown.style.display = 'block';
+            dropdown.querySelector('.dropdown-toggle').style.display = 'flex';
+        } else {
+            dropdown.style.display = 'none';
+            dropdown.querySelector('.dropdown-toggle').style.display = 'none';
+        }
+    });
+
+    // Se o item ativo estiver dentro de um dropdown, abre o dropdown correspondente
+    const activeLink = document.querySelector('.sidebar-nav .nav-item.active');
+    if (activeLink && activeLink.classList.contains('sub-item')) {
+        const dropdown = activeLink.closest('.nav-dropdown');
+        if (dropdown) {
+            dropdown.classList.add('open');
+            const menu = dropdown.querySelector('.dropdown-menu-items');
+            if (menu) menu.classList.remove('hidden');
+        }
+    }
 
     // Se a seção atual não é permitida, joga para a primeira permitida
     const activeSection = document.querySelector('.content-section.active');
     if (activeSection && !perms.includes(activeSection.id)) {
-        const firstAllowed = Array.from(document.querySelectorAll('.sidebar-nav .nav-item')).find(l => l.style.display === 'block');
+        const firstAllowed = Array.from(document.querySelectorAll('.sidebar-nav .nav-item'))
+            .find(l => l.style.display === 'flex' && !l.classList.contains('dropdown-toggle'));
         if (firstAllowed) firstAllowed.click();
     }
 }
@@ -372,6 +398,15 @@ document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
         e.preventDefault();
         const currentLink = e.currentTarget;
         if(currentLink.id === 'btn-logout' || currentLink.id === 'btn-dark-mode') return;
+
+        // Se for um menu toggle de dropdown
+        if (currentLink.classList.contains('dropdown-toggle')) {
+            const dropdown = currentLink.parentElement;
+            dropdown.classList.toggle('open');
+            const menu = dropdown.querySelector('.dropdown-menu-items');
+            if (menu) menu.classList.toggle('hidden');
+            return;
+        }
         
         document.querySelectorAll('.sidebar-nav .nav-item').forEach(l => l.classList.remove('active'));
         currentLink.classList.add('active');
@@ -386,6 +421,7 @@ document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
         if(targetId === 'crm-section') renderKanban();
         if(targetId === 'site-section') window.renderSiteSettings();
         if(targetId === 'usuarios-section') renderUsers();
+        if(targetId === 'cartas-section') window.initLettersTab();
         if(targetId === 'configs-section') window.renderConfigsSettings();
 
         // Fecha a sidebar no celular ao clicar em um link
@@ -956,7 +992,9 @@ window.renderUsers = function() {
         'turmas-section': 'Turmas',
         'crm-section': 'CRM',
         'site-section': 'Site & Preços',
-        'usuarios-section': 'Acessos'
+        'usuarios-section': 'Acessos',
+        'cartas-section': 'Carta de Confirmação',
+        'configs-section': 'Configurações'
     };
 
     state.users.forEach(user => {
@@ -1353,7 +1391,7 @@ document.getElementById('btn-export-selected')?.addEventListener('click', () => 
     if (state.selectedForExport.size === 0) return;
     const clientsToExport = state.clients.filter(c => state.selectedForExport.has(c.id));
     
-    const csvContent = "Nome,E-mail,Telefone,Tags\n" + clientsToExport.map(c => `"${c.name}","${c.email}","${c.phone}","${(c.tags || []).join(', ')}"`).join("\n");
+    const csvContent = "Nome,CPF,E-mail,Telefone,Empresa,Tags\n" + clientsToExport.map(c => `"${c.name}","${c.cpf || ''}","${c.email}","${c.phone}","${c.company || ''}","${(c.tags || []).join(', ')}"`).join("\n");
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -1369,7 +1407,7 @@ window.exportCSV = function(classId, className) {
     const clientsToExport = classId ? state.clients.filter(c => c.classId === classId) : state.clients;
     if(clientsToExport.length === 0) return alert('Nenhum aluno para exportar.');
 
-    const csvContent = "Nome,E-mail,Telefone,Tags\n" + clientsToExport.map(c => `"${c.name}","${c.email}","${c.phone}","${c.tags.join(', ')}"`).join("\n");
+    const csvContent = "Nome,CPF,E-mail,Telefone,Empresa,Tags\n" + clientsToExport.map(c => `"${c.name}","${c.cpf || ''}","${c.email}","${c.phone}","${c.company || ''}","${c.tags.join(', ')}"`).join("\n");
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -1728,9 +1766,56 @@ window.copySubscriptionLink = function() {
     window.copyToClipboard(url, "Link de inscrição copiado com sucesso!");
 };
 
-window.exportarCarta = function(dealId) {
-    // Função temporária até implementarmos a lógica da carta
-    window.showToast("A funcionalidade 'Exportar Carta' será implementada em breve!", "success");
+window.exportarCarta = async function(dealId) {
+    const deal = state.deals.find(d => d.id === dealId);
+    if (!deal) return;
+
+    window.showToast("Gerando PDF da carta...", "info");
+
+    try {
+        const pipeline = state.pipelines.find(p => p.id === deal.pipelineId);
+        const isPnl = pipeline && pipeline.name.toLowerCase().includes("pnl");
+        const courseDocId = isPnl ? "course_pnl" : "course_ser";
+
+        // Busca configurações do curso para caso não haja data/local definidos no negócio
+        let fallbackDate = "";
+        let fallbackLoc = "";
+        try {
+            const docSnap = await getDoc(doc(db, "settings", courseDocId));
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                fallbackDate = data.date || "";
+                fallbackLoc = data.location || "";
+            }
+        } catch(e) {
+            console.error("Erro ao buscar configurações do curso:", e);
+        }
+
+        const letterDate = deal.letterDate || fallbackDate || (isPnl ? "24, 25 e 26 de fevereiro de 2026" : "a definir");
+        const letterLoc = deal.letterLoc || fallbackLoc || (isPnl ? "Centro Mariápolis Arnold\nAv. Theodomiro Porto da Fonseca, 3555, Bairro Cristo Rei, São Leopoldo, RS\nO horário de início será das 18h59min e o término está previsto para 23h.\nA recepção será feita após as 18h29min." : "a definir");
+
+        const templates = window.siteSettings && window.siteSettings['letter_templates'] || {};
+        const templateText = isPnl 
+            ? (templates.pnlTemplate || getDefaultPnlTemplate())
+            : (templates.serTemplate || getDefaultSerTemplate());
+
+        const parsedText = templateText
+            .replace(/{nome}/g, deal.contactName)
+            .replace(/{data}/g, letterDate)
+            .replace(/{local}/g, letterLoc);
+
+        // Gerar PDF usando jsPDF
+        const { jsPDF } = window.jspdf;
+        const docPdf = new jsPDF();
+        
+        await drawLetterPDF(docPdf, parsedText, isPnl);
+        
+        docPdf.save(`Carta_Confirmacao_${deal.contactName.replace(/\s+/g, '_')}.pdf`);
+        window.showToast("Carta de confirmação exportada com sucesso!", "success");
+    } catch(err) {
+        console.error("Erro ao exportar carta:", err);
+        window.showToast("Erro ao gerar PDF da carta de confirmação.", "error");
+    }
 };
 
 window.updatePipelineSelector = function() {
@@ -1956,10 +2041,10 @@ window.renderConfigsSettings = function() {
     document.getElementById('config-template-id').value = emailConfig.templateId || '';
     document.getElementById('config-public-key').value = emailConfig.publicKey || '';
 
-    document.getElementById('config-template-pnl').value = templates.pnlTemplate || 
-        `Prezado(a) {nome},\n\nSua inscrição no curso Introdução à PNL foi confirmada com sucesso!\n\nInformações do Treinamento:\nData: {data}\nLocal: {local}\n\nEsperamos você lá!\n\nAbraços,\nInstituto EINAI`;
-    document.getElementById('config-template-ser').value = templates.serTemplate || 
-        `Prezado(a) {nome},\n\nSua inscrição no treinamento SER - Evolução e Liderança foi confirmada com sucesso!\n\nInformações do Treinamento:\nData: {data}\nLocal: {local}\n\nEsperamos você lá!\n\nAbraços,\nInstituto EINAI`;
+    const pnlInput = document.getElementById('config-template-pnl');
+    const serInput = document.getElementById('config-template-ser');
+    if (pnlInput) pnlInput.value = templates.pnlTemplate || getDefaultPnlTemplate();
+    if (serInput) serInput.value = templates.serTemplate || getDefaultSerTemplate();
 };
 
 document.getElementById('form-email-config')?.addEventListener('submit', async (e) => {
@@ -2038,8 +2123,8 @@ document.getElementById('btn-send-letter')?.addEventListener('click', async () =
 
         // Obter o template e substituir os marcadores
         const templateText = isPnl 
-            ? (templates?.pnlTemplate || `Prezado(a) {nome},\n\nSua inscrição no curso Introdução à PNL foi confirmada com sucesso!\n\nInformações do Treinamento:\nData: {data}\nLocal: {local}\n\nEsperamos você lá!\n\nAbraços,\nInstituto EINAI`)
-            : (templates?.serTemplate || `Prezado(a) {nome},\n\nSua inscrição no treinamento SER - Evolução e Liderança foi confirmada com sucesso!\n\nInformações do Treinamento:\nData: {data}\nLocal: {local}\n\nEsperamos você lá!\n\nAbraços,\nInstituto EINAI`);
+            ? (templates?.pnlTemplate || getDefaultPnlTemplate())
+            : (templates?.serTemplate || getDefaultSerTemplate());
 
         const parsedText = templateText
             .replace(/{nome}/g, deal.contactName)
@@ -2050,33 +2135,7 @@ document.getElementById('btn-send-letter')?.addEventListener('click', async () =
         const { jsPDF } = window.jspdf;
         const docPdf = new jsPDF();
         
-        // Configura fonte e margens
-        docPdf.setFont("helvetica", "normal");
-        docPdf.setFontSize(12);
-
-        // Título do documento
-        docPdf.setFont("helvetica", "bold");
-        docPdf.setFontSize(16);
-        docPdf.text("CONFIRMAÇÃO DE INSCRIÇÃO", 20, 30);
-        docPdf.line(20, 35, 190, 35); // Linha divisória
-
-        // Texto da carta
-        docPdf.setFont("helvetica", "normal");
-        docPdf.setFontSize(11);
-        const splitText = docPdf.splitTextToSize(parsedText, 170); // Largura útil de 170mm (210 - 20 - 20)
-        docPdf.text(splitText, 20, 50);
-
-        // Carregar logotipo e colocar no final do documento no canto direito
-        try {
-            const logoImg = await loadImage('assets/img/einai-logo2.png');
-            const logoW = 40;
-            const logoH = 15;
-            const logoX = 190 - logoW; // Canto direito
-            const logoY = 270 - logoH; // Canto inferior
-            docPdf.addImage(logoImg, 'PNG', logoX, logoY, logoW, logoH);
-        } catch (e) {
-            console.error("Não foi possível carregar o logotipo para o PDF:", e);
-        }
+        await drawLetterPDF(docPdf, parsedText, isPnl);
 
         const pdfDataUri = docPdf.output('datauristring'); // data:application/pdf;base64,JVBERi0xLjQK...
 
@@ -2119,4 +2178,239 @@ function loadImage(src) {
         img.onerror = (e) => reject(e);
         img.src = src;
     });
+}
+
+function getDefaultPnlTemplate() {
+    return `<p>Olá {nome},</p><p>Seja muito bem-vindo(a) ao <strong>INTRODUÇÃO À PNL</strong>.</p><p>Informamos que a sua participação no curso que acontecerá nos dias {data} já está confirmada.</p><p>Lembramos que o Introdução à PNL se trata da iniciação das ferramentas da programação neurolinguísticas. Três dias que permitirão você entender um pouco mais da estrutura mental de comportamentos, crenças, ações e reações, bem como ampliar suas capacidades de comunicação e relacionamento intrapessoal e interpessoal.</p><p style="color: rgb(49, 130, 206);"><strong><em>Local e Horário</em></strong></p><p><strong>Centro Mariápolis Arnold</strong><br>Av. Theodomiro Porto da Fonseca, 3555, Bairro Cristo Rei, São Leopoldo, RS<br>O horário de início será das 18h59min e o término está previsto para 23h.<br>A recepção será feita após as 18h29min.</p><p style="color: rgb(49, 130, 206);"><strong><em>Mensagem para você</em></strong></p><p><strong>Evolução do Ser Humano:</strong> acreditamos que as pessoas são as únicas responsáveis por esse processo, e que a busca pela excelência da qualidade de vida esteja em oferecer caminhos para que as pessoas interajam e tenham tempo umas para as outras.</p><p>Para nós é fator primordial poder modificar nossos pensamentos e comportamentos, buscar a evolução pessoal e aprimorar o melhor do ser humano. Nossas capacidades devem ser estimuladas, e por isso desenvolvemos técnicas que nos possibilitam aperfeiçoar a forma de nos comunicarmos, expressarmos e realizarmos escolhas.</p><p>Muito obrigado pela confiança depositada em nosso trabalho. Temos a certeza que estamos preparados para surpreendê-la.</p><p>Desejamos a você um excelente curso.</p><p>Grande abraço,<br>Equipe Einai</p>`;
+}
+
+function getDefaultSerTemplate() {
+    return `<p>Prezado(a) {nome},</p><p>Sua inscrição no treinamento <strong>SER - Evolução e Liderança</strong> foi confirmada com sucesso!</p><p>Informações do Treinamento:<br>Data: {data}<br>Local: {local}</p><p>Esperamos você lá!</p><p>Abraços,<br>Instituto EINAI</p>`;
+}
+
+async function drawLetterPDF(docPdf, parsedText, isPnl) {
+    const printDiv = document.createElement('div');
+    printDiv.id = 'letter-print-container';
+    printDiv.style.width = '794px';
+    printDiv.style.minHeight = '1123px';
+    printDiv.style.padding = '70px 60px';
+    printDiv.style.boxSizing = 'border-box';
+    printDiv.style.fontFamily = 'Arial, sans-serif';
+    printDiv.style.fontSize = '14px';
+    printDiv.style.lineHeight = '1.6';
+    printDiv.style.color = '#1e293b';
+    printDiv.style.background = 'white';
+    printDiv.style.position = 'fixed';
+    printDiv.style.left = '-9999px';
+    printDiv.style.top = '-9999px';
+    
+    const templates = window.siteSettings && window.siteSettings['letter_templates'] || {};
+    const savedCustomLogo = isPnl ? templates.pnlLogo : templates.serLogo;
+    
+    const logoSrc = savedCustomLogo || (isPnl ? 'assets/img/CHAVE.png' : 'assets/img/ser-logo.png');
+    const logoHeight = isPnl && !savedCustomLogo ? '90px' : '50px';
+    
+    printDiv.innerHTML = `
+        <div style="text-align: center; margin-bottom: 25px;">
+            <img src="${logoSrc}" style="max-height: ${logoHeight}; display: inline-block;">
+        </div>
+        <div style="text-align: center; margin-bottom: 35px;">
+            <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1e3a8a; font-style: italic; font-family: Arial, sans-serif;">CARTA DE CONFIRMAÇÃO</h2>
+        </div>
+        <div style="text-align: justify; font-size: 14px; color: #334155; font-family: Arial, sans-serif;">
+            ${parsedText}
+        </div>
+    `;
+    
+    document.body.appendChild(printDiv);
+    
+    await new Promise(r => setTimeout(r, 300));
+    
+    try {
+        const canvas = await html2canvas(printDiv, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff'
+        });
+        
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        docPdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+    } finally {
+        document.body.removeChild(printDiv);
+    }
+}
+
+let quillInstance = null;
+let currentCustomLogoBase64 = null;
+
+window.initLettersTab = function() {
+    if (!quillInstance) {
+        quillInstance = new Quill('#quill-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'color': [] }],
+                    ['clean']
+                ]
+            }
+        });
+
+        quillInstance.on('text-change', () => {
+            updateLetterPreview();
+        });
+
+        document.getElementById('letter-course-select').addEventListener('change', (e) => {
+            currentCustomLogoBase64 = null;
+            loadTemplateToEditor(e.target.value);
+        });
+
+        // Logo Upload Handler
+        document.getElementById('letter-logo-upload')?.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                currentCustomLogoBase64 = event.target.result;
+                updateLetterPreview();
+                
+                const btnRemove = document.getElementById('btn-remove-letter-logo');
+                if (btnRemove) btnRemove.style.display = 'inline-flex';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Logo Remove Handler
+        document.getElementById('btn-remove-letter-logo')?.addEventListener('click', () => {
+            currentCustomLogoBase64 = 'REMOVE';
+            updateLetterPreview();
+            
+            const btnRemove = document.getElementById('btn-remove-letter-logo');
+            if (btnRemove) btnRemove.style.display = 'none';
+            
+            const fileInput = document.getElementById('letter-logo-upload');
+            if (fileInput) fileInput.value = '';
+        });
+
+        document.getElementById('btn-save-letter-templates').addEventListener('click', async () => {
+            const course = document.getElementById('letter-course-select').value;
+            const htmlContent = quillInstance.root.innerHTML;
+            
+            const btn = document.getElementById('btn-save-letter-templates');
+            const originalText = btn.innerText;
+            btn.innerText = 'Salvando...'; btn.disabled = true;
+            
+            try {
+                const docRef = doc(db, "settings", "letter_templates");
+                const dataToSave = {};
+                
+                if (course === 'pnl') {
+                    dataToSave.pnlTemplate = htmlContent;
+                    if (currentCustomLogoBase64 === 'REMOVE') {
+                        dataToSave.pnlLogo = null;
+                    } else if (currentCustomLogoBase64) {
+                        dataToSave.pnlLogo = currentCustomLogoBase64;
+                    }
+                } else {
+                    dataToSave.serTemplate = htmlContent;
+                    if (currentCustomLogoBase64 === 'REMOVE') {
+                        dataToSave.serLogo = null;
+                    } else if (currentCustomLogoBase64) {
+                        dataToSave.serLogo = currentCustomLogoBase64;
+                    }
+                }
+                
+                await setDoc(docRef, dataToSave, { merge: true });
+                
+                // Update local cache
+                if (!window.siteSettings) window.siteSettings = {};
+                if (!window.siteSettings['letter_templates']) window.siteSettings['letter_templates'] = {};
+                
+                if (course === 'pnl') {
+                    window.siteSettings['letter_templates'].pnlTemplate = htmlContent;
+                    if (dataToSave.pnlLogo !== undefined) {
+                        window.siteSettings['letter_templates'].pnlLogo = dataToSave.pnlLogo;
+                    }
+                } else {
+                    window.siteSettings['letter_templates'].serTemplate = htmlContent;
+                    if (dataToSave.serLogo !== undefined) {
+                        window.siteSettings['letter_templates'].serLogo = dataToSave.serLogo;
+                    }
+                }
+                
+                currentCustomLogoBase64 = null;
+                window.showToast("Modelo e logotipo salvos com sucesso!", "success");
+                loadTemplateToEditor(course);
+            } catch(err) {
+                console.error("Erro ao salvar template:", err);
+                window.showToast("Erro ao salvar modelo.", "error");
+            } finally {
+                btn.innerText = originalText; btn.disabled = false;
+            }
+        });
+    }
+
+    const activeCourse = document.getElementById('letter-course-select').value || 'pnl';
+    loadTemplateToEditor(activeCourse);
+};
+
+window.insertPlaceholder = function(placeholder) {
+    if (!quillInstance) return;
+    const range = quillInstance.getSelection(true);
+    quillInstance.insertText(range.index, placeholder);
+    quillInstance.setSelection(range.index + placeholder.length);
+};
+
+function updateLetterPreview() {
+    if (!quillInstance) return;
+    const course = document.getElementById('letter-course-select').value;
+    const logoImg = document.getElementById('letter-preview-logo');
+    
+    if (logoImg) {
+        const templates = window.siteSettings && window.siteSettings['letter_templates'] || {};
+        const savedCustomLogo = course === 'pnl' ? templates.pnlLogo : templates.serLogo;
+        
+        if (currentCustomLogoBase64 === 'REMOVE') {
+            logoImg.src = course === 'pnl' ? 'assets/img/CHAVE.png' : 'assets/img/ser-logo.png';
+        } else if (currentCustomLogoBase64) {
+            logoImg.src = currentCustomLogoBase64;
+        } else if (savedCustomLogo) {
+            logoImg.src = savedCustomLogo;
+        } else {
+            logoImg.src = course === 'pnl' ? 'assets/img/CHAVE.png' : 'assets/img/ser-logo.png';
+        }
+        
+        const isDefaultPnlLogo = logoImg.src.includes('CHAVE.png');
+        logoImg.style.maxHeight = isDefaultPnlLogo ? '40px' : '35px';
+    }
+    
+    let html = quillInstance.root.innerHTML;
+    html = html
+        .replace(/{nome}/g, '<strong>Kelly da Silva</strong>')
+        .replace(/{data}/g, '<strong>24, 25 e 26 de fevereiro de 2026</strong>')
+        .replace(/{local}/g, '<strong>Centro Mariápolis Arnold, São Leopoldo, RS</strong>');
+        
+    const previewContent = document.getElementById('letter-preview-content');
+    if (previewContent) previewContent.innerHTML = html;
+}
+
+function loadTemplateToEditor(course) {
+    if (!quillInstance) return;
+    const templates = window.siteSettings && window.siteSettings['letter_templates'] || {};
+    
+    if (course === 'pnl') {
+        quillInstance.root.innerHTML = templates.pnlTemplate || getDefaultPnlTemplate();
+    } else {
+        quillInstance.root.innerHTML = templates.serTemplate || getDefaultSerTemplate();
+    }
+    
+    const savedCustomLogo = course === 'pnl' ? templates.pnlLogo : templates.serLogo;
+    const btnRemove = document.getElementById('btn-remove-letter-logo');
+    if (btnRemove) {
+        btnRemove.style.display = savedCustomLogo ? 'inline-flex' : 'none';
+    }
+    
+    updateLetterPreview();
 }

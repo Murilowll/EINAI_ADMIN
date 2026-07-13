@@ -5,12 +5,11 @@ const axios = require("axios");
 // INTEGRAÇÃO REDE ITAÚ - E.REDE (CHECKOUT TRANSPARENTE)
 // ============================================================================
 // ATENÇÃO: Nunca divulgue estas chaves publicamente.
-// Você obtém o PV (Número de Filiação) e o TOKEN no portal da e.Rede.
-const REDE_PV = "SEU_PV_AQUI"; 
-const REDE_TOKEN = "SEU_TOKEN_AQUI"; 
+const REDE_PV = "80792645"; 
+const REDE_TOKEN = "0b8a698e49c4428fa79167fc8d715140"; 
 
-// Ambiente: Produção. Para testes sem cobrança real, a Rede fornece um Sandbox na documentação.
-const REDE_API_URL = "https://api.userede.com.br/erede/v1/transactions"; 
+// Ambiente: Sandbox (Testes). Para produção, altere para "https://api.userede.com.br/erede/v1/transactions"
+const REDE_API_URL = "https://sandbox-erede.useredecloud.com.br/erede/v1/transactions"; 
 // ============================================================================
 
 exports.processarPagamentoRede = functions.https.onCall(async (data, context) => {

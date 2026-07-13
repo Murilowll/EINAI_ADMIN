@@ -922,7 +922,7 @@ document.getElementById('btn-export-selected')?.addEventListener('click', () => 
     if (state.selectedForExport.size === 0) return;
     const clientsToExport = state.clients.filter(c => state.selectedForExport.has(c.id));
     
-    const csvContent = "Nome,E-mail,Telefone,Tags\n" + clientsToExport.map(c => `"${c.name}","${c.email}","${c.phone}","${(c.tags || []).join(', ')}"`).join("\n");
+    const csvContent = "Nome,CPF,E-mail,Telefone,Empresa,Tags\n" + clientsToExport.map(c => `"${c.name}","${c.cpf || ''}","${c.email}","${c.phone}","${c.company || ''}","${(c.tags || []).join(', ')}"`).join("\n");
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -938,7 +938,7 @@ window.exportCSV = function(classId, className) {
     const clientsToExport = classId ? state.clients.filter(c => c.classId === classId) : state.clients;
     if(clientsToExport.length === 0) return alert('Nenhum aluno para exportar.');
 
-    const csvContent = "Nome,E-mail,Telefone,Tags\n" + clientsToExport.map(c => `"${c.name}","${c.email}","${c.phone}","${c.tags.join(', ')}"`).join("\n");
+    const csvContent = "Nome,CPF,E-mail,Telefone,Empresa,Tags\n" + clientsToExport.map(c => `"${c.name}","${c.cpf || ''}","${c.email}","${c.phone}","${c.company || ''}","${c.tags.join(', ')}"`).join("\n");
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -1233,9 +1233,12 @@ window.copySubscriptionLink = function() {
     window.copyToClipboard(url, "Link de inscrição copiado com sucesso!");
 };
 
-window.exportarCarta = function(dealId) {
-    // Função temporária até implementarmos a lógica da carta
-    window.showToast("A funcionalidade 'Exportar Carta' será implementada em breve!", "success");
+window.exportarCarta = async function(dealId) {
+    // Redireciona para a mesma lógica implementada no scriptadmin.js
+    if (typeof window.exportarCartaAdmin === 'function') {
+        return await window.exportarCartaAdmin(dealId);
+    }
+    window.showToast("Erro ao exportar carta.", "error");
 };
 
 window.updatePipelineSelector = function() {

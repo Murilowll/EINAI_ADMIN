@@ -657,6 +657,68 @@
                 grid-template-columns: 1fr 1fr 1fr
             }
         }
+
+        /* Modal Pix Overlay & Card */
+        .insc-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: insc-fadeIn 0.2s ease-out;
+        }
+
+        .insc-modal-content {
+            background: white;
+            width: 90%;
+            max-width: 440px;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 24px;
+            position: relative;
+            animation: insc-scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .insc-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: #94a3b8;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .insc-modal-close:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        @keyframes insc-fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes insc-scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 
@@ -1059,6 +1121,11 @@
                                 placeholder="seu@exemplo.com" required>
                         </div>
 
+                        <div class="insc-field">
+                            <label for="empresa">Empresa <span style="color: #64748b; font-weight: normal; font-size: 11px;">(Opcional)</span></label>
+                            <input id="empresa" name="empresa" type="text" placeholder="Empresa onde trabalha">
+                        </div>
+
                         <div class="insc-status" id="insc-status-step1"
                             style="color: red; font-size: 13px; font-weight: 600; margin-top: 8px;"></div>
 
@@ -1243,11 +1310,7 @@
                                 <div id="copy-feedback" class="insc-copy-feedback">Código copiado com sucesso!</div>
                             </div>
 
-                            <!-- Botão dinâmico bacana adicionado -->
-                            <div style="width:100%; margin-top:16px;">
-                                <button type="button" class="insc-btn insc-btn-primary" onclick="goToStep(5)">Já
-                                    realizei o pagamento &rarr;</button>
-                            </div>
+
                         </div>
                     </div>
 
@@ -1330,6 +1393,33 @@
                 <p style="font-size: 14px; color: var(--text); font-weight: 500;">Enviaremos o comprovante e os próximos
                     passos para o seu e-mail.</p>
             </section>
+
+            <!-- Modal Pix -->
+            <div id="pix-modal" class="insc-modal-overlay" style="display:none;">
+                <div class="insc-modal-content">
+                    <button type="button" class="insc-modal-close" onclick="closePixModal()">&times;</button>
+                    <div style="margin-bottom: 16px; text-align: left;">
+                        <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1e293b;">Pagamento via Pix</h2>
+                        <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b; line-height: 1.4;">Escaneie o QR Code ou copie o código abaixo para finalizar sua inscrição.</p>
+                    </div>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div class="insc-qr-container" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; display: inline-block;">
+                            <img id="pix-modal-qr-img" src="" alt="QR Code Pix" style="width: 180px; height: 180px; display: block; object-fit: contain;">
+                        </div>
+                    </div>
+                    <div style="width:100%">
+                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; text-align: left; color: #475569;">Código Pix (Copia e Cola):</label>
+                        <div class="insc-pix-copy-box" style="display: flex; gap: 8px;">
+                            <input type="text" id="pix-modal-code-input" readonly style="background: #f1f5f9; font-size: 13px; color: #334155; border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px; width: 100%;" onclick="this.select()">
+                            <button type="button" class="insc-btn insc-btn-copy" onclick="copyPixModalCode()" style="background: var(--text); color: white; border: none; border-radius: 8px; padding: 0 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Copiar</button>
+                        </div>
+                        <div id="modal-copy-feedback" class="insc-copy-feedback" style="margin-top: 6px; text-align: left;">Código copiado com sucesso!</div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button type="button" class="insc-btn insc-btn-primary" onclick="confirmPixModalPayment()" style="width: 100%; padding: 12px; border: none; border-radius: 8px; background: #10b981; color: white; font-weight: 600; cursor: pointer; text-align: center;">Concluir</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -1541,6 +1631,7 @@
             const telefone = document.getElementById('telefone').value.trim();
             const email = document.getElementById('email').value.trim();
             const cpf = document.getElementById('cpf').value.trim();
+            const empresa = document.getElementById('empresa').value.trim();
             const cep = document.getElementById('cep').value.trim();
             const logradouro = document.getElementById('logradouro').value.trim();
             const numero = document.getElementById('numero').value.trim();
@@ -1559,7 +1650,7 @@
 
             const enderecoCompleto = `${logradouro}, ${numero}${complemento ? ' - ' + complemento : ''}, ${bairro}, ${cidade} - ${uf}, CEP: ${cep}`;
 
-            return { ok: true, data: { nome, nascimento, telefone, email, cpf, enderecoCompleto, motivos } };
+            return { ok: true, data: { nome, nascimento, telefone, email, cpf, empresa, enderecoCompleto, motivos } };
         }
 
         let currentDealId = null;
@@ -1734,6 +1825,7 @@
                     phone: check.data.telefone,
                     address: check.data.enderecoCompleto,
                     birthDate: check.data.nascimento,
+                    company: check.data.empresa || '',
                     updatedAt: new Date().toISOString()
                 };
 
@@ -1742,7 +1834,6 @@
                     await updateDoc(docRef, clientData);
                 } else {
                     clientData.classId = 'unassigned';
-                    clientData.company = '';
                     clientData.role = '';
                     clientData.tags = ['Inscrição PNL'];
                     clientData.createdAt = new Date().toISOString();
@@ -1810,12 +1901,47 @@
             cardArea.style.display = 'none';
 
             if (method === 'pix') {
-                btnPix.classList.add('selected');
-                pixArea.style.display = 'block';
+                openPixModal();
             } else {
                 btnCard.classList.add('selected');
                 cardArea.style.display = 'block';
             }
+        };
+
+        window.openPixModal = function () {
+            const modal = document.getElementById('pix-modal');
+            if (modal) {
+                const modalQrImg = document.getElementById('pix-modal-qr-img');
+                const modalInput = document.getElementById('pix-modal-code-input');
+                if (modalQrImg) modalQrImg.src = PIX_IMG_URL;
+                if (modalInput) modalInput.value = PIX_CODIGO;
+                modal.style.display = 'flex';
+            }
+        };
+
+        window.closePixModal = function () {
+            const modal = document.getElementById('pix-modal');
+            if (modal) modal.style.display = 'none';
+            const btnPix = document.getElementById('btn-pix');
+            if (btnPix) btnPix.classList.remove('selected');
+        };
+
+        window.copyPixModalCode = function () {
+            const copyText = document.getElementById("pix-modal-code-input");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                const feedback = document.getElementById('modal-copy-feedback');
+                if (feedback) {
+                    feedback.classList.add('show');
+                    setTimeout(() => { feedback.classList.remove('show'); }, 3000);
+                }
+            }).catch(err => { console.error('Erro ao copiar: ', err); });
+        };
+
+        window.confirmPixModalPayment = async function () {
+            closePixModal();
+            await window.confirmPixPayment();
         };
 
         window.goBackToForm = function () {
