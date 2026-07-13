@@ -2035,11 +2035,21 @@ window.deleteDeal = function() {
 // --- CONFIGURAÇÕES DE EMAILJS E CARTAS ---
 window.renderConfigsSettings = function() {
     const emailConfig = window.siteSettings && window.siteSettings['email_config'] || {};
+    const eredeConfig = window.siteSettings && window.siteSettings['erede_config'] || {};
     const templates = window.siteSettings && window.siteSettings['letter_templates'] || {};
 
     document.getElementById('config-service-id').value = emailConfig.serviceId || '';
     document.getElementById('config-template-id').value = emailConfig.templateId || '';
     document.getElementById('config-public-key').value = emailConfig.publicKey || '';
+
+    // Fill e-Rede Configs
+    const eredePvInput = document.getElementById('config-erede-pv');
+    const eredeTokenInput = document.getElementById('config-erede-token');
+    const eredeEnvSelect = document.getElementById('config-erede-env');
+    
+    if (eredePvInput) eredePvInput.value = eredeConfig.pv || '';
+    if (eredeTokenInput) eredeTokenInput.value = eredeConfig.token || '';
+    if (eredeEnvSelect) eredeEnvSelect.value = eredeConfig.production ? 'production' : 'sandbox';
 
     const pnlInput = document.getElementById('config-template-pnl');
     const serInput = document.getElementById('config-template-ser');
@@ -2063,6 +2073,32 @@ document.getElementById('form-email-config')?.addEventListener('submit', async (
     } catch (err) {
         console.error("Erro ao salvar config de e-mail:", err);
         window.showToast("Erro ao salvar configurações.", "error");
+    } finally {
+        btn.innerText = originalText; btn.disabled = false;
+    }
+});
+
+document.getElementById('form-erede-config')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    const originalText = btn.innerText;
+    btn.innerText = 'Salvando...'; btn.disabled = true;
+
+    try {
+        const pv = document.getElementById('config-erede-pv').value.trim();
+        const token = document.getElementById('config-erede-token').value.trim();
+        const env = document.getElementById('config-erede-env').value;
+        const production = env === 'production';
+
+        await setDoc(doc(db, "settings", "erede_config"), { pv, token, production }, { merge: true });
+        
+        if (!window.siteSettings) window.siteSettings = {};
+        window.siteSettings['erede_config'] = { pv, token, production };
+
+        window.showToast("Configurações da e.Rede salvas com sucesso!", "success");
+    } catch(err) {
+        console.error("Erro ao salvar config e-Rede:", err);
+        window.showToast("Erro ao salvar configurações da e.Rede.", "error");
     } finally {
         btn.innerText = originalText; btn.disabled = false;
     }

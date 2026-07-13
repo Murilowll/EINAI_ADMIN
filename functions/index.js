@@ -1,15 +1,12 @@
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 const axios = require("axios");
 
-// ============================================================================
-// INTEGRAÇÃO REDE ITAÚ - E.REDE (CHECKOUT TRANSPARENTE)
-// ============================================================================
-// ATENÇÃO: Nunca divulgue estas chaves publicamente.
-const REDE_PV = "80792645"; 
-const REDE_TOKEN = "0b8a698e49c4428fa79167fc8d715140"; 
+admin.initializeApp();
+const db = admin.firestore();
 
-// Ambiente: Sandbox (Testes). Para produção, altere para "https://api.userede.com.br/erede/v1/transactions"
-const REDE_API_URL = "https://sandbox-erede.useredecloud.com.br/erede/v1/transactions"; 
+// ============================================================================
+// INTEGRAÇÃO REDE ITAÚ - E.REDE (CHECKOUT TRANSPARENTE DINÂMICO)
 // ============================================================================
 
 exports.processarPagamentoRede = functions.https.onCall(async (data, context) => {
@@ -17,10 +14,28 @@ exports.processarPagamentoRede = functions.https.onCall(async (data, context) =>
         // 1. Recebe os dados do cartão vindos do formulário do site de forma segura
         const { numero, nome, mesValidade, anoValidade, cvv, parcelas, dealId, valorEmCentavos } = data;
 
-        // 2. Prepara a autorização Básica (Base64 do seu PV : TOKEN)
-        const authString = Buffer.from(`${REDE_PV}:${REDE_TOKEN}`).toString('base64');
+        // 2. Busca as credenciais dinâmicas do Firestore para e-Rede
+        let pv = "80792645"; // Default Sandbox PV
+        let token = "0b8a698e49c4428fa79167fc8d715140"; // Default Sandbox Token
+        let production = false;
 
-        // 3. Monta o corpo da requisição exigido pela API da e.Rede
+        const configDoc = await db.collection("settings").doc("erede_config").get();
+        if (configDoc.exists) {
+            const configData = configDoc.data();
+            if (configData.pv) pv = configData.pv.trim();
+            if (configData.token) token = configData.token.trim();
+            if (configData.production !== undefined) production = configData.production;
+        }
+
+        // Definir endpoint baseado no ambiente configurado
+        const REDE_API_URL = production 
+            ? "https://api.userede.com.br/erede/v1/transactions"
+            : "https://sandbox-erede.useredecloud.com.br/erede/v1/transactions";
+
+        // 3. Prepara a autorização Básica (Base64 do seu PV : TOKEN)
+        const authString = Buffer.from(`${pv}:${token}`).toString('base64');
+
+        // 4. Monta o corpo da requisição exigido pela API da e.Rede
         const payloadRede = {
             capture: true, // "true" significa que autoriza e já captura (debita) na mesma hora
             reference: dealId || `pedido_${Date.now()}`,
@@ -34,7 +49,7 @@ exports.processarPagamentoRede = functions.https.onCall(async (data, context) =>
             kind: "credit" // Tipo da transação: Crédito
         };
 
-        // 4. Envia a requisição para a operadora do cartão (Rede Itaú)
+        // 5. Envia a requisição para a operadora do cartão (Rede Itaú)
         const response = await axios.post(REDE_API_URL, payloadRede, {
             headers: {
                 "Authorization": `Basic ${authString}`,
@@ -42,7 +57,7 @@ exports.processarPagamentoRede = functions.https.onCall(async (data, context) =>
             }
         });
 
-        // 5. Verifica se a transação foi aprovada (código 00 é SUCESSO na Rede)
+        // 6. Verifica se a transação foi aprovada (código 00 é SUCESSO na Rede)
         if (response.data.returnCode === "00") return { sucesso: true, mensagem: "Pagamento aprovado!" };
         else return { sucesso: false, mensagem: response.data.returnMessage }; // Se deu erro (Ex: Sem limite)
     } catch (error) {
