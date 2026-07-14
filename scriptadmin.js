@@ -2036,6 +2036,7 @@ window.deleteDeal = function() {
 window.renderConfigsSettings = function() {
     const emailConfig = window.siteSettings && window.siteSettings['email_config'] || {};
     const eredeConfig = window.siteSettings && window.siteSettings['erede_config'] || {};
+    const asaasConfig = window.siteSettings && window.siteSettings['asaas_config'] || {};
     const templates = window.siteSettings && window.siteSettings['letter_templates'] || {};
 
     document.getElementById('config-service-id').value = emailConfig.serviceId || '';
@@ -2050,6 +2051,15 @@ window.renderConfigsSettings = function() {
     if (eredePvInput) eredePvInput.value = eredeConfig.pv || '';
     if (eredeTokenInput) eredeTokenInput.value = eredeConfig.token || '';
     if (eredeEnvSelect) eredeEnvSelect.value = eredeConfig.production ? 'production' : 'sandbox';
+
+    // Fill Asaas Configs
+    const asaasTokenInput = document.getElementById('config-asaas-token');
+    const asaasWalletInput = document.getElementById('config-asaas-wallet');
+    const asaasEnvSelect = document.getElementById('config-asaas-env');
+
+    if (asaasTokenInput) asaasTokenInput.value = asaasConfig.token || '';
+    if (asaasWalletInput) asaasWalletInput.value = asaasConfig.walletId || '';
+    if (asaasEnvSelect) asaasEnvSelect.value = asaasConfig.production ? 'production' : 'sandbox';
 
     const pnlInput = document.getElementById('config-template-pnl');
     const serInput = document.getElementById('config-template-ser');
@@ -2099,6 +2109,32 @@ document.getElementById('form-erede-config')?.addEventListener('submit', async (
     } catch(err) {
         console.error("Erro ao salvar config e-Rede:", err);
         window.showToast("Erro ao salvar configurações da e.Rede.", "error");
+    } finally {
+        btn.innerText = originalText; btn.disabled = false;
+    }
+});
+
+document.getElementById('form-asaas-config')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    const originalText = btn.innerText;
+    btn.innerText = 'Salvando...'; btn.disabled = true;
+
+    try {
+        const token = document.getElementById('config-asaas-token').value.trim();
+        const walletId = document.getElementById('config-asaas-wallet').value.trim();
+        const env = document.getElementById('config-asaas-env').value;
+        const production = env === 'production';
+
+        await setDoc(doc(db, "settings", "asaas_config"), { token, walletId, production }, { merge: true });
+        
+        if (!window.siteSettings) window.siteSettings = {};
+        window.siteSettings['asaas_config'] = { token, walletId, production };
+
+        window.showToast("Configurações do Asaas salvas com sucesso!", "success");
+    } catch(err) {
+        console.error("Erro ao salvar config Asaas:", err);
+        window.showToast("Erro ao salvar configurações do Asaas.", "error");
     } finally {
         btn.innerText = originalText; btn.disabled = false;
     }

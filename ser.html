@@ -1427,6 +1427,9 @@
 
         let currentDealId = null;
         let currentPriceCentavos = 91900; // Valor de fallback
+        let activeCheckoutMode = 'transparent';
+        let currentAsaasPaymentId = null;
+        let pixPromise = null;
 
         function startPromoCountdown(countdownElId, containerElId) {
             const countdownEl = document.getElementById(countdownElId);
@@ -1545,6 +1548,7 @@
 
                     // Tipo de Checkout e Configuração de Redirecionamento
                     const mode = data.checkoutMode || 'transparent';
+                    activeCheckoutMode = mode;
                     const transparentDiv = document.getElementById('cc-transparent-fields');
                     const redirectDiv = document.getElementById('cc-redirect-fields');
                     if (mode === 'redirect') {
@@ -1659,6 +1663,44 @@
               showLoading(false);
               goToStep(4);
 
+              if (activeCheckoutMode === 'transparent_asaas') {
+                  pixPromise = (async () => {
+                      try {
+                          const nome = document.getElementById('nome').value.trim();
+                          const email = document.getElementById('email').value.trim();
+                          const telefone = document.getElementById('telefone').value.trim();
+                          const cpf = document.getElementById('cpf').value.trim();
+                          const cep = document.getElementById('cep').value.trim();
+                          const logradouro = document.getElementById('logradouro').value.trim();
+                          const numeroEndereco = document.getElementById('numero').value.trim();
+                          const bairro = document.getElementById('bairro').value.trim();
+                          const cidade = document.getElementById('cidade').value.trim();
+                          const uf = document.getElementById('uf').value.trim();
+
+                          const processarPagamentoAsaas = httpsCallable(functions, 'processarPagamentoAsaas');
+                          const result = await processarPagamentoAsaas({
+                              nome, email, telefone, cpf, cep, logradouro, numeroEndereco, bairro, cidade, uf,
+                              billingType: "PIX",
+                              valorEmCentavos: currentPriceCentavos,
+                              parcelas: 1
+                          });
+
+                          if (result.data && result.data.sucesso) {
+                              currentAsaasPaymentId = result.data.paymentId;
+                              return {
+                                  qrCodeBase64: result.data.qrCodeBase64,
+                                  copiaecola: result.data.copiaecola
+                              };
+                          } else {
+                              throw new Error(result.data.mensagem || "Erro ao pré-gerar Pix");
+                          }
+                      } catch (e) {
+                          console.error("Erro na pré-geração do Pix:", e);
+                          return null;
+                      }
+                  })();
+              }
+
           } catch(error) {
               console.error("Erro no Firebase:", error);
               statusEl.textContent = 'Erro ao processar sua inscrição. Tente novamente.';
@@ -1680,14 +1722,70 @@
             }
         };
 
-        window.openPixModal = function () {
+        window.openPixModal = async function () {
             const modal = document.getElementById('pix-modal');
             if (modal) {
                 const modalQrImg = document.getElementById('pix-modal-qr-img');
                 const modalInput = document.getElementById('pix-modal-code-input');
-                if (modalQrImg) modalQrImg.src = PIX_IMG_URL;
-                if (modalInput) modalInput.value = PIX_CODIGO;
-                modal.style.display = 'flex';
+                
+                if (activeCheckoutMode === 'transparent_asaas') {
+                    if (modalQrImg) modalQrImg.src = "";
+                    if (modalInput) modalInput.value = "Gerando Pix...";
+                    modal.style.display = 'flex';
+
+                    try {
+                        if (!pixPromise) {
+                            pixPromise = (async () => {
+                                const nome = document.getElementById('nome').value.trim();
+                                const email = document.getElementById('email').value.trim();
+                                const telefone = document.getElementById('telefone').value.trim();
+                                const cpf = document.getElementById('cpf').value.trim();
+                                const cep = document.getElementById('cep').value.trim();
+                                const logradouro = document.getElementById('logradouro').value.trim();
+                                const numeroEndereco = document.getElementById('numero').value.trim();
+                                const bairro = document.getElementById('bairro').value.trim();
+                                const cidade = document.getElementById('cidade').value.trim();
+                                const uf = document.getElementById('uf').value.trim();
+
+                                const processarPagamentoAsaas = httpsCallable(functions, 'processarPagamentoAsaas');
+                                const result = await processarPagamentoAsaas({
+                                    nome, email, telefone, cpf, cep, logradouro, numeroEndereco, bairro, cidade, uf,
+                                    billingType: "PIX",
+                                    valorEmCentavos: currentPriceCentavos,
+                                    parcelas: 1
+                                });
+                                if (result.data && result.data.sucesso) {
+                                    currentAsaasPaymentId = result.data.paymentId;
+                                    return {
+                                        qrCodeBase64: result.data.qrCodeBase64,
+                                        copiaecola: result.data.copiaecola
+                                    };
+                                } else {
+                                    throw new Error(result.data.mensagem || "Erro ao gerar Pix");
+                                }
+                            })();
+                        }
+
+                        const pixData = await pixPromise;
+                        if (pixData) {
+                            if (modalQrImg) modalQrImg.src = pixData.qrCodeBase64;
+                            if (modalInput) modalInput.value = pixData.copiaecola;
+                        } else {
+                            alert("Erro ao gerar Pix no Asaas. Por favor, tente novamente.");
+                            pixPromise = null;
+                            closePixModal();
+                        }
+                    } catch (e) {
+                        console.error("Erro ao gerar Pix:", e);
+                        alert("Erro ao conectar com o servidor para gerar o Pix.");
+                        pixPromise = null;
+                        closePixModal();
+                    }
+                } else {
+                    if (modalQrImg) modalQrImg.src = PIX_IMG_URL;
+                    if (modalInput) modalInput.value = PIX_CODIGO;
+                    modal.style.display = 'flex';
+                }
             }
         };
 
@@ -1712,8 +1810,35 @@
         };
 
         window.confirmPixModalPayment = async function () {
-            closePixModal();
-            await window.confirmPixPayment();
+            if (activeCheckoutMode === 'transparent_asaas') {
+                if (!currentAsaasPaymentId) {
+                    alert("Pagamento não iniciado. Por favor, tente novamente.");
+                    return;
+                }
+                const btn = document.querySelector("#pix-modal button.insc-btn-primary");
+                const originalText = btn.innerText;
+                btn.innerText = "Verificando...";
+                btn.disabled = true;
+                try {
+                    const consultarStatusPagamentoAsaas = httpsCallable(functions, 'consultarStatusPagamentoAsaas');
+                    const statusResult = await consultarStatusPagamentoAsaas({ paymentId: currentAsaasPaymentId });
+                    if (statusResult.data && statusResult.data.pago) {
+                        closePixModal();
+                        await window.confirmPixPayment();
+                    } else {
+                        alert("Ainda não identificamos o pagamento do seu Pix. Se você já pagou, por favor aguarde alguns segundos e tente novamente.");
+                    }
+                } catch (e) {
+                    console.error("Erro ao verificar Pix:", e);
+                    alert("Erro ao verificar pagamento. Tente novamente em alguns instantes.");
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            } else {
+                closePixModal();
+                await window.confirmPixPayment();
+            }
         };
 
         window.goBackToForm = function(){
@@ -1733,7 +1858,6 @@
         btnPayCard.addEventListener('click', async function(){
             const selectedOption = installmentsSelect.value;
             
-            // Captura dos novos campos de cartão
             const ccNumero = document.getElementById('cc-numero').value.replace(/\D/g, '');
             const ccNome = document.getElementById('cc-nome').value.trim();
             const ccValidade = document.getElementById('cc-validade').value;
@@ -1760,17 +1884,43 @@
                     cvv: ccCvv,
                     parcelas: parseInt(selectedOption),
                     dealId: currentDealId,
-                    valorEmCentavos: currentPriceCentavos // Valor dinâmico puxado do admin
+                    valorEmCentavos: currentPriceCentavos
                 };
 
-                // Comunicação com o Firebase Cloud Functions
-                const processarPagamentoRede = httpsCallable(functions, 'processarPagamentoRede');
-                const result = await processarPagamentoRede(payload);
+                let result;
+                if (activeCheckoutMode === 'transparent_asaas') {
+                    const nome = document.getElementById('nome').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const telefone = document.getElementById('telefone').value.trim();
+                    const cpf = document.getElementById('cpf').value.trim();
+                    const cep = document.getElementById('cep').value.trim();
+                    const logradouro = document.getElementById('logradouro').value.trim();
+                    const numeroEndereco = document.getElementById('numero').value.trim();
+                    const bairro = document.getElementById('bairro').value.trim();
+                    const cidade = document.getElementById('cidade').value.trim();
+                    const uf = document.getElementById('uf').value.trim();
+
+                    const processarPagamentoAsaas = httpsCallable(functions, 'processarPagamentoAsaas');
+                    result = await processarPagamentoAsaas({
+                        nome, email, telefone, cpf, cep, logradouro, numeroEndereco, bairro, cidade, uf,
+                        billingType: "CREDIT_CARD",
+                        valorEmCentavos: currentPriceCentavos,
+                        parcelas: parseInt(selectedOption),
+                        card: {
+                            holderName: ccNome,
+                            number: ccNumero,
+                            expiryMonth: mes,
+                            expiryYear: ano,
+                            cvv: ccCvv
+                        }
+                    });
+                } else {
+                    const processarPagamentoRede = httpsCallable(functions, 'processarPagamentoRede');
+                    result = await processarPagamentoRede(payload);
+                }
 
                 if (result.data && result.data.sucesso) {
-                    // Transação aprovada pela Rede!
                     if (currentDealId) await updateDoc(doc(db, "deals", currentDealId), { stage: 'won' });
-                    
                     goToStep(5);
                 } else {
                     cardError.innerText = result.data.mensagem || "Pagamento recusado pela operadora.";
