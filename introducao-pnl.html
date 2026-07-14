@@ -1319,11 +1319,6 @@
                     </div>
 
                     <div id="card-area" class="insc-checkout-step" style="display:none; text-align:left;">
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 16px; text-align: center;">
-                            <p style="margin: 0; font-size: 14px; color: var(--muted);">Valor do Investimento</p>
-                            <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span id="dynamic-price-display">...</span></h3>
-                        </div>
-
                         <!-- MODO 1: CHECKOUT TRANSPARENTE -->
                         <div id="cc-transparent-fields" style="display:none;">
                             <div class="insc-field" style="margin-bottom:12px;">
@@ -1355,6 +1350,12 @@
                                         <option value="12">12x sem juros</option>
                                 </select>
                             </div>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; text-align: center;">
+                                <p style="margin: 0; font-size: 14px; color: var(--muted);">Valor do Investimento</p>
+                                <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span id="dynamic-price-display">...</span></h3>
+                            </div>
+
                             <div class="insc-actions" style="margin-top:16px;">
                                 <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-card">Finalizar pagamento</button>
                             </div>
@@ -1694,21 +1695,34 @@
             const select = document.getElementById('installments');
             if (!select) return;
             
-            const price = priceCentavos / 100;
-            const basePrice = installmentPrice ? (installmentPrice * installments) : price;
             select.innerHTML = '<option value="" disabled selected>Selecione as parcelas...</option>';
             
-            for (let i = 1; i <= installments; i++) {
-                let val;
-                if (i === installments && installmentPrice) {
-                    val = installmentPrice;
-                } else {
-                    val = basePrice / i;
-                }
-                const label = i === 1 ? '1x (À vista)' : `${i}x`;
-                select.innerHTML += `<option value="${i}">${label} - R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})} sem juros</option>`;
-            }
+            const options = [
+                { count: 1, val: 630.00, label: '1x (À vista) - R$ 630,00' },
+                { count: 3, val: 227.00, label: '3x de R$ 227,00' },
+                { count: 6, val: 116.00, label: '6x de R$ 116,00' },
+                { count: 10, val: 76.00, label: '10x de R$ 76,00' },
+                { count: 12, val: 67.00, label: '12x de R$ 67,00' }
+            ];
+
+            options.forEach(opt => {
+                const total = opt.count * opt.val;
+                select.innerHTML += `<option value="${opt.count}" data-total="${total}">${opt.label}</option>`;
+            });
         };
+
+        document.getElementById('installments')?.addEventListener('change', function(e) {
+            const select = e.target;
+            const selectedOption = select.options[select.selectedIndex];
+            const total = parseFloat(selectedOption.getAttribute('data-total'));
+            if (!isNaN(total)) {
+                const display = document.getElementById('dynamic-price-display');
+                if (display) {
+                    display.innerText = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+                currentPriceCentavos = Math.round(total * 100);
+            }
+        });
 
         window.openPaymentLink = async function() {
             const select = document.getElementById('payment-link-select');
