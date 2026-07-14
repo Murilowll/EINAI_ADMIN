@@ -178,8 +178,11 @@ exports.processarPagamentoAsaas = functions.https.onCall(async (data, context) =
                 mobilePhone: cleanPhone
             };
 
-            if (parcelas > 1) {
-                paymentPayload.installmentCount = parcelas;
+            const numParcelas = parseInt(parcelas, 10);
+            if (!isNaN(numParcelas) && numParcelas > 1) {
+                paymentPayload.installmentCount = numParcelas;
+                paymentPayload.totalValue = valor;
+                delete paymentPayload.value;
             }
         }
 
