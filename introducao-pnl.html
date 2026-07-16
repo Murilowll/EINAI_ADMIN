@@ -1442,7 +1442,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, addDoc, getDocs, query, where, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
 
         const firebaseConfig = {
@@ -1456,8 +1456,14 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const db = initializeFirestore(app, {
+            localCache: persistentLocalCache({
+                tabManager: persistentMultipleTabManager()
+            })
+        });
         const functions = getFunctions(app);
+
+        const STORAGE_PREFIX = 'einai_pnl_';
 
         const PIX_IMG_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAYAAACHjumMAAAQAElEQVR4AeydjW6cR7JD5+T93znXkpEb21t0hlb3fD9zAkuxqTKLfVogghaw+9ff/iMBCUhgE4G/Hv4jAQlIYBMBC2YTWG0lIIHHw4Lxu+C2BDzY8QQsmOPvwAQSuC2BsWCAB5z/I90KnCu7OdfeR8szzScdurzJJ+kw+7fzMPvAMfqUfyyYaVBNAhKQQEvAgmmJPTnvmAQk8PCR128CCUhgHwH/C2YfW50l8PYELJi3/xYQgARKAsV4VTB///3344iP4jyfoynj5xeLT8mn1dPK5JPmk558kp58gPGnh61Pml+lp/ytDvN5W580D7N/4pB8kp58duspz6RXBTMZqElAAhJIBCyYREZdAhL4MgEL5ssINXgpAZddioAFc6nrMqwErkXAgrnWfZlWApcisKRgYH4th05fRQ7mva0/7PWBzj/9dCCdC2b/5JP05N/Ow5wn+UM3n3xW6e15V+1tfWDmBp3e7p3mlxTMZHxLzUNJQAIVAQumwuWwBCTQELBgGlrOSkACFQELpsLlsATuSmDPuSyYPVx1lYAEvhGwYL5B2P2r/elDmoc1PwWA2ecoDnBMnnTexD/Ntzqc67xt/mbegmloOSsBCVQELJgKl8N7COh6VwIWzF1v1nNJ4AQELJgTXIIRJHBXAhbMXW/Wc0ngBARuWTDppwCznv9X+tL9QPdTANg7n86V8icd5pywV0/5k57y79ah47A7zxX8b1kwVwBvRgm8AwEL5h1u2TNK4CACFsxB4F0rgRcQOHyFBXP4FRhAAvclYMHc9249mQQOJ7CkYNJrf6uvogHza3/rn/K3Pmm+9W/n096kJ/9Wb/3TPMz3CLOecib/pEPnn/a2esrT6u3eNN/uneaXFMxkrPb2BAQggYcF4zeBBCSwjYAFsw2txhKQgAXj94AEJLCNwF0LZhswjSUggecJVAUD8+s67NWfP86fTcKc/8/cXv+3YM6/6qcDMPuvOinM/rvz7/ZPfGA+b5pPOsw+sFdPeSa9KpjJQE0CEpBAImDBJDLqEjgpgSvFsmCudFtmlcDFCFgwF7sw40rgSgQsmCvdllklcDECY8Gk1/Wz6S1rmF/X07lgzXzKCZ1/8mnzJ5+k/+j/4+/TfNJhPm+aT/qPGX78PRzj/2OGH38Pc54fZ378fXveH//uGX4/5R8LZhpUk4AEJNASsGBaYs5LQAJPE7BgnkbloAQk0BK4VMG0h3NeAhI4loAFcyx/t0vg1gTGgoH59RtmPRGCbr71gdk/vai3/mm+1ds8yR/m88Kst3th9oFOT/lbHdbsXcUh+cCcM50X5nlYo6/a2/pM82PBTINqEpDARgI3tbZgbnqxHksCZyBgwZzhFswggZsSsGBuerEeSwJnIGDBnOEWjs7gfglsIrC1YFa9uiefpLeskk/Sk//Z5mH+qUSbvz3XKv92b5qHmQPMesqf9LS31ZN/q8Oac8Hsk8415dxaMNNCNQlI4H0IWDDvc9eeVAIvJ3B8wbz8yC6UgAReRcCCeRVp90jgDQlYMG946R5ZAq8iUBVMej2G+bUZZj35pEPD7LNqPvm0Osw5odPbvS3P1n/3PMx80t7d513lD9250nmTnnLu1uH5c1UFkw6qLgEJSGAiYMFMVNQkIIElBCyYJRg1kYAEJgIWzETlFpqHkMDxBCyY4+/ABBK4LYGxYNIr9FEUUh6YX7PT/FH5096UE+Zzway3/u3e5J/03f6whkPKn3RYsxdmn8Qt6Sln0mHeC7OefBp9LJjGwFkJSEACicCmgknr1CUggXciYMG80217Vgm8mIAF82LgrpPAOxGwYN7ptj3rCgJ6FASqgoH5tTm9cicdZh/o9OKcS0dhzpmWJA5pPunJB7o8q/zbPGk+5YHuXNDNp72tDvNemPXEAeb5lAfmeZj1tDfpMPukPJNeFcxkoCYBCUggEbBgEhl1CUjgywQsmC8jfKmByyRwKQIWzKtIu0cCb0jAgnnDS/fIEngVgapg0usxzK/QMOvpcDDPQ6fv9m85tHmS/1E+sIZ/e672vGk+6SlP0mENhznP4wGdP8zzj/AP7J2f1lYFMxmoSUACEkgELJhERl0CEvgyAQvmywg1kIAEEgELJpF5K93DSmAPAQtmD1ddJSCBbwSqgoH5FTq9uif9297q126f3f7psGkv7OWc9ia9zZ98YD4XzHrySTrMPik/zPMw62lv8k/6bp/kv0qHmc903qpgJgM1CUhAAomABZPIqEtAAl8mYMF8GeFpDQwmgcMJWDCHX4EBJHBfAhbMfe/Wk0ngcAJjwcD8erw7Lcx7d7+iw7wXOj3xafOneViTJ+WE2T/lafV2L8x5kk/SU06Y/dN88ofZJ82v0mHeC7O+am/jMxZMYxBmlSUgAQk8LBi/CSQggW0ELJhtaDWWwG0JPH0wC+ZpVA5KQAItAQumJea8BCTwNIGtBQPzazZ0enrNTqeEzj/5tHvTPMx5Vu1NPkfpMJ838WlzrvJp98J8ruQD8zzM+qpzrfJJ52r0rQXTBHFWAk8ScOxCBCyYC12WUSVwNQIWzNVuzLwSuBABC+ZCl2VUCVyNgAXT3ZjTEpBAQaAqmPZ1etU8zK/u6Zxpb9KTD8x7YdaTT9qb9OQD816Y9danzZP8Wz3tTXryh5kDzHrr0+ZJ/q1Pmk962gszB5j11mearwpmMlCTgAQkkAhYMImMugTejMCO41owO6jqKQEJfBKwYD4x+EkCEthBwILZQVVPCUjgk0BVMDC/NkOnf24uPqXXcti7t4j4OQpdHpjnP82GT4lD0geLF+iLoAAABKpJREFU30pwXJ4pGMx5YNYnjw+t5ZPmodv7sbv5gNkfZj15QzffnjfNT3mqgpkM1CQgAQkkAhYMIqMuAQl8mYAF82WEGkhAAomABfN4PBIcdQlI4GsELJiv8fNvS0ACvyEwFgzMr9Dp9Tjpv9lbfQm6PMkcZp80n/R03qQnn6TDmpzJf5UOc07o9FV5VvnAnL+93zQPs3+bH47xgef3jgXTHtR5CUjgpAQOjmXBHHwBrpfAnQlYMHe+Xc8mgYMJWDAHwnf1/Qm8+wktmHf/DvD8EthI4JYFk17XE8fd82kvzD+tgFnfnRP27k35Yd4Lnd5yTnl2+6S9SW/zQMcN5vk2z5TzlgUzHVRNAhJ4PQEL5vXMX7bRRRI4moAFc/QNuF8CNyZgwdz4cj2aBI4mYMEcfQPul8CNCSwpmOm1+U+0VZxhfhVv/aHzgXkeZr1llPInH+j2Jv9VOsx5Wv903uST5mHOk+aTf9Jh9oc1etq7Kv8K/yUFk4KoS0AC703Agnnv+/f0EthKwILZilfzWxLwUE8TsGCeRuWgBCTQErBgWmLOS0ACTxOoCgbWvH5D5/P0af5wEOY87Wt8mk96igtzHpj15LNKhzV7E4ekt/mhy3m2vSlPq8MaDtD5TPdVFcxkoPZiAq6TwIUIWDAXuiyjSuBqBCyYq92YeSVwIQIWzIUuy6gSuBqBrmCudjrzSkAChxIYC6Z9tT5qPpFblSf579bb/ClP8mnnW5/k3+rt3nZ+VZ60N+nt3nY+7U168m/nJ5+xYKZBNQlIQAItAQumJeb8TQl4rB0ELJgdVPWUgAQ+CVgwnxj8JAEJ7CDwfwAAAP//O9zXkwAAAAZJREFUAwCuzGpH9Mk9YgAAAABJRU5ErkJggg==";
         const PIX_CODIGO = "00020126360014BR.GOV.BCB.PIX01142844177300012252040000530398654072598.005802BR5901N6001C62070503***6304991B";
@@ -1526,6 +1532,10 @@
                 if (regCard) regCard.style.display = 'none';
                 if (checkoutCard) checkoutCard.style.display = 'none';
                 if (successCard) successCard.style.display = 'block';
+                try {
+                    localStorage.removeItem(STORAGE_PREFIX + 'form_data');
+                    localStorage.removeItem(STORAGE_PREFIX + 'deal_id');
+                } catch(e) {}
             }
 
             updateProgress(step);
@@ -1905,6 +1915,7 @@
                     const docRef = await addDoc(collection(db, "deals"), dealData);
                     currentDealId = docRef.id;
                 }
+                saveFormData();
 
                 showLoading(false);
                 goToStep(4);
@@ -2243,6 +2254,7 @@
                             document.getElementById('cidade').value = data.localidade;
                             document.getElementById('uf').value = data.uf;
                             document.getElementById('numero').focus();
+                            saveFormData();
                         } else {
                             alert('CEP não encontrado.');
                         }
@@ -2250,6 +2262,88 @@
                     .catch(err => { console.error('Erro ao buscar CEP', err); });
             }
         });
+
+        // --- LOCAL STORAGE AUTO-SAVE & AUTO-RESTORE ---
+        function saveFormData() {
+            try {
+                const data = {
+                    nome: document.getElementById('nome')?.value || '',
+                    nascimento: document.getElementById('nascimento')?.value || '',
+                    telefone: document.getElementById('telefone')?.value || '',
+                    email: document.getElementById('email')?.value || '',
+                    cpf: document.getElementById('cpf')?.value || '',
+                    empresa: document.getElementById('empresa')?.value || '',
+                    cep: document.getElementById('cep')?.value || '',
+                    logradouro: document.getElementById('logradouro')?.value || '',
+                    numero: document.getElementById('numero')?.value || '',
+                    bairro: document.getElementById('bairro')?.value || '',
+                    cidade: document.getElementById('cidade')?.value || '',
+                    uf: document.getElementById('uf')?.value || '',
+                    complemento: document.getElementById('complemento')?.value || '',
+                    motivos: getCheckedValues('motivo')
+                };
+                localStorage.setItem(STORAGE_PREFIX + 'form_data', JSON.stringify(data));
+                if (currentDealId) {
+                    localStorage.setItem(STORAGE_PREFIX + 'deal_id', currentDealId);
+                }
+            } catch (e) {
+                console.error("Erro ao salvar no localStorage", e);
+            }
+        }
+
+        window.saveFormData = saveFormData;
+
+        function loadFormData() {
+            try {
+                const dataStr = localStorage.getItem(STORAGE_PREFIX + 'form_data');
+                if (dataStr) {
+                    const data = JSON.parse(dataStr);
+                    if (document.getElementById('nome')) document.getElementById('nome').value = data.nome || '';
+                    if (document.getElementById('nascimento')) document.getElementById('nascimento').value = data.nascimento || '';
+                    if (document.getElementById('telefone')) document.getElementById('telefone').value = data.telefone || '';
+                    if (document.getElementById('email')) document.getElementById('email').value = data.email || '';
+                    if (document.getElementById('cpf')) document.getElementById('cpf').value = data.cpf || '';
+                    if (document.getElementById('empresa')) document.getElementById('empresa').value = data.empresa || '';
+                    if (document.getElementById('cep')) document.getElementById('cep').value = data.cep || '';
+                    if (document.getElementById('logradouro')) document.getElementById('logradouro').value = data.logradouro || '';
+                    if (document.getElementById('numero')) document.getElementById('numero').value = data.numero || '';
+                    if (document.getElementById('bairro')) document.getElementById('bairro').value = data.bairro || '';
+                    if (document.getElementById('cidade')) document.getElementById('cidade').value = data.cidade || '';
+                    if (document.getElementById('uf')) document.getElementById('uf').value = data.uf || '';
+                    if (document.getElementById('complemento')) document.getElementById('complemento').value = data.complemento || '';
+                    
+                    if (data.motivos && Array.isArray(data.motivos)) {
+                        const inputs = document.querySelectorAll('input[name="motivo"]');
+                        inputs.forEach(input => {
+                            input.checked = data.motivos.includes(input.value);
+                        });
+                    }
+                }
+                const savedDealId = localStorage.getItem(STORAGE_PREFIX + 'deal_id');
+                if (savedDealId) {
+                    currentDealId = savedDealId;
+                    const nome = document.getElementById('nome')?.value;
+                    const email = document.getElementById('email')?.value;
+                    if (nome && email) {
+                        setTimeout(() => {
+                            goToStep(4);
+                        }, 100);
+                    }
+                }
+            } catch (e) {
+                console.error("Erro ao carregar do localStorage", e);
+            }
+        }
+
+        // Setup auto-save event listeners
+        const formInputs = document.querySelectorAll('#insc-form input, #insc-form select, #insc-form textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('input', saveFormData);
+            input.addEventListener('change', saveFormData);
+        });
+
+        // Load data on start
+        loadFormData();
 
         // --- MÁSCARAS DO CARTÃO DE CRÉDITO (REMOVIDAS TEMPORARIAMENTE) ---
         /*
