@@ -858,7 +858,14 @@
                     <div class="d-flex align-items-center gap-1">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                         <span>Garantia de 7 Dias</span>
-                    </div>    <!-- BLOCO DE INSCRIÇÃO -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- BLOCO DE INSCRIÇÃO -->
     <div id="inscricao-section">
         <main class="insc-wrap mx-auto">
             <!-- Barra de Progresso compartilhada -->
@@ -1093,11 +1100,6 @@
                     </div>
             
                     <div id="card-area" class="insc-checkout-step" style="display:none; text-align:left;">
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 16px; text-align: center;">
-                            <p style="margin: 0; font-size: 14px; color: var(--muted);">Valor do Investimento</p>
-                            <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span id="dynamic-price-display">...</span></h3>
-                        </div>
-
                         <!-- MODO 1: CHECKOUT TRANSPARENTE -->
                         <div id="cc-transparent-fields" style="display:none;">
                             <div class="insc-field" style="margin-bottom:12px;">
@@ -1129,6 +1131,12 @@
                                         <option value="12">12x sem juros</option>
                                 </select>
                             </div>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; text-align: center;">
+                                <p style="margin: 0; font-size: 14px; color: var(--muted);">Valor do Investimento</p>
+                                <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span id="dynamic-price-display">...</span></h3>
+                            </div>
+
                             <div class="insc-actions" style="margin-top:16px;">
                                 <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-card">Finalizar pagamento</button>
                             </div>
