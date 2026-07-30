@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Einai CRM</title>
     <link rel="stylesheet" href="styleadmin.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Roboto+Slab:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -65,6 +65,7 @@
                 <a href="#" data-target="crm-section" class="nav-item"><i class="ph ph-kanban"></i> <span>CRM (Vendas)</span></a>
                 
                 <div class="sidebar-category">Operações</div>
+                <a href="#" data-target="financeiro-section" class="nav-item"><i class="ph ph-currency-dollar"></i> <span>Financeiro</span></a>
                 <a href="#" data-target="clientes-section" class="nav-item"><i class="ph ph-users"></i> <span>Clientes</span></a>
                 <a href="#" data-target="turmas-section" class="nav-item"><i class="ph ph-graduation-cap"></i> <span>Turmas</span></a>
                 
@@ -73,7 +74,7 @@
                     <a href="#" class="nav-item dropdown-toggle"><i class="ph ph-gear"></i> <span>Configurações</span> <i class="ph ph-caret-down dropdown-arrow" style="margin-left: auto;"></i></a>
                     <div class="dropdown-menu-items hidden">
                         <a href="#" data-target="site-section" class="nav-item sub-item"><i class="ph ph-globe"></i> <span>Site & Preços</span></a>
-                        <a href="#" data-target="cartas-section" class="nav-item sub-item"><i class="ph ph-file-text"></i> <span>Carta de Confirmação</span></a>
+                        <a href="#" data-target="cartas-section" class="nav-item sub-item"><i class="ph ph-paint-brush"></i> <span>Customizações</span></a>
                         <a href="#" data-target="usuarios-section" class="nav-item sub-item"><i class="ph ph-shield-check"></i> <span>Acessos (Admin)</span></a>
                         <a href="#" data-target="configs-section" class="nav-item sub-item"><i class="ph ph-plugs"></i> <span>Integrações</span></a>
                     </div>
@@ -108,43 +109,24 @@
                         <h2 id="dash-active-students">0</h2>
                     </div>
                     <div class="card summary-card">
-                        <p class="text-muted">Inscrições pelo Site</p>
-                        <div style="margin-top: 0.5rem; display: flex; gap: 1rem; align-items: center; font-size: 1.25rem;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span class="tag" style="margin: 0; background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;">PNL</span> <span id="dash-source-pnl" style="font-weight: 700;">0</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span class="tag" style="margin: 0; background-color: #fef08a; color: #854d0e; border: 1px solid #fde047;">SER</span> <span id="dash-source-ser" style="font-weight: 700;">0</span>
-                            </div>
-                        </div>
+                        <p class="text-muted">Receita Acumulada</p>
+                        <h2 id="dash-total-revenue">R$ 0</h2>
                     </div>
                 </div>
-                
-                <div class="dashboard-grid mt-4">
+
+                <div class="grid-2 mt-4">
                     <div class="card">
-                        <h3 class="card-title">Crescimento de Clientes</h3>
-                        <div class="chart-container">
-                            <canvas id="clientsChart"></canvas>
-                        </div>
+                        <h2 class="card-title">Vendas por Mês</h2>
+                        <div style="height: 300px;"><canvas id="chart-sales"></canvas></div>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">Acesso Rápido</h3>
-                        <div class="shortcuts-list">
-                            <button class="shortcut-btn" onclick="openNewClientModal()">
-                                <span><i class="ph ph-user" style="font-size: 1.25rem;"></i></span> Novo Cliente
-                            </button>
-                            <button class="shortcut-btn" onclick="openNewClassModal()">
-                                <span><i class="ph ph-graduation-cap" style="font-size: 1.25rem;"></i></span> Nova Turma
-                            </button>
-                            <button class="shortcut-btn" onclick="document.querySelector('[data-target=\'clientes-section\']').click()">
-                                <span><i class="ph ph-magnifying-glass" style="font-size: 1.25rem;"></i></span> Buscar Cliente
-                            </button>
-                        </div>
+                        <h2 class="card-title">Distribuição do Funil</h2>
+                        <div style="height: 300px;"><canvas id="chart-funnel"></canvas></div>
                     </div>
                 </div>
             </section>
 
-            <!-- CLIENTES -->
+            <!-- CLIENTES (TABELA) -->
             <section id="clientes-section" class="content-section">
                 <div class="header-between">
                     <h1>Gestão de Clientes</h1>
@@ -217,42 +199,120 @@
                 </div>
             </section>
 
+            <!-- GESTÃO FINANCEIRA -->
+            <section id="financeiro-section" class="content-section">
+                <div class="header-between" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h1><i class="ph ph-currency-dollar" style="color: var(--primary-color);"></i> Gestão Financeira & Pagamentos</h1>
+                        <p class="text-muted" style="font-size: 0.9rem; margin-top: 0.25rem;">Acompanhamento de vendas, receitas por PIX / Cartão / Boleto e status dos pagamentos no Asaas.</p>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-outline" onclick="window.renderFinanceiro()"><i class="ph ph-arrows-clockwise"></i> Atualizar Dados</button>
+                    </div>
+                </div>
+
+                <!-- Cards de Métricas Financeiras -->
+                <div class="finance-stats-grid">
+                    <div class="stat-card-finance">
+                        <div class="stat-card-icon icon-received">
+                            <i class="ph ph-coins"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted" style="font-size: 0.8rem; font-weight: 600;">Total Recebido</span>
+                            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin-top: 0.15rem;" id="fin-total-received">R$ 0,00</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card-finance">
+                        <div class="stat-card-icon icon-pix">
+                            <i class="ph ph-lightning"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted" style="font-size: 0.8rem; font-weight: 600;">Vendas por PIX</span>
+                            <h2 style="font-size: 1.35rem; font-weight: 700; color: #0d9488; margin-top: 0.15rem;" id="fin-total-pix">R$ 0,00</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card-finance">
+                        <div class="stat-card-icon icon-card">
+                            <i class="ph ph-credit-card"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted" style="font-size: 0.8rem; font-weight: 600;">Vendas por Cartão</span>
+                            <h2 style="font-size: 1.35rem; font-weight: 700; color: #4338ca; margin-top: 0.15rem;" id="fin-total-card">R$ 0,00</h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card-finance">
+                        <div class="stat-card-icon icon-pending">
+                            <i class="ph ph-clock-clockwise"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted" style="font-size: 0.8rem; font-weight: 600;">Pagamentos Pendentes</span>
+                            <h2 style="font-size: 1.35rem; font-weight: 700; color: #b45309; margin-top: 0.15rem;" id="fin-total-pending">R$ 0,00</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Lançamentos Financeiros -->
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+                        <h2 class="card-title" style="font-size: 1.1rem; margin: 0;"><i class="ph ph-receipt" style="margin-right: 0.35rem; color: var(--primary-color);"></i> Histórico de Transações</h2>
+                        
+                        <!-- Barra de Filtros -->
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                            <input type="text" id="search-finance" placeholder="Buscar por cliente ou email..." style="padding: 0.4rem 0.75rem; font-size: 0.85rem; width: 220px;">
+                            
+                            <select id="filter-finance-status" style="padding: 0.4rem 0.75rem; font-size: 0.85rem; width: 150px;">
+                                <option value="all">Todos os Status</option>
+                                <option value="pago">Pago / Confirmado</option>
+                                <option value="pending">Pendente</option>
+                            </select>
+
+                            <select id="filter-finance-method" style="padding: 0.4rem 0.75rem; font-size: 0.85rem; width: 160px;">
+                                <option value="all">Todas as Formas</option>
+                                <option value="pix">PIX</option>
+                                <option value="credit_card">Cartão de Crédito</option>
+                                <option value="boleto">Boleto</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table" id="finance-table">
+                            <thead>
+                                <tr>
+                                    <th>Cliente / E-mail</th>
+                                    <th>Curso / Origem</th>
+                                    <th>Valor (R$)</th>
+                                    <th>Forma de Pagamento</th>
+                                    <th>Status</th>
+                                    <th>Data</th>
+                                    <th>ID Asaas</th>
+                                    <th style="text-align: right;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finance-table-body">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             <!-- CONFIGURAÇÕES DO SITE -->
             <section id="site-section" class="content-section">
                 <div class="header-between">
-                    <h1>Site & Preços</h1>
-                    <p class="text-muted">Altere as datas, locais e valores das páginas de vendas.</p>
+                    <h1>Configurações da Landing Page</h1>
+                    <p class="text-muted">Edite os preços e links de checkout exibidos nos sites.</p>
                 </div>
+                
                 <div class="grid-2 mt-4">
+                    <!-- Treinamento SER -->
                     <div class="card">
-                        <h2 class="card-title">SER - Evolução e Liderança</h2>
+                        <h2 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;"><i class="ph ph-lightning" style="color: #ea580c;"></i> Treinamento SER</h2>
                         <form id="form-site-ser" class="mt-3">
                             <div class="form-group">
-                                <label>Data da Próxima Turma</label>
-                                <input type="text" id="site-ser-date" placeholder="Ex: A definir" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Local</label>
-                                <input type="text" id="site-ser-loc" placeholder="Ex: Centro Mariápolis - São Leopoldo, RS" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Valor Original/Antigo (R$) (Opcional - Riscado)</label>
-                                <input type="number" step="0.01" id="site-ser-old-price" placeholder="Ex: 1200.00">
-                            </div>
-                            <div class="form-group">
-                                <label>Valor do Investimento (R$)</label>
-                                <input type="number" step="0.01" id="site-ser-price" placeholder="Ex: 919.00" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Número Máximo de Parcelas (Ex: 12)</label>
-                                <input type="number" id="site-ser-installments" placeholder="Ex: 12" min="1" max="24" value="12" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Valor da Parcela (R$) (Opcional - Calculado se vazio)</label>
-                                <input type="number" step="0.01" id="site-ser-installment-price" placeholder="Ex: 79.90">
-                            </div>
-                            <div class="form-group">
-                                <label>Método de Checkout (Cartão)</label>
                                 <select id="site-ser-checkout-mode" onchange="toggleRedirectInputs('ser')">
                                     <option value="transparent">Checkout Transparente e.Rede (Cartão no Modal)</option>
                                     <option value="transparent_asaas">Checkout Transparente Asaas (Cartão/Pix/Boleto)</option>
@@ -378,65 +438,379 @@
                 </div>
             </section>
 
-            <!-- CARTA DE CONFIRMAÇÃO (RICH TEXT EDITOR) -->
+            <!-- CUSTOMIZAÇÕES (CERTIFICADOS, CRACHÁS E CARTAS DE CONFIRMAÇÃO) -->
             <section id="cartas-section" class="content-section">
                 <div class="header-between">
-                    <h1>Modelos de Cartas de Confirmação</h1>
-                    <p class="text-muted">Personalize e formate as cartas de confirmação enviadas aos alunos.</p>
+                    <h1>Customizações de Documentos</h1>
+                    <p class="text-muted">Personalize os modelos de certificados, crachás e cartas de confirmação.</p>
                 </div>
                 
-                <div class="grid-2 mt-4" style="grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem;">
-                    <!-- Editor Card -->
-                    <div class="card">
-                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem;">
-                            <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 140px;">
-                                <label style="font-weight: 600; margin-bottom: 0.25rem;">Selecionar Curso</label>
-                                <select id="letter-course-select" style="padding: 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border-color); width: 100%;">
-                                    <option value="pnl">Introdução à PNL</option>
-                                    <option value="ser">Treinamento SER</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0; flex: 1.2; min-width: 180px;">
-                                <label style="font-weight: 600; margin-bottom: 0.25rem;">Alterar Logotipo do Topo</label>
-                                <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                    <input type="file" id="letter-logo-upload" accept="image/*" style="display: none;">
-                                    <button type="button" class="btn btn-outline" onclick="document.getElementById('letter-logo-upload').click()" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; white-space: nowrap; height: 38px;"><i class="ph ph-upload-simple" style="margin-right: 0.25rem;"></i> Enviar Imagem</button>
-                                    <button type="button" id="btn-remove-letter-logo" class="btn btn-outline text-danger" style="padding: 0.5rem; border-color: var(--danger); display: none; height: 38px; width: 38px; min-width: 38px;" data-tooltip="Usar Logotipo Padrão"><i class="ph ph-trash" style="font-size: 1.15rem;"></i></button>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
-                                <button type="button" id="btn-save-letter-templates" class="btn btn-primary" style="padding: 0.5rem 1rem; height: 38px; white-space: nowrap;">Salvar Modelo</button>
-                            </div>
-                        </div>
+                <!-- Barra de Abas -->
+                <div class="custom-tabs-container mt-4">
+                    <button type="button" class="custom-tab-btn active" id="tab-btn-certificados" onclick="window.switchCustomTab('certificados')"><i class="ph ph-certificate"></i> Certificados</button>
+                    <button type="button" class="custom-tab-btn" id="tab-btn-crachas" onclick="window.switchCustomTab('crachas')"><i class="ph ph-identification-card"></i> Crachás</button>
+                    <button type="button" class="custom-tab-btn" id="tab-btn-cartas" onclick="window.switchCustomTab('cartas')"><i class="ph ph-envelope-open"></i> Cartas de Confirmação</button>
+                </div>
 
-                        <!-- Placeholders quick buttons -->
-                        <div style="margin-bottom: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
-                            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 6px;">Clique para inserir variáveis no texto:</label>
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button type="button" class="btn btn-outline" onclick="insertPlaceholder('{nome}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">{nome} (Nome do Aluno)</button>
-                                <button type="button" class="btn btn-outline" onclick="insertPlaceholder('{data}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">{data} (Data do Curso)</button>
-                                <button type="button" class="btn btn-outline" onclick="insertPlaceholder('{local}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">{local} (Local do Curso)</button>
-                            </div>
+                <!-- ABA 1: CERTIFICADOS -->
+                <div id="tab-content-certificados" class="custom-tab-content active">
+                    <!-- Barra de Seleção do Modelo do Curso -->
+                    <div class="course-select-bar">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1;">
+                            <label style="font-weight: 700; font-size: 0.85rem; color: var(--text-main); white-space: nowrap;"><i class="ph ph-graduation-cap" style="color: var(--primary-color);"></i> Modelo do Curso:</label>
+                            <select id="cert-course-select" style="padding: 0.4rem 0.6rem; border-radius: 0.375rem; border: 1px solid var(--border-color); font-weight: 600; font-size: 0.85rem; width: 100%; max-width: 280px; background: white;">
+                                <option value="pnl">Introdução à PNL</option>
+                                <option value="ser">Treinamento SER</option>
+                                <option value="__new__">+ Criar Novo Modelo de Curso...</option>
+                            </select>
                         </div>
-
-                        <!-- Quill Editor Container -->
-                        <div id="quill-editor-wrapper" style="margin-bottom: 1.5rem;">
-                            <div id="quill-editor" style="min-height: 350px; background: white; font-family: 'Poppins', sans-serif;"></div>
-                        </div>
+                        <button type="button" id="btn-delete-cert-course" class="btn btn-outline text-danger" style="display: none; padding: 0.35rem 0.6rem; font-size: 0.75rem; border-color: var(--danger);" title="Excluir Modelo deste Curso"><i class="ph ph-trash"></i> Excluir Modelo</button>
                     </div>
 
-                    <!-- Live Preview Card -->
-                    <div class="card" style="display: flex; flex-direction: column;">
-                        <h2 class="card-title" style="margin-bottom: 1rem;">Pré-visualização da Impressão</h2>
-                        <div id="letter-preview-box" style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; background: #f1f5f9; padding: 16px; overflow-y: auto; max-height: 520px; display: flex; justify-content: center;">
-                            <!-- Styled paper sheet -->
-                            <div id="letter-preview-paper" style="width: 100%; max-width: 380px; min-height: 480px; background: white; padding: 30px 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-family: sans-serif; font-size: 11px; line-height: 1.5; color: #334155; box-sizing: border-box; text-align: justify;">
-                                <div style="text-align: center; margin-bottom: 15px;">
-                                    <img id="letter-preview-logo" src="assets/img/CHAVE.png" style="max-height: 40px;">
+                    <div class="template-editor-grid">
+                        <!-- Painel de Controles do Certificado -->
+                        <div class="card">
+                            <h2 class="card-title mb-3" style="font-size: 1.1rem;"><i class="ph ph-sliders" style="margin-right: 0.4rem; color: var(--primary-color);"></i> Configurar Certificado</h2>
+                            
+                            <!-- Imagem de fundo -->
+                            <div class="form-group" style="background: #f8fafc; padding: 0.85rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 1.25rem;">
+                                <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Imagem de Fundo do Modelo</label>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <input type="file" id="cert-bg-upload" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-outline w-100" onclick="document.getElementById('cert-bg-upload').click()" style="font-size: 0.8rem; padding: 0.4rem 0.75rem;"><i class="ph ph-upload-simple" style="margin-right: 0.25rem;"></i> Trocar Imagem</button>
+                                    <button type="button" id="btn-reset-cert-bg" class="btn btn-outline text-danger" style="padding: 0.4rem 0.6rem; font-size: 0.8rem; border-color: var(--danger);" title="Restaurar Padrão"><i class="ph ph-arrows-counter-clockwise"></i></button>
                                 </div>
-                                <h3 style="text-align: center; margin: 0 0 20px 0; font-size: 12px; font-weight: bold; color: #1e3a8a; font-style: italic;">CARTA DE CONFIRMAÇÃO</h3>
-                                <div id="letter-preview-content" style="font-family: Arial, sans-serif; font-size: 11px; color: #334155; line-height: 1.6;">
-                                    <!-- Rendered HTML will update live -->
+                            </div>
+
+                            <!-- Seleção de campo para editar -->
+                            <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.35rem;">Selecione a Variável para Posicionar:</label>
+                            <div class="field-selector-group" id="cert-field-pills">
+                                <button type="button" class="field-selector-btn active" data-type="cert" data-field="nome">Nome do Aluno</button>
+                                <button type="button" class="field-selector-btn" data-type="cert" data-field="data">Data de Emissão</button>
+                                <button type="button" class="field-selector-btn" data-type="cert" data-field="carga">Carga Horária</button>
+                                <button type="button" class="field-selector-btn" data-type="cert" data-field="curso">Nome do Curso</button>
+                            </div>
+
+                            <!-- Formulário de propriedades do campo selecionado -->
+                            <div id="cert-field-controls" style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-color);" id="cert-active-field-label">Editando: Nome do Aluno</span>
+                                    <label style="font-size: 0.75rem; display: flex; align-items: center; gap: 0.25rem; cursor: pointer; color: var(--text-muted);">
+                                        <input type="checkbox" id="cert-field-visible" checked style="width: auto; height: auto;"> Exibir
+                                    </label>
+                                </div>
+
+                                <div class="grid-2" style="gap: 0.75rem; margin-bottom: 0.75rem;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.75rem; font-weight: 600;">Posição Horizontal X (%)</label>
+                                        <input type="number" id="cert-pos-x" min="0" max="100" step="0.5" value="50" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.75rem; font-weight: 600;">Posição Vertical Y (%)</label>
+                                        <input type="number" id="cert-pos-y" min="0" max="100" step="0.5" value="50" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+                                    </div>
+                                </div>
+
+                                <div class="grid-2" style="gap: 0.75rem; margin-bottom: 0.75rem;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.75rem; font-weight: 600;">Tamanho da Fonte (px)</label>
+                                        <input type="number" id="cert-font-size" min="8" max="72" value="28" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.75rem; font-weight: 600;">Cor do Texto</label>
+                                        <input type="color" id="cert-font-color" value="#1e3a8a" style="padding: 0.15rem; height: 34px; width: 100%; cursor: pointer;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0.75rem;">
+                                    <label style="font-size: 0.75rem; font-weight: 600;">Estilo da Fonte</label>
+                                    <select id="cert-font-family" style="padding: 0.35rem 0.5rem; font-size: 0.85rem; width: 100%;">
+                                        <option value="'Lato', sans-serif">Lato</option>
+                                        <option value="'Montserrat', sans-serif">Montserrat (Moderna/Elegante)</option>
+                                        <option value="'Great Vibes', cursive">Great Vibes (Manuscrita / Assinatura)</option>
+                                        <option value="'Playfair Display', serif">Playfair Display (Clássica)</option>
+                                        <option value="'Cinzel', serif">Cinzel (Formal / Diploma)</option>
+                                        <option value="'Inter', sans-serif">Inter (Limpa)</option>
+                                        <option value="Arial, sans-serif">Arial (Padrão)</option>
+                                        <option value="'Times New Roman', serif">Times New Roman</option>
+                                    </select>
+                                </div>
+
+                                <div class="grid-3" style="gap: 0.5rem; grid-template-columns: 1fr 1fr 1fr;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.7rem; font-weight: 600;">Peso</label>
+                                        <select id="cert-font-weight" style="padding: 0.25rem 0.35rem; font-size: 0.8rem;">
+                                            <option value="400">Normal</option>
+                                            <option value="600">Semibold</option>
+                                            <option value="700">Negrito</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.7rem; font-weight: 600;">Estilo</label>
+                                        <select id="cert-font-style" style="padding: 0.25rem 0.35rem; font-size: 0.8rem;">
+                                            <option value="normal">Normal</option>
+                                            <option value="italic">Itálico</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.7rem; font-weight: 600;">Alinhamento</label>
+                                        <select id="cert-text-align" style="padding: 0.25rem 0.35rem; font-size: 0.8rem;">
+                                            <option value="center">Centro</option>
+                                            <option value="left">Esquerda</option>
+                                            <option value="right">Direita</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-2" style="margin-bottom: 0;">
+                                    <label style="font-size: 0.75rem; font-weight: 600;">Formato do Texto / Prefixo</label>
+                                    <input type="text" id="cert-text-template" placeholder="Ex: Certificamos que {nome}" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+                                    <span style="font-size: 0.7rem; color: var(--text-muted);">Use {nome}, {data}, {carga}, {curso} para substituir.</span>
+                                </div>
+                            </div>
+
+                            <button type="button" id="btn-save-cert-config" class="btn btn-primary w-100" style="padding: 0.65rem;"><i class="ph ph-floppy-disk" style="margin-right: 0.35rem;"></i> Salvar Modelo de Certificado</button>
+                        </div>
+
+                        <!-- Live Preview do Certificado -->
+                        <div class="card" style="display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <h2 class="card-title" style="margin: 0; font-size: 1rem;">Pré-visualização Interativa (Arraste os elementos)</h2>
+                                <span class="text-muted" style="font-size: 0.75rem;"><i class="ph ph-cursor-click"></i> Clique e arraste para posicionar</span>
+                            </div>
+                            
+                            <div class="preview-canvas-wrapper">
+                                <div id="cert-preview-box" class="preview-canvas-box">
+                                    <img id="cert-preview-bg" src="assets/img/template-certificado-pnl.png" class="preview-canvas-bg" alt="Fundo Certificado">
+                                    
+                                    <div id="cert-item-nome" class="draggable-preview-item active" data-type="cert" data-field="nome">
+                                        <span class="drag-badge">Nome</span>
+                                        <span class="preview-text-content">Nome do Cliente Exemplo</span>
+                                    </div>
+                                    <div id="cert-item-data" class="draggable-preview-item" data-type="cert" data-field="data">
+                                        <span class="drag-badge">Data</span>
+                                        <span class="preview-text-content">26, 27 e 28 de Agosto</span>
+                                    </div>
+                                    <div id="cert-item-carga" class="draggable-preview-item" data-type="cert" data-field="carga">
+                                        <span class="drag-badge">Carga Horária</span>
+                                        <span class="preview-text-content">Carga Horária: 60 horas</span>
+                                    </div>
+                                    <div id="cert-item-curso" class="draggable-preview-item" data-type="cert" data-field="curso">
+                                        <span class="drag-badge">Curso</span>
+                                        <span class="preview-text-content">Introdução à PNL</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABA 2: CRACHÁS -->
+                <div id="tab-content-crachas" class="custom-tab-content">
+                    <!-- Barra de Seleção do Modelo do Curso -->
+                    <div class="course-select-bar">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1;">
+                            <label style="font-weight: 700; font-size: 0.85rem; color: var(--text-main); white-space: nowrap;"><i class="ph ph-graduation-cap" style="color: var(--primary-color);"></i> Modelo do Curso:</label>
+                            <select id="cracha-course-select" style="padding: 0.4rem 0.6rem; border-radius: 0.375rem; border: 1px solid var(--border-color); font-weight: 600; font-size: 0.85rem; width: 100%; max-width: 280px; background: white;">
+                                <option value="pnl">Introdução à PNL</option>
+                                <option value="ser">Treinamento SER</option>
+                                <option value="__new__">+ Criar Novo Modelo de Curso...</option>
+                            </select>
+                        </div>
+                        <button type="button" id="btn-delete-cracha-course" class="btn btn-outline text-danger" style="display: none; padding: 0.35rem 0.6rem; font-size: 0.75rem; border-color: var(--danger);" title="Excluir Modelo deste Curso"><i class="ph ph-trash"></i> Excluir Modelo</button>
+                    </div>
+
+                    <div class="template-editor-grid">
+                        <!-- Painel de Controles do Crachá -->
+                        <div class="card">
+                            <h2 class="card-title mb-3" style="font-size: 1.1rem;"><i class="ph ph-sliders" style="margin-right: 0.4rem; color: var(--primary-color);"></i> Configurar Crachá</h2>
+                            
+                            <!-- Imagem de fundo -->
+                            <div class="form-group" style="background: #f8fafc; padding: 0.85rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 1.25rem;">
+                                <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Imagem de Fundo do Crachá</label>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <input type="file" id="cracha-bg-upload" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-outline w-100" onclick="document.getElementById('cracha-bg-upload').click()" style="font-size: 0.8rem; padding: 0.4rem 0.75rem;"><i class="ph ph-upload-simple" style="margin-right: 0.25rem;"></i> Trocar Imagem</button>
+                                    <button type="button" id="btn-reset-cracha-bg" class="btn btn-outline text-danger" style="padding: 0.4rem 0.6rem; font-size: 0.8rem; border-color: var(--danger);" title="Restaurar Padrão"><i class="ph ph-arrows-counter-clockwise"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Seleção de campo para editar -->
+                            <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.35rem;">Selecione a Variável para Posicionar:</label>
+                            <div class="field-selector-group" id="cracha-field-pills">
+                                <button type="button" class="field-selector-btn active" data-type="cracha" data-field="nome">Nome do Aluno</button>
+                                <button type="button" class="field-selector-btn" data-type="cracha" data-field="data">Data do Curso</button>
+                                <button type="button" class="field-selector-btn" data-type="cracha" data-field="carga">Carga Horária</button>
+                                <button type="button" class="field-selector-btn" data-type="cracha" data-field="empresa">Empresa / Cargo</button>
+                            </div>
+
+                            <!-- Formulário de propriedades do campo selecionado -->
+                            <div id="cracha-field-controls" style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-color);" id="cracha-active-field-label">Editando: Nome do Aluno</span>
+                                    <label style="font-size: 0.75rem; display: flex; align-items: center; gap: 0.25rem; cursor: pointer; color: var(--text-muted);">
+                                        <input type="checkbox" id="cracha-field-visible" checked style="width: auto; height: auto;"> Exibir
+                                    </label>
+                                </div>
+
+                                <div class="grid-2" style="gap: 0.75rem; margin-bottom: 0.75rem;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.75rem; font-weight: 600;">Posição Horizontal X (%)</label>
+                                        <input type="number" id="cracha-pos-x" min="0" max="100" step="0.5" value="50" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.75rem; font-weight: 600;">Posição Vertical Y (%)</label>
+                                        <input type="number" id="cracha-pos-y" min="0" max="100" step="0.5" value="50" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+                                    </div>
+                                </div>
+
+                                <div class="grid-2" style="gap: 0.75rem; margin-bottom: 0.75rem;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.75rem; font-weight: 600;">Tamanho da Fonte (px)</label>
+                                        <input type="number" id="cracha-font-size" min="8" max="72" value="22" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.75rem; font-weight: 600;">Cor do Texto</label>
+                                        <input type="color" id="cracha-font-color" value="#0f172a" style="padding: 0.15rem; height: 34px; width: 100%; cursor: pointer;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0.75rem;">
+                                    <label style="font-size: 0.75rem; font-weight: 600;">Estilo da Fonte</label>
+                                    <select id="cracha-font-family" style="padding: 0.35rem 0.5rem; font-size: 0.85rem; width: 100%;">
+                                        <option value="'Lato', sans-serif">Lato</option>
+                                        <option value="'Montserrat', sans-serif">Montserrat (Moderna/Elegante)</option>
+                                        <option value="'Inter', sans-serif">Inter (Limpa)</option>
+                                        <option value="'Roboto', sans-serif">Roboto</option>
+                                        <option value="Arial, sans-serif">Arial (Padrão)</option>
+                                        <option value="'Playfair Display', serif">Playfair Display</option>
+                                    </select>
+                                </div>
+
+                                <div class="grid-3" style="gap: 0.5rem; grid-template-columns: 1fr 1fr 1fr;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.7rem; font-weight: 600;">Peso</label>
+                                        <select id="cracha-font-weight" style="padding: 0.25rem 0.35rem; font-size: 0.8rem;">
+                                            <option value="400">Normal</option>
+                                            <option value="600">Semibold</option>
+                                            <option value="700" selected>Negrito</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.7rem; font-weight: 600;">Estilo</label>
+                                        <select id="cracha-font-style" style="padding: 0.25rem 0.35rem; font-size: 0.8rem;">
+                                            <option value="normal">Normal</option>
+                                            <option value="italic">Itálico</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label style="font-size: 0.7rem; font-weight: 600;">Alinhamento</label>
+                                        <select id="cracha-text-align" style="padding: 0.25rem 0.35rem; font-size: 0.8rem;">
+                                            <option value="center">Centro</option>
+                                            <option value="left">Esquerda</option>
+                                            <option value="right">Direita</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-2" style="margin-bottom: 0;">
+                                    <label style="font-size: 0.75rem; font-weight: 600;">Formato do Texto / Prefixo</label>
+                                    <input type="text" id="cracha-text-template" placeholder="Ex: {nome}" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;">
+                                    <span style="font-size: 0.7rem; color: var(--text-muted);">Use {nome}, {data}, {carga}, {empresa} para substituir.</span>
+                                </div>
+                            </div>
+
+                            <button type="button" id="btn-save-cracha-config" class="btn btn-primary w-100" style="padding: 0.65rem;"><i class="ph ph-floppy-disk" style="margin-right: 0.35rem;"></i> Salvar Modelo de Crachá</button>
+                        </div>
+
+                        <!-- Live Preview do Crachá -->
+                        <div class="card" style="display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <h2 class="card-title" style="margin: 0; font-size: 1rem;">Pré-visualização Interativa (Arraste os elementos)</h2>
+                                <span class="text-muted" style="font-size: 0.75rem;"><i class="ph ph-cursor-click"></i> Clique e arraste para posicionar</span>
+                            </div>
+                            
+                            <div class="preview-canvas-wrapper">
+                                <div id="cracha-preview-box" class="preview-canvas-box" style="max-width: 500px;">
+                                    <img id="cracha-preview-bg" src="assets/img/template cracha pnlHSC.png" class="preview-canvas-bg" alt="Fundo Crachá">
+                                    
+                                    <div id="cracha-item-nome" class="draggable-preview-item active" data-type="cracha" data-field="nome">
+                                        <span class="drag-badge">Nome</span>
+                                        <span class="preview-text-content">Nome do Cliente Exemplo</span>
+                                    </div>
+                                    <div id="cracha-item-data" class="draggable-preview-item" data-type="cracha" data-field="data">
+                                        <span class="drag-badge">Data</span>
+                                        <span class="preview-text-content">26 a 28 de Agosto</span>
+                                    </div>
+                                    <div id="cracha-item-carga" class="draggable-preview-item" data-type="cracha" data-field="carga">
+                                        <span class="drag-badge">Carga Horária</span>
+                                        <span class="preview-text-content">60h</span>
+                                    </div>
+                                    <div id="cracha-item-empresa" class="draggable-preview-item" data-type="cracha" data-field="empresa">
+                                        <span class="drag-badge">Empresa</span>
+                                        <span class="preview-text-content">Empresa X - Cargo</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABA 3: CARTAS DE CONFIRMAÇÃO (RICH TEXT EDITOR) -->
+                <div id="tab-content-cartas" class="custom-tab-content">
+                    <div class="grid-2" style="grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem;">
+                        <!-- Editor Card -->
+                        <div class="card">
+                            <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem;">
+                                <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 140px;">
+                                    <label style="font-weight: 600; margin-bottom: 0.25rem;">Selecionar Curso</label>
+                                    <select id="letter-course-select" style="padding: 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border-color); width: 100%;">
+                                        <option value="pnl">Introdução à PNL</option>
+                                        <option value="ser">Treinamento SER</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0; flex: 1.2; min-width: 180px;">
+                                    <label style="font-weight: 600; margin-bottom: 0.25rem;">Alterar Logotipo do Topo</label>
+                                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                        <input type="file" id="letter-logo-upload" accept="image/*" style="display: none;">
+                                        <button type="button" class="btn btn-outline" onclick="document.getElementById('letter-logo-upload').click()" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; white-space: nowrap; height: 38px;"><i class="ph ph-upload-simple" style="margin-right: 0.25rem;"></i> Enviar Imagem</button>
+                                        <button type="button" id="btn-remove-letter-logo" class="btn btn-outline text-danger" style="padding: 0.5rem; border-color: var(--danger); display: none; height: 38px; width: 38px; min-width: 38px;" data-tooltip="Usar Logotipo Padrão"><i class="ph ph-trash" style="font-size: 1.15rem;"></i></button>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+                                    <button type="button" id="btn-save-letter-templates" class="btn btn-primary" style="padding: 0.5rem 1rem; height: 38px; white-space: nowrap;">Salvar Modelo</button>
+                                </div>
+                            </div>
+
+                            <!-- Placeholders quick buttons -->
+                            <div style="margin-bottom: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 6px;">Clique para inserir variáveis no texto:</label>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button type="button" class="btn btn-outline" onclick="insertPlaceholder('{nome}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">{nome} (Nome do Aluno)</button>
+                                    <button type="button" class="btn btn-outline" onclick="insertPlaceholder('{data}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">{data} (Data do Curso)</button>
+                                    <button type="button" class="btn btn-outline" onclick="insertPlaceholder('{local}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">{local} (Local do Curso)</button>
+                                </div>
+                            </div>
+
+                            <!-- Quill Editor Container -->
+                            <div id="quill-editor-wrapper" style="margin-bottom: 1.5rem;">
+                                <div id="quill-editor" style="min-height: 350px; background: white; font-family: 'Poppins', sans-serif;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Live Preview Card -->
+                        <div class="card" style="display: flex; flex-direction: column;">
+                            <h2 class="card-title" style="margin-bottom: 1rem;">Pré-visualização da Impressão</h2>
+                            <div id="letter-preview-box" style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; background: #f1f5f9; padding: 16px; overflow-y: auto; max-height: 520px; display: flex; justify-content: center;">
+                                <!-- Styled paper sheet -->
+                                <div id="letter-preview-paper" style="width: 100%; max-width: 380px; min-height: 480px; background: white; padding: 30px 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-family: sans-serif; font-size: 11px; line-height: 1.5; color: #334155; box-sizing: border-box; text-align: justify;">
+                                    <div style="text-align: center; margin-bottom: 15px;">
+                                        <img id="letter-preview-logo" src="assets/img/CHAVE.png" style="max-height: 40px;">
+                                    </div>
+                                    <h3 style="text-align: center; margin: 0 0 20px 0; font-size: 12px; font-weight: bold; color: #1e3a8a; font-style: italic;">CARTA DE CONFIRMAÇÃO</h3>
+                                    <div id="letter-preview-content" style="font-family: Arial, sans-serif; font-size: 11px; color: #334155; line-height: 1.6;">
+                                        <!-- Rendered HTML will update live -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -835,6 +1209,7 @@
                         <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;"><input type="checkbox" class="nu-perm" value="clientes-section" style="width: auto; height: auto;"> Clientes</label>
                         <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;"><input type="checkbox" class="nu-perm" value="turmas-section" style="width: auto; height: auto;"> Turmas</label>
                         <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;"><input type="checkbox" class="nu-perm" value="crm-section" style="width: auto; height: auto;"> CRM (Vendas)</label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;"><input type="checkbox" class="nu-perm" value="financeiro-section" style="width: auto; height: auto;"> Financeiro</label>
                         <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;"><input type="checkbox" class="nu-perm" value="site-section" style="width: auto; height: auto;"> Site & Preços</label>
                         <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;"><input type="checkbox" class="nu-perm" value="usuarios-section" style="width: auto; height: auto;"> Acessos (Admin)</label>
                         <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;"><input type="checkbox" class="nu-perm" value="cartas-section" style="width: auto; height: auto;"> Carta de Confirmação</label>

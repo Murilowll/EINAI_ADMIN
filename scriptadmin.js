@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, getDocs, doc, updateDoc, onSnapshot, writeBatch, addDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, getDocs, doc, updateDoc, onSnapshot, writeBatch, addDoc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCWughEoZ0eUB6298L9kpe-u1mzBuV3p3k",
@@ -19,6 +20,7 @@ const db = initializeFirestore(app, {
         tabManager: persistentMultipleTabManager()
     })
 });
+const functionsInstance = getFunctions(app);
 
 // App secundário para criar usuários sem deslogar o admin atual
 const secondaryApp = initializeApp(firebaseConfig, "Secondary");
@@ -423,9 +425,10 @@ document.querySelectorAll('.sidebar-nav .nav-item').forEach(link => {
         if(targetId === 'clientes-section') renderClients();
         if(targetId === 'turmas-section') renderClassesList();
         if(targetId === 'crm-section') renderKanban();
+        if(targetId === 'financeiro-section') window.renderFinanceiro();
         if(targetId === 'site-section') window.renderSiteSettings();
         if(targetId === 'usuarios-section') renderUsers();
-        if(targetId === 'cartas-section') window.initLettersTab();
+        if(targetId === 'cartas-section') window.initCustomizationSection();
         if(targetId === 'configs-section') window.renderConfigsSettings();
 
         // Fecha a sidebar no celular ao clicar em um link
@@ -939,6 +942,19 @@ window.openClientModal = function(clientId) {
             <p class="text-muted mb-2">ANOTAÇÕES INTERNAS</p>
             <textarea id="client-notes" placeholder="Deixe anotações...">${client.notes}</textarea>
         </div>
+        <div class="col-span-2 client-docs-panel mt-3">
+            <p style="font-weight: 700; font-size: 0.85rem; color: #15803d; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                <i class="ph ph-file-pdf" style="font-size: 1.15rem;"></i> EMISSÃO DE DOCUMENTOS (PDF)
+            </p>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <button type="button" class="btn btn-outline" onclick="window.gerarCertificadoPDF('${client.id}')" style="background: white; border-color: #0d9488; color: #0d9488; font-weight: 600; padding: 0.45rem 0.85rem; font-size: 0.85rem;">
+                    <i class="ph ph-certificate" style="margin-right: 0.35rem; font-size: 1.1rem;"></i> Gerar Certificado (PDF)
+                </button>
+                <button type="button" class="btn btn-outline" onclick="window.gerarCrachaPDF('${client.id}')" style="background: white; border-color: #6366f1; color: #6366f1; font-weight: 600; padding: 0.45rem 0.85rem; font-size: 0.85rem;">
+                    <i class="ph ph-identification-card" style="margin-right: 0.35rem; font-size: 1.1rem;"></i> Gerar Crachá (PDF)
+                </button>
+            </div>
+        </div>
     `;
 
     document.getElementById('client-modal').classList.remove('hidden');
@@ -1256,6 +1272,7 @@ function renderClassesList() {
             `<button class="btn btn-outline" onclick="exportCSV('${cls.id}', '${cls.name}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Exportar</button>` :
             `
             <button class="btn btn-outline" onclick="openAddClientsToClassModal('${cls.id}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: var(--primary-color); border-color: var(--primary-color);">+ Alunos</button>
+            <button class="btn btn-outline" onclick="window.gerarCrachasTurmaA4PDF('${cls.id}', '${cls.name.replace(/'/g, "\\'")}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; color: #6366f1; border-color: #6366f1;" title="Gerar 10 crachás por folha A4 para a turma"><i class="ph ph-identification-card"></i> Crachás A4 (10/folha)</button>
             <button class="btn btn-outline" onclick="openEditClassModal('${cls.id}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Editar</button>
             <button class="btn btn-outline text-danger" onclick="deleteClass('${cls.id}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-color: #fca5a5;">Excluir</button>
             <button class="btn btn-outline" onclick="exportCSV('${cls.id}', '${cls.name}'); event.stopPropagation();" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Exportar</button>
@@ -2490,3 +2507,1049 @@ function loadTemplateToEditor(course) {
     
     updateLetterPreview();
 }
+
+// --- MÓDULO DE CUSTOMIZAÇÃO DE CERTIFICADOS E CRACHÁS (MULTI-CURSO & IMPRESSÃO A4) ---
+
+window.customizationState = {
+    activeTab: 'certificados',
+    certCourse: 'pnl',
+    crachaCourse: 'pnl',
+    certTemplates: {
+        pnl: {
+            name: 'Introdução à PNL',
+            bg: 'assets/img/template-certificado-pnl.png',
+            activeField: 'nome',
+            fields: {
+                nome: { visible: true, posX: 50, posY: 52, fontSize: 32, fontColor: '#1e3a8a', fontFamily: "'Montserrat', sans-serif", fontWeight: '700', fontStyle: 'normal', textAlign: 'center', template: '{nome}' },
+                data: { visible: true, posX: 50, posY: 75, fontSize: 16, fontColor: '#334155', fontFamily: "'Lato', sans-serif", fontWeight: '400', fontStyle: 'normal', textAlign: 'center', template: 'Emitido em {data}' },
+                carga: { visible: true, posX: 50, posY: 80, fontSize: 14, fontColor: '#475569', fontFamily: "'Lato', sans-serif", fontWeight: '600', fontStyle: 'normal', textAlign: 'center', template: 'Carga Horária: {carga}' },
+                curso: { visible: true, posX: 50, posY: 62, fontSize: 20, fontColor: '#1e3a8a', fontFamily: "'Cinzel', serif", fontWeight: '600', fontStyle: 'normal', textAlign: 'center', template: '{curso}' }
+            }
+        },
+        ser: {
+            name: 'Treinamento SER',
+            bg: 'assets/img/template-certificado-pnl.png',
+            activeField: 'nome',
+            fields: {
+                nome: { visible: true, posX: 50, posY: 52, fontSize: 32, fontColor: '#ea580c', fontFamily: "'Montserrat', sans-serif", fontWeight: '700', fontStyle: 'normal', textAlign: 'center', template: '{nome}' },
+                data: { visible: true, posX: 50, posY: 75, fontSize: 16, fontColor: '#334155', fontFamily: "'Lato', sans-serif", fontWeight: '400', fontStyle: 'normal', textAlign: 'center', template: 'Emitido em {data}' },
+                carga: { visible: true, posX: 50, posY: 80, fontSize: 14, fontColor: '#475569', fontFamily: "'Lato', sans-serif", fontWeight: '600', fontStyle: 'normal', textAlign: 'center', template: 'Carga Horária: {carga}' },
+                curso: { visible: true, posX: 50, posY: 62, fontSize: 20, fontColor: '#ea580c', fontFamily: "'Cinzel', serif", fontWeight: '600', fontStyle: 'normal', textAlign: 'center', template: '{curso}' }
+            }
+        }
+    },
+    crachaTemplates: {
+        pnl: {
+            name: 'Introdução à PNL',
+            bg: 'assets/img/template cracha pnlHSC.png',
+            activeField: 'nome',
+            fields: {
+                nome: { visible: true, posX: 50, posY: 55, fontSize: 24, fontColor: '#0f172a', fontFamily: "'Montserrat', sans-serif", fontWeight: '700', fontStyle: 'normal', textAlign: 'center', template: '{nome}' },
+                data: { visible: true, posX: 50, posY: 78, fontSize: 13, fontColor: '#475569', fontFamily: "'Inter', sans-serif", fontWeight: '400', fontStyle: 'normal', textAlign: 'center', template: '{data}' },
+                carga: { visible: true, posX: 50, posY: 84, fontSize: 12, fontColor: '#64748b', fontFamily: "'Inter', sans-serif", fontWeight: '600', fontStyle: 'normal', textAlign: 'center', template: '{carga}' },
+                empresa: { visible: true, posX: 50, posY: 66, fontSize: 14, fontColor: '#334155', fontFamily: "'Inter', sans-serif", fontWeight: '400', fontStyle: 'normal', textAlign: 'center', template: '{empresa}' }
+            }
+        },
+        ser: {
+            name: 'Treinamento SER',
+            bg: 'assets/img/template cracha pnlHSC.png',
+            activeField: 'nome',
+            fields: {
+                nome: { visible: true, posX: 50, posY: 55, fontSize: 24, fontColor: '#ea580c', fontFamily: "'Montserrat', sans-serif", fontWeight: '700', fontStyle: 'normal', textAlign: 'center', template: '{nome}' },
+                data: { visible: true, posX: 50, posY: 78, fontSize: 13, fontColor: '#475569', fontFamily: "'Inter', sans-serif", fontWeight: '400', fontStyle: 'normal', textAlign: 'center', template: '{data}' },
+                carga: { visible: true, posX: 50, posY: 84, fontSize: 12, fontColor: '#64748b', fontFamily: "'Inter', sans-serif", fontWeight: '600', fontStyle: 'normal', textAlign: 'center', template: '{carga}' },
+                empresa: { visible: true, posX: 50, posY: 66, fontSize: 14, fontColor: '#334155', fontFamily: "'Inter', sans-serif", fontWeight: '400', fontStyle: 'normal', textAlign: 'center', template: '{empresa}' }
+            }
+        }
+    }
+};
+
+window.initCustomizationSection = async function() {
+    await loadCustomizationSettings();
+    window.switchCustomTab(window.customizationState.activeTab || 'certificados');
+};
+
+async function loadCustomizationSettings() {
+    try {
+        const docRef = doc(db, "settings", "customizacoes");
+        const snapshot = await getDoc(docRef);
+        if (snapshot.exists()) {
+            const data = snapshot.data();
+            
+            // Compatibilidade e fusão de múltiplos modelos de certificados
+            if (data.certTemplates) {
+                window.customizationState.certTemplates = Object.assign({}, window.customizationState.certTemplates, data.certTemplates);
+            } else if (data.cert) {
+                window.customizationState.certTemplates.pnl = Object.assign({}, window.customizationState.certTemplates.pnl, data.cert);
+            }
+
+            // Compatibilidade e fusão de múltiplos modelos de crachás
+            if (data.crachaTemplates) {
+                window.customizationState.crachaTemplates = Object.assign({}, window.customizationState.crachaTemplates, data.crachaTemplates);
+            } else if (data.cracha) {
+                window.customizationState.crachaTemplates.pnl = Object.assign({}, window.customizationState.crachaTemplates.pnl, data.cracha);
+            }
+        }
+    } catch (err) {
+        console.error("Erro ao carregar configurações de customização:", err);
+    }
+}
+
+window.switchCustomTab = function(tabName) {
+    window.customizationState.activeTab = tabName;
+    
+    document.querySelectorAll('.custom-tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.custom-tab-content').forEach(c => c.classList.remove('active'));
+
+    const btn = document.getElementById(`tab-btn-${tabName}`);
+    const content = document.getElementById(`tab-content-${tabName}`);
+
+    if (btn) btn.classList.add('active');
+    if (content) content.classList.add('active');
+
+    if (tabName === 'certificados') {
+        initCustomizationEditor('cert');
+    } else if (tabName === 'crachas') {
+        initCustomizationEditor('cracha');
+    } else if (tabName === 'cartas') {
+        if (typeof window.initLettersTab === 'function') window.initLettersTab();
+    }
+};
+
+function initCustomizationEditor(type) {
+    const isCert = type === 'cert';
+    const templatesDict = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+    const currentCourseKey = isCert ? (window.customizationState.certCourse || 'pnl') : (window.customizationState.crachaCourse || 'pnl');
+
+    // Garantir que a chave do curso existe
+    if (!templatesDict[currentCourseKey]) {
+        const firstKey = Object.keys(templatesDict)[0] || 'pnl';
+        if (isCert) window.customizationState.certCourse = firstKey;
+        else window.customizationState.crachaCourse = firstKey;
+    }
+
+    const courseKey = isCert ? window.customizationState.certCourse : window.customizationState.crachaCourse;
+    const templateConfig = templatesDict[courseKey];
+
+    // Atualizar o seletor de cursos no DOM
+    updateCourseSelectDOM(type, templatesDict, courseKey);
+
+    const prefix = type; // 'cert' ou 'cracha'
+
+    // Atualizar imagem de fundo na preview
+    const bgImg = document.getElementById(`${prefix}-preview-bg`);
+    if (bgImg) bgImg.src = templateConfig.bg;
+
+    // Atualizar visualização dos elementos no preview
+    Object.keys(templateConfig.fields).forEach(field => {
+        const item = document.getElementById(`${prefix}-item-${field}`);
+        if (item) {
+            applyFieldToPreviewItem(item, templateConfig.fields[field]);
+            setupDragAndDrop(item, type, field);
+        }
+    });
+
+    // Seleção de pílulas de variáveis
+    const pillContainer = document.getElementById(`${prefix}-field-pills`);
+    if (pillContainer) {
+        pillContainer.querySelectorAll('.field-selector-btn').forEach(btn => {
+            btn.onclick = () => {
+                pillContainer.querySelectorAll('.field-selector-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const field = btn.getAttribute('data-field');
+                templateConfig.activeField = field;
+                
+                // Destacar no preview
+                document.querySelectorAll(`#${prefix}-preview-box .draggable-preview-item`).forEach(i => i.classList.remove('active'));
+                const activeItem = document.getElementById(`${prefix}-item-${field}`);
+                if (activeItem) activeItem.classList.add('active');
+
+                updateFieldControlsUI(type, field);
+            };
+        });
+    }
+
+    // Preencher campos de controle com a variável ativa atual
+    updateFieldControlsUI(type, templateConfig.activeField || 'nome');
+    bindControlsInputEvents(type);
+    setupBackgroundHandlers(type);
+    setupSaveHandler(type);
+}
+
+function updateCourseSelectDOM(type, templatesDict, currentKey) {
+    const selectElem = document.getElementById(`${type}-course-select`);
+    const btnDelete = document.getElementById(`btn-delete-${type}-course`);
+    if (!selectElem) return;
+
+    selectElem.innerHTML = '';
+    Object.keys(templatesDict).forEach(key => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.innerText = templatesDict[key].name || key.toUpperCase();
+        if (key === currentKey) opt.selected = true;
+        selectElem.appendChild(opt);
+    });
+
+    const newOpt = document.createElement('option');
+    newOpt.value = '__new__';
+    newOpt.innerText = '+ Criar Novo Modelo de Curso...';
+    selectElem.appendChild(newOpt);
+
+    // Botão de exclusão (visível apenas para cursos customizados além de PNL e SER)
+    if (btnDelete) {
+        btnDelete.style.display = (currentKey !== 'pnl' && currentKey !== 'ser') ? 'inline-flex' : 'none';
+        btnDelete.onclick = () => deleteCustomCourseTemplate(type, currentKey);
+    }
+
+    selectElem.onchange = (e) => {
+        const val = e.target.value;
+        if (val === '__new__') {
+            createNewCourseTemplate(type);
+        } else {
+            if (type === 'cert') window.customizationState.certCourse = val;
+            else window.customizationState.crachaCourse = val;
+            initCustomizationEditor(type);
+        }
+    };
+}
+
+function createNewCourseTemplate(type) {
+    const isCert = type === 'cert';
+    const courseName = prompt(`Digite o nome do novo curso para o modelo de ${isCert ? 'Certificado' : 'Crachá'} (ex: Master Practitioner):`);
+    
+    if (!courseName || courseName.trim() === '') {
+        initCustomizationEditor(type);
+        return;
+    }
+
+    const cleanName = courseName.trim();
+    const newKey = `custom_${Date.now()}`;
+    const defaultBg = isCert ? 'assets/img/template-certificado-pnl.png' : 'assets/img/template cracha pnlHSC.png';
+
+    const baseDict = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+    const sampleTpl = baseDict['pnl'] || Object.values(baseDict)[0];
+
+    const newTpl = JSON.parse(JSON.stringify(sampleTpl));
+    newTpl.name = cleanName;
+    newTpl.bg = defaultBg;
+
+    baseDict[newKey] = newTpl;
+
+    if (isCert) window.customizationState.certCourse = newKey;
+    else window.customizationState.crachaCourse = newKey;
+
+    window.showToast(`Novo modelo de curso "${cleanName}" criado!`, "success");
+    initCustomizationEditor(type);
+}
+
+function deleteCustomCourseTemplate(type, key) {
+    const isCert = type === 'cert';
+    const dict = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+    const tplName = dict[key]?.name || key;
+
+    window.openConfirmModal(
+        "Excluir Modelo de Curso",
+        `Tem certeza que deseja excluir o modelo de ${isCert ? 'Certificado' : 'Crachá'} para "${tplName}"?`,
+        async () => {
+            delete dict[key];
+            const firstKey = Object.keys(dict)[0] || 'pnl';
+            if (isCert) window.customizationState.certCourse = firstKey;
+            else window.customizationState.crachaCourse = firstKey;
+
+            await setDoc(doc(db, "settings", "customizacoes"), {
+                [isCert ? 'certTemplates' : 'crachaTemplates']: dict
+            }, { merge: true });
+
+            window.showToast(`Modelo "${tplName}" excluído com sucesso.`, "success");
+            initCustomizationEditor(type);
+        }
+    );
+}
+
+function updateFieldControlsUI(type, field) {
+    const isCert = type === 'cert';
+    const templatesDict = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+    const courseKey = isCert ? window.customizationState.certCourse : window.customizationState.crachaCourse;
+    const templateConfig = templatesDict[courseKey];
+    if (!templateConfig) return;
+
+    const fieldObj = templateConfig.fields[field];
+    if (!fieldObj) return;
+
+    templateConfig.activeField = field;
+    const prefix = type;
+
+    const labelMap = {
+        nome: 'Nome do Aluno',
+        data: 'Data de Emissão/Curso',
+        carga: 'Carga Horária',
+        curso: 'Nome do Curso',
+        empresa: 'Empresa / Cargo'
+    };
+
+    const labelElem = document.getElementById(`${prefix}-active-field-label`);
+    if (labelElem) labelElem.innerText = `Editando: ${labelMap[field] || field}`;
+
+    const visElem = document.getElementById(`${prefix}-field-visible`);
+    if (visElem) visElem.checked = fieldObj.visible !== false;
+
+    const posXElem = document.getElementById(`${prefix}-pos-x`);
+    if (posXElem) posXElem.value = fieldObj.posX;
+
+    const posYElem = document.getElementById(`${prefix}-pos-y`);
+    if (posYElem) posYElem.value = fieldObj.posY;
+
+    const sizeElem = document.getElementById(`${prefix}-font-size`);
+    if (sizeElem) sizeElem.value = fieldObj.fontSize;
+
+    const colorElem = document.getElementById(`${prefix}-font-color`);
+    if (colorElem) colorElem.value = fieldObj.fontColor;
+
+    const fontElem = document.getElementById(`${prefix}-font-family`);
+    if (fontElem) fontElem.value = fieldObj.fontFamily;
+
+    const weightElem = document.getElementById(`${prefix}-font-weight`);
+    if (weightElem) weightElem.value = fieldObj.fontWeight;
+
+    const styleElem = document.getElementById(`${prefix}-font-style`);
+    if (styleElem) styleElem.value = fieldObj.fontStyle;
+
+    const alignElem = document.getElementById(`${prefix}-text-align`);
+    if (alignElem) alignElem.value = fieldObj.textAlign;
+
+    const tplElem = document.getElementById(`${prefix}-text-template`);
+    if (tplElem) tplElem.value = fieldObj.template || `{${field}}`;
+}
+
+function bindControlsInputEvents(type) {
+    const prefix = type;
+    const updateActiveField = () => {
+        const isCert = type === 'cert';
+        const templatesDict = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+        const courseKey = isCert ? window.customizationState.certCourse : window.customizationState.crachaCourse;
+        const templateConfig = templatesDict[courseKey];
+        if (!templateConfig) return;
+
+        const field = templateConfig.activeField;
+        const fieldObj = templateConfig.fields[field];
+        if (!fieldObj) return;
+
+        fieldObj.visible = document.getElementById(`${prefix}-field-visible`)?.checked ?? true;
+        fieldObj.posX = parseFloat(document.getElementById(`${prefix}-pos-x`)?.value || 50);
+        fieldObj.posY = parseFloat(document.getElementById(`${prefix}-pos-y`)?.value || 50);
+        fieldObj.fontSize = parseInt(document.getElementById(`${prefix}-font-size`)?.value || 24, 10);
+        fieldObj.fontColor = document.getElementById(`${prefix}-font-color`)?.value || '#000000';
+        fieldObj.fontFamily = document.getElementById(`${prefix}-font-family`)?.value || 'Arial, sans-serif';
+        fieldObj.fontWeight = document.getElementById(`${prefix}-font-weight`)?.value || '400';
+        fieldObj.fontStyle = document.getElementById(`${prefix}-font-style`)?.value || 'normal';
+        fieldObj.textAlign = document.getElementById(`${prefix}-text-align`)?.value || 'center';
+        fieldObj.template = document.getElementById(`${prefix}-text-template`)?.value || `{${field}}`;
+
+        const item = document.getElementById(`${prefix}-item-${field}`);
+        if (item) applyFieldToPreviewItem(item, fieldObj);
+    };
+
+    const inputs = [
+        `${prefix}-field-visible`, `${prefix}-pos-x`, `${prefix}-pos-y`,
+        `${prefix}-font-size`, `${prefix}-font-color`, `${prefix}-font-family`,
+        `${prefix}-font-weight`, `${prefix}-font-style`, `${prefix}-text-align`,
+        `${prefix}-text-template`
+    ];
+
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.oninput = updateActiveField;
+            el.onchange = updateActiveField;
+        }
+    });
+}
+
+function applyFieldToPreviewItem(item, fieldObj) {
+    if (!item || !fieldObj) return;
+
+    item.style.display = fieldObj.visible ? 'block' : 'none';
+    item.style.left = `${fieldObj.posX}%`;
+    item.style.top = `${fieldObj.posY}%`;
+    item.style.fontSize = `${fieldObj.fontSize}px`;
+    item.style.color = fieldObj.fontColor;
+    item.style.fontFamily = fieldObj.fontFamily;
+    item.style.fontWeight = fieldObj.fontWeight;
+    item.style.fontStyle = fieldObj.fontStyle;
+    item.style.textAlign = fieldObj.textAlign;
+
+    const sampleMap = {
+        nome: 'Nome do Cliente Exemplo',
+        data: '26 a 28 de Agosto',
+        carga: '60 horas',
+        curso: 'Introdução à PNL',
+        empresa: 'Empresa X - Gerente'
+    };
+
+    const fieldName = item.getAttribute('data-field');
+    const rawTemplate = fieldObj.template || `{${fieldName}}`;
+    const formattedText = rawTemplate
+        .replace(/{nome}/g, sampleMap.nome)
+        .replace(/{data}/g, sampleMap.data)
+        .replace(/{carga}/g, sampleMap.carga)
+        .replace(/{curso}/g, sampleMap.curso)
+        .replace(/{empresa}/g, sampleMap.empresa);
+
+    const spanText = item.querySelector('.preview-text-content');
+    if (spanText) spanText.innerText = formattedText;
+}
+
+function setupDragAndDrop(item, type, field) {
+    if (item._dragInitialized) return;
+    item._dragInitialized = true;
+
+    let isDragging = false;
+
+    const onStart = (e) => {
+        isDragging = true;
+        
+        // Ativar a pílula correspondente
+        const pillBtn = document.querySelector(`#${type}-field-pills .field-selector-btn[data-field="${field}"]`);
+        if (pillBtn) pillBtn.click();
+
+        e.preventDefault();
+    };
+
+    const onMove = (e) => {
+        if (!isDragging) return;
+        const box = document.getElementById(`${type}-preview-box`);
+        if (!box) return;
+
+        const rect = box.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        let pctX = ((clientX - rect.left) / rect.width) * 100;
+        let pctY = ((clientY - rect.top) / rect.height) * 100;
+
+        pctX = Math.max(0, Math.min(100, parseFloat(pctX.toFixed(1))));
+        pctY = Math.max(0, Math.min(100, parseFloat(pctY.toFixed(1))));
+
+        const isCert = type === 'cert';
+        const templatesDict = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+        const courseKey = isCert ? window.customizationState.certCourse : window.customizationState.crachaCourse;
+        const templateConfig = templatesDict[courseKey];
+
+        const fieldObj = templateConfig.fields[field];
+        fieldObj.posX = pctX;
+        fieldObj.posY = pctY;
+
+        item.style.left = `${pctX}%`;
+        item.style.top = `${pctY}%`;
+
+        const posXInput = document.getElementById(`${type}-pos-x`);
+        const posYInput = document.getElementById(`${type}-pos-y`);
+        if (posXInput) posXInput.value = pctX;
+        if (posYInput) posYInput.value = pctY;
+    };
+
+    const onEnd = () => { isDragging = false; };
+
+    item.addEventListener('mousedown', onStart);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onEnd);
+
+    item.addEventListener('touchstart', onStart, { passive: false });
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+}
+
+function setupBackgroundHandlers(type) {
+    const uploadInput = document.getElementById(`${type}-bg-upload`);
+    const resetBtn = document.getElementById(`btn-reset-${type}-bg`);
+    const bgImg = document.getElementById(`${type}-preview-bg`);
+
+    const defaultMap = {
+        cert: 'assets/img/template-certificado-pnl.png',
+        cracha: 'assets/img/template cracha pnlHSC.png'
+    };
+
+    if (uploadInput) {
+        uploadInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const dataUrl = evt.target.result;
+                const isCert = type === 'cert';
+                const templatesDict = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+                const courseKey = isCert ? window.customizationState.certCourse : window.customizationState.crachaCourse;
+
+                templatesDict[courseKey].bg = dataUrl;
+                if (bgImg) bgImg.src = dataUrl;
+            };
+            reader.readAsDataURL(file);
+        };
+    }
+
+    if (resetBtn) {
+        resetBtn.onclick = () => {
+            const defaultBg = defaultMap[type];
+            const isCert = type === 'cert';
+            const templatesDict = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+            const courseKey = isCert ? window.customizationState.certCourse : window.customizationState.crachaCourse;
+
+            templatesDict[courseKey].bg = defaultBg;
+            if (bgImg) bgImg.src = defaultBg;
+            window.showToast("Plano de fundo restaurado para o padrão.", "info");
+        };
+    }
+}
+
+function setupSaveHandler(type) {
+    const btn = document.getElementById(`btn-save-${type}-config`);
+    if (!btn) return;
+
+    btn.onclick = async () => {
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="ph ph-spinner" style="margin-right: 0.35rem; animation: spin 1s linear infinite;"></i> Salvando...';
+
+        const isCert = type === 'cert';
+        const saveKey = isCert ? 'certTemplates' : 'crachaTemplates';
+        const dataToSave = isCert ? window.customizationState.certTemplates : window.customizationState.crachaTemplates;
+
+        try {
+            await setDoc(doc(db, "settings", "customizacoes"), {
+                [saveKey]: dataToSave
+            }, { merge: true });
+
+            window.showToast(`Modelos de ${isCert ? 'Certificados' : 'Crachás'} salvos com sucesso!`, "success");
+        } catch (err) {
+            console.error("Erro ao salvar customização:", err);
+            window.showToast("Erro ao salvar customização no banco.", "error");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    };
+}
+
+// --- GERAÇÃO E EXPORTAÇÃO DE PDFs (CERTIFICADOS E CRACHÁS A4 POR TURMA) ---
+
+window.gerarCertificadoPDF = async function(clientId) {
+    const client = state.clients.find(c => c.id === clientId);
+    if (!client) {
+        window.showToast("Cliente não encontrado.", "error");
+        return;
+    }
+
+    window.showToast("Gerando PDF do Certificado...", "info");
+
+    try {
+        await loadCustomizationSettings();
+
+        let clientClass = null;
+        if (client.classId && client.classId !== 'unassigned') {
+            clientClass = state.classes.find(cls => cls.id === client.classId);
+        }
+
+        // Determinar o modelo de certificado pelo curso da turma
+        let courseKey = 'pnl';
+        if (clientClass && clientClass.name.toLowerCase().includes('ser')) {
+            courseKey = 'ser';
+        }
+
+        const certDict = window.customizationState.certTemplates;
+        const certConfig = certDict[courseKey] || certDict['pnl'] || Object.values(certDict)[0];
+
+        const nomeData = client.name || 'Aluno';
+        const dataData = clientClass ? (clientClass.dates || '2026') : new Date().toLocaleDateString('pt-BR');
+        const cargaData = clientClass ? (clientClass.workload || '60h') : '60h';
+        const cursoData = clientClass ? clientClass.name : certConfig.name;
+
+        await buildAndDownloadPDF({
+            bgUrl: certConfig.bg,
+            fields: certConfig.fields,
+            dataMap: { nome: nomeData, data: dataData, carga: cargaData, curso: cursoData },
+            filename: `Certificado_${nomeData.replace(/\s+/g, '_')}.pdf`,
+            orientation: 'landscape',
+            targetWidthPx: 1200
+        });
+
+        window.showToast("Certificado exportado com sucesso!", "success");
+    } catch (err) {
+        console.error("Erro ao gerar Certificado PDF:", err);
+        window.showToast("Erro ao gerar PDF do certificado.", "error");
+    }
+};
+
+window.gerarCrachaPDF = async function(clientId) {
+    const client = state.clients.find(c => c.id === clientId);
+    if (!client) {
+        window.showToast("Cliente não encontrado.", "error");
+        return;
+    }
+
+    window.showToast("Gerando PDF do Crachá...", "info");
+
+    try {
+        await loadCustomizationSettings();
+
+        let clientClass = null;
+        if (client.classId && client.classId !== 'unassigned') {
+            clientClass = state.classes.find(cls => cls.id === client.classId);
+        }
+
+        let courseKey = 'pnl';
+        if (clientClass && clientClass.name.toLowerCase().includes('ser')) {
+            courseKey = 'ser';
+        }
+
+        const crachaDict = window.customizationState.crachaTemplates;
+        const crachaConfig = crachaDict[courseKey] || crachaDict['pnl'] || Object.values(crachaDict)[0];
+
+        const nomeData = client.name || 'Aluno';
+        const dataData = clientClass ? (clientClass.dates || '2026') : new Date().toLocaleDateString('pt-BR');
+        const cargaData = clientClass ? (clientClass.workload || '60h') : '60h';
+        const empresaData = client.company ? `${client.company}${client.role ? ' - ' + client.role : ''}` : 'Participante';
+
+        await buildAndDownloadPDF({
+            bgUrl: crachaConfig.bg,
+            fields: crachaConfig.fields,
+            dataMap: { nome: nomeData, data: dataData, carga: cargaData, empresa: empresaData },
+            filename: `Cracha_${nomeData.replace(/\s+/g, '_')}.pdf`,
+            orientation: 'portrait',
+            targetWidthPx: 800
+        });
+
+        window.showToast("Crachá exportado com sucesso!", "success");
+    } catch (err) {
+        console.error("Erro ao gerar Crachá PDF:", err);
+        window.showToast("Erro ao gerar PDF do crachá.", "error");
+    }
+};
+
+// IMPRESSÃO DE CRACHÁS DA TURMA EM FOLHA A4 (10 CRACHÁS POR PÁGINA: 2 COLUNAS X 5 LINHAS)
+window.gerarCrachasTurmaA4PDF = async function(classId, className) {
+    const classClients = state.clients.filter(c => c.classId === classId);
+    if (!classClients || classClients.length === 0) {
+        window.showToast("Nenhum aluno cadastrado nesta turma.", "warning");
+        return;
+    }
+
+    window.showToast(`Gerando PDF de Crachás da turma ${className} (10 por folha A4)...`, "info");
+
+    try {
+        await loadCustomizationSettings();
+
+        // Determinar o modelo de crachá correspondente ao curso da turma
+        let courseKey = 'pnl';
+        const lowerName = (className || '').toLowerCase();
+        if (lowerName.includes('ser')) courseKey = 'ser';
+
+        const crachaDict = window.customizationState.crachaTemplates;
+        const crachaTpl = crachaDict[courseKey] || crachaDict['pnl'] || Object.values(crachaDict)[0];
+
+        const totalClients = classClients.length;
+        const totalPages = Math.max(1, Math.ceil(totalClients / 10));
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        for (let pageIdx = 0; pageIdx < totalPages; pageIdx++) {
+            const pageClients = classClients.slice(pageIdx * 10, (pageIdx + 1) * 10);
+            
+            // Criar contêiner A4 oculto para renderização (794px x 1123px = A4 96DPI)
+            const a4Sheet = document.createElement('div');
+            a4Sheet.className = 'a4-print-sheet';
+
+            for (let slotIdx = 0; slotIdx < 10; slotIdx++) {
+                const slotDiv = document.createElement('div');
+                slotDiv.className = 'a4-badge-slot';
+                
+                const client = pageClients[slotIdx];
+                if (client) {
+                    const bgImg = document.createElement('img');
+                    bgImg.crossOrigin = 'anonymous';
+                    bgImg.src = crachaTpl.bg;
+                    bgImg.style.width = '100%';
+                    bgImg.style.height = '100%';
+                    bgImg.style.objectFit = 'cover';
+                    bgImg.style.display = 'block';
+                    slotDiv.appendChild(bgImg);
+
+                    const nomeData = client.name || 'Aluno';
+                    const dataData = client.classDates || '2026';
+                    const cargaData = client.classWorkload || '60h';
+                    const empresaData = client.company ? `${client.company}${client.role ? ' - ' + client.role : ''}` : 'Participante';
+
+                    const dataMap = { nome: nomeData, data: dataData, carga: cargaData, empresa: empresaData };
+
+                    Object.keys(crachaTpl.fields).forEach(key => {
+                        const f = crachaTpl.fields[key];
+                        if (!f.visible) return;
+
+                        const textDiv = document.createElement('div');
+                        textDiv.style.position = 'absolute';
+                        textDiv.style.left = `${f.posX}%`;
+                        textDiv.style.top = `${f.posY}%`;
+                        textDiv.style.transform = 'translate(-50%, -50%)';
+                        textDiv.style.fontSize = `${Math.round(f.fontSize * 0.48)}px`; // Proporcional ao slot do A4
+                        textDiv.style.color = f.fontColor;
+                        textDiv.style.fontFamily = f.fontFamily;
+                        textDiv.style.fontWeight = f.fontWeight;
+                        textDiv.style.fontStyle = f.fontStyle;
+                        textDiv.style.textAlign = f.textAlign;
+                        textDiv.style.whiteSpace = 'nowrap';
+
+                        const rawTpl = f.template || `{${key}}`;
+                        textDiv.innerText = rawTpl
+                            .replace(/{nome}/g, dataMap.nome || '')
+                            .replace(/{data}/g, dataMap.data || '')
+                            .replace(/{carga}/g, dataMap.carga || '')
+                            .replace(/{empresa}/g, dataMap.empresa || '');
+
+                        slotDiv.appendChild(textDiv);
+                    });
+                } else {
+                    // Slot vazio mantendo a grade de 10 crachás por folha A4 para corte
+                    slotDiv.classList.add('empty-slot');
+                    slotDiv.innerHTML = '<span style="font-size:10px; color:#cbd5e1; font-weight:600;">Espaço para Corte (Vazio)</span>';
+                }
+
+                a4Sheet.appendChild(slotDiv);
+            }
+
+            document.body.appendChild(a4Sheet);
+
+            const canvas = await html2canvas(a4Sheet, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                logging: false
+            });
+
+            document.body.removeChild(a4Sheet);
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            if (pageIdx > 0) pdf.addPage('a4', 'portrait');
+            pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+        }
+
+        pdf.save(`Crachas_Turma_${className.replace(/\s+/g, '_')}.pdf`);
+        window.showToast(`Crachás A4 da turma ${className} gerados com sucesso!`, "success");
+    } catch (err) {
+        console.error("Erro ao gerar crachás da turma A4:", err);
+        window.showToast("Erro ao gerar PDF de crachás da turma.", "error");
+    }
+};
+
+async function buildAndDownloadPDF(options) {
+    const { bgUrl, fields, dataMap, filename, orientation, targetWidthPx } = options;
+
+    return new Promise((resolve, reject) => {
+        const renderContainer = document.createElement('div');
+        renderContainer.style.position = 'absolute';
+        renderContainer.style.left = '-9999px';
+        renderContainer.style.top = '-9999px';
+        renderContainer.style.width = `${targetWidthPx}px`;
+        renderContainer.style.backgroundColor = 'white';
+        renderContainer.style.overflow = 'hidden';
+
+        const bgImg = new Image();
+        bgImg.crossOrigin = 'anonymous';
+        bgImg.onload = async () => {
+            const aspectRatio = bgImg.height / bgImg.width;
+            const targetHeightPx = Math.round(targetWidthPx * aspectRatio);
+            renderContainer.style.height = `${targetHeightPx}px`;
+
+            bgImg.style.width = '100%';
+            bgImg.style.height = '100%';
+            bgImg.style.display = 'block';
+            renderContainer.appendChild(bgImg);
+
+            const scaleFactor = targetWidthPx / 780;
+
+            Object.keys(fields).forEach(key => {
+                const f = fields[key];
+                if (!f.visible) return;
+
+                const textDiv = document.createElement('div');
+                textDiv.style.position = 'absolute';
+                textDiv.style.left = `${f.posX}%`;
+                textDiv.style.top = `${f.posY}%`;
+                textDiv.style.transform = 'translate(-50%, -50%)';
+                textDiv.style.fontSize = `${Math.round(f.fontSize * scaleFactor)}px`;
+                textDiv.style.color = f.fontColor;
+                textDiv.style.fontFamily = f.fontFamily;
+                textDiv.style.fontWeight = f.fontWeight;
+                textDiv.style.fontStyle = f.fontStyle;
+                textDiv.style.textAlign = f.textAlign;
+                textDiv.style.whiteSpace = 'nowrap';
+
+                const rawTpl = f.template || `{${key}}`;
+                const formatted = rawTpl
+                    .replace(/{nome}/g, dataMap.nome || '')
+                    .replace(/{data}/g, dataMap.data || '')
+                    .replace(/{carga}/g, dataMap.carga || '')
+                    .replace(/{curso}/g, dataMap.curso || '')
+                    .replace(/{empresa}/g, dataMap.empresa || '');
+
+                textDiv.innerText = formatted;
+                renderContainer.appendChild(textDiv);
+            });
+
+            document.body.appendChild(renderContainer);
+
+            try {
+                const canvas = await html2canvas(renderContainer, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false
+                });
+
+                document.body.removeChild(renderContainer);
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: orientation || (bgImg.width > bgImg.height ? 'landscape' : 'portrait'),
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
+                pdf.save(filename);
+
+                resolve();
+            } catch (err) {
+                if (document.body.contains(renderContainer)) document.body.removeChild(renderContainer);
+                reject(err);
+            }
+        };
+
+        bgImg.onerror = (err) => {
+            if (document.body.contains(renderContainer)) document.body.removeChild(renderContainer);
+            reject(err);
+        };
+
+        bgImg.src = bgUrl;
+    });
+}
+
+// --- MÓDULO FINANCEIRO & INTEGRAÇÃO COM ASAAS ---
+
+window.renderFinanceiro = function() {
+    const tableBody = document.getElementById('finance-table-body');
+    if (!tableBody) return;
+
+    const searchTerm = (document.getElementById('search-finance')?.value || '').toLowerCase().trim();
+    const filterStatus = document.getElementById('filter-finance-status')?.value || 'all';
+    const filterMethod = document.getElementById('filter-finance-method')?.value || 'all';
+
+    let totalReceived = 0;
+    let totalPix = 0;
+    let totalCard = 0;
+    let totalPending = 0;
+
+    // Processar transações provenientes do CRM / Coleção Deals
+    const transactions = (state.deals || []).map(deal => {
+        const isPaid = deal.stage === 'won' || deal.paymentStatus === 'CONFIRMED' || deal.paymentStatus === 'RECEIVED';
+        const isCancelled = deal.stage === 'lost';
+        
+        const rawValue = parseFloat(deal.value) || 0;
+        const method = (deal.paymentMethod || deal.method || 'other').toLowerCase();
+
+        if (isPaid) {
+            totalReceived += rawValue;
+            if (method.includes('pix')) totalPix += rawValue;
+            else if (method.includes('card') || method.includes('cartao') || method.includes('credit')) totalCard += rawValue;
+        } else if (!isCancelled) {
+            totalPending += rawValue;
+        }
+
+        return {
+            id: deal.id,
+            clientName: deal.title || deal.clientName || deal.name || 'Cliente Sem Nome',
+            clientEmail: deal.email || deal.clientEmail || 'N/A',
+            courseName: deal.courseName || deal.course || 'Treinamento / CRM',
+            value: rawValue,
+            paymentMethod: method,
+            paymentStatus: isPaid ? 'CONFIRMED' : (isCancelled ? 'CANCELLED' : 'PENDING'),
+            asaasPaymentId: deal.asaasPaymentId || deal.paymentId || null,
+            createdAt: deal.createdAt ? (deal.createdAt.toDate ? deal.createdAt.toDate() : new Date(deal.createdAt)) : new Date()
+        };
+    });
+
+    // Atualizar indicadores de métricas
+    const elemReceived = document.getElementById('fin-total-received');
+    const elemPix = document.getElementById('fin-total-pix');
+    const elemCard = document.getElementById('fin-total-card');
+    const elemPending = document.getElementById('fin-total-pending');
+
+    if (elemReceived) elemReceived.innerText = totalReceived.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    if (elemPix) elemPix.innerText = totalPix.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    if (elemCard) elemCard.innerText = totalCard.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    if (elemPending) elemPending.innerText = totalPending.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    // Filtrar transações
+    const filtered = transactions.filter(t => {
+        const matchesSearch = !searchTerm || 
+            t.clientName.toLowerCase().includes(searchTerm) || 
+            t.clientEmail.toLowerCase().includes(searchTerm);
+
+        let matchesStatus = true;
+        if (filterStatus === 'pago') matchesStatus = t.paymentStatus === 'CONFIRMED';
+        else if (filterStatus === 'pending') matchesStatus = t.paymentStatus === 'PENDING';
+
+        let matchesMethod = true;
+        if (filterMethod === 'pix') matchesMethod = t.paymentMethod.includes('pix');
+        else if (filterMethod === 'credit_card') matchesMethod = t.paymentMethod.includes('card') || t.paymentMethod.includes('cartao') || t.paymentMethod.includes('credit');
+        else if (filterMethod === 'boleto') matchesMethod = t.paymentMethod.includes('boleto');
+
+        return matchesSearch && matchesStatus && matchesMethod;
+    });
+
+    // Ordenar por data mais recente
+    filtered.sort((a, b) => b.createdAt - a.createdAt);
+
+    if (filtered.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-muted" style="padding: 2rem;">Nenhuma transação encontrada.</td></tr>`;
+        return;
+    }
+
+    tableBody.innerHTML = filtered.map(t => {
+        // Badges de Método de Pagamento
+        let methodBadge = `<span class="badge-payment badge-payment-other"><i class="ph ph-receipt"></i> Outro</span>`;
+        if (t.paymentMethod.includes('pix')) {
+            methodBadge = `<span class="badge-payment badge-payment-pix"><i class="ph ph-lightning"></i> PIX</span>`;
+        } else if (t.paymentMethod.includes('card') || t.paymentMethod.includes('cartao') || t.paymentMethod.includes('credit')) {
+            methodBadge = `<span class="badge-payment badge-payment-card"><i class="ph ph-credit-card"></i> Cartão</span>`;
+        } else if (t.paymentMethod.includes('boleto')) {
+            methodBadge = `<span class="badge-payment badge-payment-boleto"><i class="ph ph-barcode"></i> Boleto</span>`;
+        }
+
+        // Badges de Status
+        let statusBadge = `<span class="badge-payment badge-status-pending"><i class="ph ph-clock"></i> Pendente</span>`;
+        if (t.paymentStatus === 'CONFIRMED') {
+            statusBadge = `<span class="badge-payment badge-status-paid"><i class="ph ph-check-circle"></i> Pago</span>`;
+        } else if (t.paymentStatus === 'CANCELLED') {
+            statusBadge = `<span class="badge-payment badge-status-cancelled"><i class="ph ph-x-circle"></i> Cancelado</span>`;
+        }
+
+        const dateStr = t.createdAt instanceof Date && !isNaN(t.createdAt) 
+            ? t.createdAt.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+            : 'Data N/A';
+
+        const asaasIdStr = t.asaasPaymentId ? `<code style="font-size:0.75rem; background:#f1f5f9; padding:2px 6px; border-radius:4px;">${t.asaasPaymentId}</code>` : `<span class="text-muted" style="font-size:0.8rem;">-</span>`;
+
+        let actionBtns = '';
+        if (t.paymentStatus !== 'CONFIRMED') {
+            if (t.asaasPaymentId) {
+                actionBtns += `<button class="btn btn-outline" onclick="window.verificarPagamentoAsaas('${t.id}', '${t.asaasPaymentId}')" style="font-size:0.75rem; padding:0.25rem 0.5rem; color:var(--primary-color); border-color:var(--primary-color); margin-right:0.25rem;" title="Consultar status no Asaas"><i class="ph ph-magnifying-glass"></i> Consultar Asaas</button>`;
+            }
+            actionBtns += `<button class="btn btn-outline" onclick="window.marcarComoPagoManual('${t.id}')" style="font-size:0.75rem; padding:0.25rem 0.5rem; color:#166534; border-color:#86efac;" title="Confirmar pagamento manualmente"><i class="ph ph-check-circle"></i> Marcar Pago</button>`;
+        } else {
+            actionBtns = `<span class="text-success" style="font-size:0.8rem; font-weight:600;"><i class="ph ph-check-fat"></i> Confirmado</span>`;
+        }
+
+        return `
+            <tr>
+                <td>
+                    <strong style="color: var(--text-main);">${t.clientName}</strong><br>
+                    <span class="text-muted" style="font-size: 0.8rem;">${t.clientEmail}</span>
+                </td>
+                <td><span style="font-weight: 500;">${t.courseName}</span></td>
+                <td><strong style="color: var(--text-main);">${t.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
+                <td>${methodBadge}</td>
+                <td>${statusBadge}</td>
+                <td><span class="text-muted" style="font-size:0.85rem;">${dateStr}</span></td>
+                <td>${asaasIdStr}</td>
+                <td style="text-align: right;">${actionBtns}</td>
+            </tr>
+        `;
+    }).join('');
+};
+
+// Event Listeners dos Filtros Financeiros
+document.getElementById('search-finance')?.addEventListener('input', () => window.renderFinanceiro());
+document.getElementById('filter-finance-status')?.addEventListener('change', () => window.renderFinanceiro());
+document.getElementById('filter-finance-method')?.addEventListener('change', () => window.renderFinanceiro());
+
+// VERIFICAÇÃO EM TEMPO REAL NO ASAAS VIA FIREBASE FUNCTION
+window.verificarPagamentoAsaas = async function(dealId, paymentId) {
+    if (!paymentId) {
+        window.showToast("ID do pagamento Asaas não encontrado nesta transação.", "warning");
+        return;
+    }
+
+    window.showToast("Consultando status no Asaas...", "info");
+
+    try {
+        const consultarStatus = httpsCallable(functionsInstance, 'consultarStatusPagamentoAsaas');
+        const result = await consultarStatus({ paymentId });
+
+        if (result.data && result.data.sucesso) {
+            const { status, pago } = result.data;
+            if (pago) {
+                // Atualizar no Firestore e mover lead para Ganha no CRM
+                await updateDoc(doc(db, "deals", dealId), {
+                    stage: 'won',
+                    paymentStatus: 'CONFIRMED',
+                    updatedAt: new Date()
+                });
+
+                // Atualizar estado local
+                const deal = (state.deals || []).find(d => d.id === dealId);
+                if (deal) {
+                    deal.stage = 'won';
+                    deal.paymentStatus = 'CONFIRMED';
+                }
+
+                window.showToast(`Pagamento confirmado no Asaas! Lead movido para 'Ganha' no CRM.`, "success");
+                if (typeof renderKanban === 'function') renderKanban();
+                window.renderFinanceiro();
+            } else {
+                window.showToast(`Status no Asaas: ${status || 'PENDING'}. O pagamento ainda não foi confirmado.`, "warning");
+            }
+        } else {
+            window.showToast(result.data?.mensagem || "Não foi possível consultar o pagamento no Asaas.", "error");
+        }
+    } catch (err) {
+        console.error("Erro ao consultar pagamento Asaas:", err);
+        window.showToast("Erro ao conectar à API do Asaas.", "error");
+    }
+};
+
+// CONFIRMAÇÃO MANUAL DE PAGAMENTO
+window.marcarComoPagoManual = async function(dealId) {
+    const deal = (state.deals || []).find(d => d.id === dealId);
+    const dealName = deal ? (deal.title || deal.clientName || 'o cliente') : 'o cliente';
+
+    window.openConfirmModal(
+        "Confirmar Pagamento",
+        `Deseja marcar o pagamento de "${dealName}" como PAGO manualmente e movê-lo para a etapa 'Ganha' no CRM?`,
+        async () => {
+            try {
+                await updateDoc(doc(db, "deals", dealId), {
+                    stage: 'won',
+                    paymentStatus: 'CONFIRMED',
+                    updatedAt: new Date()
+                });
+
+                if (deal) {
+                    deal.stage = 'won';
+                    deal.paymentStatus = 'CONFIRMED';
+                }
+
+                window.showToast("Pagamento marcado como Pago e CRM atualizado!", "success");
+                if (typeof renderKanban === 'function') renderKanban();
+                window.renderFinanceiro();
+            } catch (err) {
+                console.error("Erro ao marcar pagamento manual:", err);
+                window.showToast("Erro ao atualizar pagamento no banco.", "error");
+            }
+        }
+    );
+};

@@ -317,3 +317,310 @@ body.dark-mode .alert { background: #450a0a; color: #fca5a5; border-color: #7f1d
 #confirm-modal {
     z-index: 2000 !important;
 }
+
+/* --- ABAS DE CUSTOMIZAÇÕES E EDITOR VISUAL --- */
+.custom-tabs-container {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.custom-tab-btn {
+    padding: 0.65rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.custom-tab-btn:hover {
+    color: var(--primary-color);
+    background: rgba(13, 148, 136, 0.05);
+}
+
+.custom-tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: rgba(13, 148, 136, 0.08);
+}
+
+.custom-tab-content {
+    display: none;
+}
+
+.custom-tab-content.active {
+    display: block;
+    animation: fadeInTab 0.25s ease-in-out;
+}
+
+@keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Layout do Editor Visual */
+.template-editor-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .template-editor-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.field-selector-group {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.field-selector-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    border: 1px solid var(--border-color);
+    background: #f8fafc;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.field-selector-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.field-selector-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 6px rgba(13, 148, 136, 0.3);
+}
+
+/* Canvas / Live Preview Container */
+.preview-canvas-wrapper {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    overflow: auto;
+}
+
+.preview-canvas-box {
+    position: relative;
+    width: 100%;
+    max-width: 780px;
+    background: white;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    user-select: none;
+    touch-action: none;
+}
+
+.preview-canvas-bg {
+    width: 100%;
+    height: auto;
+    display: block;
+    pointer-events: none;
+}
+
+/* Elemento Arrastável na Preview */
+.draggable-preview-item {
+    position: absolute;
+    cursor: move;
+    border: 1.5px dashed transparent;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+    user-select: none;
+}
+
+.draggable-preview-item:hover {
+    border-color: #0d9488;
+    background: rgba(13, 148, 136, 0.12);
+}
+
+.draggable-preview-item.active {
+    border-color: #0d9488;
+    background: rgba(13, 148, 136, 0.18);
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.25);
+    z-index: 10;
+}
+
+.draggable-preview-item .drag-badge {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0d9488;
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    pointer-events: none;
+    display: none;
+}
+
+.draggable-preview-item.active .drag-badge {
+    display: block;
+}
+
+/* Painel de Ações de PDF no Perfil do Cliente */
+.client-docs-panel {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border: 1px solid #a7f3d0;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-top: 1rem;
+}
+
+/* Seletor de Curso no Editor */
+.course-select-bar {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+/* Estrutura da Grade de Impressão A4 (10 Crachás) */
+.a4-print-sheet {
+    width: 794px;
+    height: 1123px;
+    padding: 24px 20px;
+    background: white;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    gap: 12px 16px;
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+}
+
+.a4-badge-slot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #cbd5e1;
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+    box-sizing: border-box;
+}
+
+.a4-badge-slot.empty-slot {
+    border: 1px dashed #cbd5e1;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+body.dark-mode .custom-tab-btn:hover { background: rgba(45, 212, 191, 0.1); }
+body.dark-mode .custom-tab-btn.active { background: rgba(45, 212, 191, 0.15); color: var(--primary-hover); }
+body.dark-mode .field-selector-btn { background: #0f172a; border-color: #334155; color: #cbd5e1; }
+body.dark-mode .preview-canvas-wrapper { background: #0f172a; border-color: #334155; }
+body.dark-mode .client-docs-panel { background: #064e3b; border-color: #047857; color: #a7f3d0; }
+body.dark-mode .course-select-bar { background: #1e293b; border-color: #334155; }
+
+/* --- MÓDULO FINANCEIRO --- */
+.finance-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card-finance {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card-finance:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.stat-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.icon-received { background: #dcfce7; color: #15803d; }
+.icon-pix { background: #ccfbf1; color: #0d9488; }
+.icon-card { background: #e0e7ff; color: #4338ca; }
+.icon-pending { background: #fef3c7; color: #b45309; }
+
+.badge-payment {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-payment-pix { background: #ccfbf1; color: #0f766e; }
+.badge-payment-card { background: #e0e7ff; color: #3730a3; }
+.badge-payment-boleto { background: #ffedd5; color: #c2410c; }
+.badge-payment-other { background: #f1f5f9; color: #475569; }
+
+.badge-status-paid { background: #dcfce7; color: #166534; }
+.badge-status-pending { background: #fef3c7; color: #92400e; }
+.badge-status-cancelled { background: #fee2e2; color: #991b1b; }
+
+body.dark-mode .stat-card-finance { background: #1e293b; border-color: #334155; }
+body.dark-mode .icon-received { background: #064e3b; color: #4ade80; }
+body.dark-mode .icon-pix { background: #115e59; color: #2dd4bf; }
+body.dark-mode .icon-card { background: #312e81; color: #818cf8; }
+body.dark-mode .icon-pending { background: #78350f; color: #fbbf24; }
