@@ -1,127 +1,768 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+<html data-bs-theme="dark" lang="pt-BR">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>EINAI</title>
+    <title>Instituto EINAI - Evolução Humana, PNL e Liderança</title>
+    <meta name="description"
+        content="O Instituto EINAI oferece treinamentos vivenciais de desenvolvimento humano, PNL, coaching e liderança para resgatar o seu potencial e inteligência emocional.">
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aboreto&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800&amp;display=swap">
+
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="assets/css/Features-Image-icons.css">
     <link rel="stylesheet" href="assets/css/forms-einai.css">
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<body style="background-color: #001523;">
-    <nav class="navbar navbar-expand-md bg-body py-3" style="background: transparent !important;color: var(--bs-light) !important;">
-        <div class="container"><img src="assets/img/EINAI.png" width="106" height="97"><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-2"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navcol-2" style="color: var(--bs-light) !important;">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="https://www.linkcurto.com.br/cae181">Sobre nós</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#">Cursos</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#treinamentos">Treinamentos</a></li>
-                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="display: none;">Dropdown </a>
-                        <div class="dropdown-menu"><a class="dropdown-item" href="#">First Item</a><a class="dropdown-item" href="#">Second Item</a><a class="dropdown-item" href="#">Third Item</a></div>
+<body>
+    <!-- ========== AMBIENT BACKGROUND GLOWING ORBS ========== -->
+    <div class="bg-ambient-container">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+        <div class="bg-orb bg-orb-4"></div>
+    </div>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar navbar-expand-lg navbar-einai py-1">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <img src="assets/img/EINAI.png" width="54" height="49" alt="Instituto EINAI Logo" class="img-fluid" style="max-height: 48px;">
+            </a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navcol-einai" aria-controls="navcol-einai" aria-expanded="false"
+                aria-label="Alternar navegação">
+                <i class="fa-solid fa-bars fs-3"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-einai">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-lg-3">
+                    <li class="nav-item"><a class="nav-link nav-link-hea-topper active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#sobre">Sobre Nós</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#diferenciais">Diferenciais</a>
                     </li>
-                </ul><a class="btn btn-primary ms-md-2 btn-nav-tope" role="button" href="https://www.linkcurto.com.br/cae181">Entre em contato</a>
+                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#treinamentos">Treinamentos</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#depoimentos">Depoimentos</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link nav-link-hea-topper" href="#faq">FAQ</a></li>
+                </ul>
+                <a class="btn-einai-primary py-2 px-3" style="font-size: 0.88rem;" role="button" href="https://wa.link/0oxist" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-whatsapp"></i> Fale Conosco
+                </a>
             </div>
         </div>
     </nav>
-    <section class="text-white py-4 py-xl-5">
-        <div class="container" style="min-width: 98%;">
-            <div class="border border-0 d-flex flex-column align-items-center p-4 py-5" style="background: linear-gradient(rgba(0,123,255,0.2), rgba(0,123,255,0.2)), url(&quot;assets/img/Flux_Dev_A_person_sitting_alone_on_a_mountain_viewed_from_behi_1%201.png&quot;) center / cover;height: 800px;min-width: 100%;border-radius: 40px;">
-                <div class="row">
-                    <div class="col-md-10 col-xl-8 text-center d-flex d-sm-flex d-md-flex justify-content-center align-items-center justify-content-md-start align-items-md-center justify-content-xl-center mx-auto">
+
+    <!-- ========== HERO SECTION FULL-WIDTH ========== -->
+    <section class="hero-section-full text-white">
+        <div class="hero-bg-image"></div>
+        <div class="container hero-content py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-10 col-xl-9 mx-auto text-center">
+                    <h1 class="fw-bold mb-4 display-4 text-shadow hero-title-animate"
+                        style="font-family: Aboreto, serif; line-height: 1.3;">
+                        São poucas as pessoas que vivem os seus sonhos, são poucas as pessoas que vivem como querem.
+                    </h1>
+                    <p class="lead mb-5 text-light opacity-90 mx-auto hero-sub-animate" style="max-width: 780px;">
+                        Você se lembra da última vez em que realizou um sonho? Da última vez que se fez feliz de
+                        verdade? O Instituto EINAI possui uma equipe especializada para desenvolver técnicas que
+                        contribuem no resgate das respostas que você procura.
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 hero-btn-animate">
+                        <a class="btn-einai-gold fs-5 shadow-lg" role="button" href="https://wa.link/0oxist"
+                            target="_blank" rel="noopener">
+                            <i class="fa-solid fa-rocket"></i> Iniciar Sua Transformação
+                        </a>
+                        <a class="btn-einai-outline fs-5" role="button" href="#treinamentos">
+                            <i class="fa-solid fa-compass"></i> Ver Treinamentos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SOBRE O INSTITUTO ========== -->
+    <section class="py-5 my-5" style="padding-top: 140px; padding-bottom: 140px;" id="sobre">
+        <div class="container">
+            <div class="row gy-4 align-items-center reveal-on-scroll">
+                <div class="col-lg-6 text-center">
+                    <div class="position-relative d-inline-block w-100">
+                        <img class="img-fluid logo-vector-hover"
+                            style="max-height: 416px; width: 100%; max-width: 416px; object-fit: contain;" src="assets/img/einai-logo%20vetorizado.svg"
+                            alt="Instituto EINAI Logo Vetorizado">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <span class="text-info text-uppercase fw-semibold tracking-wider">Quem Somos</span>
+                    <h2 class="text-uppercase fw-bold text-white mt-2 mb-3" style="font-family: Aboreto, serif;">
+                        Instituto EINAI</h2>
+                    <p class="text-light opacity-90 leading-relaxed mb-4 fs-5">
+                        O Instituto EINAI possui uma equipe altamente especializada para desenvolver técnicas que
+                        ajudam a resgatar o controle da sua vida. Ensinamos você a compreender a função biológica
+                        das emoções para que saiba usá-las a seu favor em todas as áreas.
+                    </p>
+                    <a class="btn-einai-primary" role="button" href="https://wa.link/0oxist" target="_blank"
+                        rel="noopener">
+                        Conheça Nossa História <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== DIFERENCIAIS ========== -->
+    <section class="py-5" id="diferenciais">
+        <div class="container">
+            <div class="text-center mb-5 reveal-on-scroll">
+                <span class="text-info text-uppercase fw-semibold">Por que escolher o EINAI</span>
+                <h2 class="text-white fw-bold mt-2" style="font-family: Aboreto, serif;">Nossos Diferenciais de
+                    Transformação</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Desenvolvemos uma jornada única baseada em
+                    ciência emocional e liderança prática.</p>
+            </div>
+
+            <div class="row gy-4">
+                <div class="col-md-6 col-lg-3 reveal-on-scroll">
+                    <div class="einai-card p-4 text-center">
+                        <div class="icon-box mx-auto">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h4 class="h5 fw-bold text-white mb-3">Metodologia Vivencial</h4>
+                        <p class="text-muted small mb-0">Dinâmicas práticas e comprovadas que ativam aprendizados
+                            profundos e mudança comportamental rápida.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 reveal-on-scroll reveal-delay-1">
+                    <div class="einai-card p-4 text-center">
+                        <div class="icon-box mx-auto">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <h4 class="h5 fw-bold text-white mb-3">Inteligência Emocional</h4>
+                        <p class="text-muted small mb-0">Entenda a função biológica do Medo, Raiva, Tristeza e Alegria
+                            para agir com consciência.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 reveal-on-scroll reveal-delay-2">
+                    <div class="einai-card p-4 text-center">
+                        <div class="icon-box mx-auto">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <h4 class="h5 fw-bold text-white mb-3">Master Trainers</h4>
+                        <p class="text-muted small mb-0">Condução experiente com Master Practitioners e Coaches
+                            qualificados internacionalmente.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 reveal-on-scroll reveal-delay-3">
+                    <div class="einai-card p-4 text-center">
+                        <div class="icon-box mx-auto">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h4 class="h5 fw-bold text-white mb-3">Ambiente Seguro</h4>
+                        <p class="text-muted small mb-0">Espaço totalmente focado no seu acolhimento, respeito e
+                            evolução pessoal contínua.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TREINAMENTOS ========== -->
+    <div class="container py-4 py-xl-5" id="treinamentos">
+        <div class="row mb-5 reveal-on-scroll">
+            <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <h2 class="color-white text-white" style="font-family: Aboreto, serif;">Sente que chegou a hora de dar
+                    um basta?</h2>
+                <p class="color-blue text-info fs-5">Veja nossos treinamentos e cursos que irão te ajudar</p>
+            </div>
+        </div>
+
+        <!-- SER -->
+        <div class="row gy-4 gy-md-0 reveal-on-scroll mb-5 py-md-5 align-items-center">
+            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
+                <div style="max-width: 380px;">
+                    <img src="assets/img/Group%2020.svg" width="167" height="16" alt="SER Tag">
+                    <h2 class="text-uppercase fw-bold mt-2" style="color: var(--bs-light);font-family: Aboreto, serif;">
+                        SER - EVOLUÇÃO E LIDERANÇA</h2>
+                    <p class="my-3" style="color: var(--bs-light);">O SER é um treinamento vivencial e transformador, de
+                        evolução humana e liderança, com situações baseadas em práticas comprovadas, que trarão à tona
+                        as suas emoções. Durante um final de semana, você irá entender a função biológica das quatro
+                        emoções que norteiam a nossa vida: Medo, Raiva, Tristeza e Alegria e ter consciência de como
+                        usá-las a seu favor.</p>
+                    <a href="ser.html" class="link-hover-arrow"
+                        style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;align-items: center;">
+                        Saiba mais <img class="img-fluid" width="24" height="17"
+                            src="assets/img/arrow_downward_24px.svg" alt="Arrow">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="p-2">
+                    <img class="img-fluid object-fit-cover training-img-hover mx-auto"
+                        style="min-height: 520px; max-height: 560px; width: 100%; max-width: 380px; border-radius: 70px;"
+                        src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.34%20(1).jpeg"
+                        alt="SER - Evolução e Liderança">
+                </div>
+            </div>
+        </div>
+
+        <!-- SER JOVEM -->
+        <div class="row gy-4 gy-md-0 reveal-on-scroll mb-5 py-md-5 align-items-center">
+            <div class="col-md-6 text-center">
+                <div class="p-2">
+                    <img class="img-fluid object-fit-cover training-img-hover mx-auto"
+                        style="min-height: 520px; max-height: 560px; width: 100%; max-width: 380px; border-radius: 70px;"
+                        src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.34.jpeg" alt="SER Jovem">
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
+                <div style="max-width: 380px;">
+                    <img src="assets/img/Group%2020.svg" width="167" height="16" alt="SER Jovem Tag">
+                    <h2 class="text-uppercase fw-bold mt-2" style="color: var(--bs-light);font-family: Aboreto, serif;">
+                        SER JOVEM</h2>
+                    <p class="my-3" style="color: var(--bs-light);">Este é um treinamento que proporciona ao jovem uma
+                        nova consciência sobre as consequências de suas escolhas, Sejam elas na vida escolar, na vida
+                        social, com os amigos, ou em casa. O SER Jovem desenvolve a interação social, introspecção,
+                        controle do estado interno, a importância do trabalho em equipe, a escolha de grupos com os
+                        valores passados pela família, dentre outros aspectos relevantes sobre a vida.</p>
+                    <a href="#" onclick="openCourseModal('SER JOVEM'); return false;" class="link-hover-arrow"
+                        style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;align-items: center;">
+                        Saiba mais <img class="img-fluid" width="24" height="17"
+                            src="assets/img/arrow_downward_24px.svg" alt="Arrow">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTRODUÇÃO À PNL -->
+        <div class="row gy-4 gy-md-0 reveal-on-scroll mb-5 py-md-5 align-items-center">
+            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
+                <div style="max-width: 380px;">
+                    <img src="assets/img/curso-tag.svg" width="167" height="16" alt="Curso Tag">
+                    <h2 class="text-uppercase fw-bold mt-2" style="color: var(--bs-light);font-family: Aboreto, serif;">
+                        INTRODUÇÃO À PNL</h2>
+                    <p class="my-3" style="color: var(--bs-light);">No curso de introdução à PNL, o participante irá
+                        adquirir ferramentas para melhorar a sua comunicação, seja para venda de uma ideia, educação,
+                        negócios ou, até mesmo, melhorar a sua convivência com as pessoas. Permitirá, também, entender
+                        melhor a sua estrutura neuropsicológica no tocante a comportamentos, crenças, ações e reações.
+                    </p>
+                    <a href="introducao-pnl.html" class="link-hover-arrow"
+                        style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;align-items: center;">
+                        Saiba mais <img class="img-fluid" width="24" height="17"
+                            src="assets/img/arrow_downward_24px.svg" alt="Arrow">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="p-2">
+                    <img class="img-fluid object-fit-cover training-img-hover mx-auto"
+                        style="min-height: 520px; max-height: 560px; width: 100%; max-width: 380px; border-radius: 70px;"
+                        src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33%20(2).jpeg"
+                        alt="Introdução à PNL">
+                </div>
+            </div>
+        </div>
+
+        <!-- PRACTITIONER -->
+        <div class="row gy-4 gy-md-0 reveal-on-scroll mb-5 py-md-5 align-items-center">
+            <div class="col-md-6 text-center">
+                <div class="p-2">
+                    <img class="img-fluid object-fit-cover training-img-hover mx-auto"
+                        style="min-height: 520px; max-height: 560px; width: 100%; max-width: 380px; border-radius: 70px;"
+                        src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33%20(1).jpeg" alt="Practitioner">
+                </div>
+            </div>
+            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
+                <div style="max-width: 380px;">
+                    <img src="assets/img/curso-tag.svg" width="167" height="16" alt="Curso Tag">
+                    <h2 class="text-uppercase fw-bold mt-2" style="color: var(--bs-light);font-family: Aboreto, serif;">
+                        PRACTITIONER</h2>
+                    <p class="my-3" style="color: var(--bs-light);">Proporcionar o desenvolvimento de habilidades para
+                        entender e influenciar pessoas de maneira ética e eficaz. Melhorar a comunicação. Obter novos
+                        comportamentos e conduzir relações comerciais e pessoais de uma forma mais satisfatória e
+                        prazerosa com ferramentas que ajudam a abordar e formular adequadamente qualquer objetivo.</p>
+                    <a href="#" onclick="openCourseModal('PRACTITIONER'); return false;" class="link-hover-arrow"
+                        style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;align-items: center;">
+                        Saiba mais <img class="img-fluid" width="24" height="17"
+                            src="assets/img/arrow_downward_24px.svg" alt="Arrow">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- COACHING -->
+        <div class="row gy-4 gy-md-0 reveal-on-scroll py-md-5 align-items-center">
+            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
+                <div style="max-width: 380px;">
+                    <img src="assets/img/curso-tag.svg" width="167" height="16" alt="Curso Tag">
+                    <h2 class="text-uppercase fw-bold mt-2" style="color: var(--bs-light);font-family: Aboreto, serif;">
+                        COACHING</h2>
+                    <p class="my-3" style="color: var(--bs-light);">Desenvolva habilidades de alto impacto para entender
+                        e influenciar pessoas de forma ética e eficaz. Este curso de Coaching irá aprimorar
+                        drasticamente sua comunicação, permitindo que você adquira novos comportamentos e conduza
+                        relações comerciais e pessoais de maneira mais satisfatória. Aprenda ferramentas poderosas de
+                        coaching para abordar, formular e alcançar qualquer objetivo com clareza e precisão.</p>
+                    <a href="#" onclick="openCourseModal('COACHING'); return false;" class="link-hover-arrow"
+                        style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;align-items: center;">
+                        Saiba mais <img class="img-fluid" width="24" height="17"
+                            src="assets/img/arrow_downward_24px.svg" alt="Arrow">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="p-2">
+                    <img class="img-fluid object-fit-cover training-img-hover mx-auto"
+                        style="min-height: 520px; max-height: 560px; width: 100%; max-width: 380px; border-radius: 70px;"
+                        src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33.jpeg" alt="Coaching">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== DEPOIMENTOS ========== -->
+    <section class="py-5" id="depoimentos">
+        <div class="container">
+            <div class="text-center mb-5 reveal-on-scroll">
+                <span class="text-info text-uppercase fw-semibold">Vidas Transformadas</span>
+                <h2 class="text-white fw-bold mt-2" style="font-family: Aboreto, serif;">O que nossos alunos dizem</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Experiências reais de quem vivenciou a jornada
+                    do Instituto EINAI.</p>
+            </div>
+
+            <div class="row gy-4">
+                <div class="col-md-4 reveal-on-scroll">
+                    <div class="testimonial-card h-100 d-flex flex-column justify-content-between">
+                        <i class="fa-solid fa-quote-right testimonial-quote"></i>
                         <div>
-                            <h1 class="fw-bold mb-3" style="font-family: Aboreto, serif;">São poucas as pessoas que vivem os seus sonhos, são poucas as pessoas que vivem como querem.&nbsp;</h1>
-                            <p class="mb-4">Você se lembra da última vez em que realizou um sonho? Da última vez que se fez feliz de verdade? O Instituto EINAI, possui uma equipe treinada e especializada para desenvolver técnicas específicas que contribuem no resgate das respostas que você procura.</p>
+                            <div class="stars-rating mb-3">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-light opacity-90 fst-italic mb-4">
+                                "O treinamento SER me permitiu entender minhas emoções e transformar a forma como me
+                                comunico com minha equipe. Foi uma virada de chave completa!"
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top border-secondary border-opacity-25">
+                            <div class="rounded-circle bg-info bg-opacity-25 text-info d-flex align-items-center justify-content-center fw-bold"
+                                style="width: 48px; height: 48px; border: 2px solid var(--einai-blue-accent);">
+                                MS
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0">Mariana Santos</h6>
+                                <span class="small text-muted">Aluna do Treinamento SER</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 reveal-on-scroll reveal-delay-1">
+                    <div class="testimonial-card h-100 d-flex flex-column justify-content-between">
+                        <i class="fa-solid fa-quote-right testimonial-quote"></i>
+                        <div>
+                            <div class="stars-rating mb-3">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-light opacity-90 fst-italic mb-4">
+                                "A Introdução à PNL me deu clareza mental e estratégias para negociação que uso todos os
+                                dias no meu negócio. Recomendo fortemente!"
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top border-secondary border-opacity-25">
+                            <div class="rounded-circle bg-info bg-opacity-25 text-info d-flex align-items-center justify-content-center fw-bold"
+                                style="width: 48px; height: 48px; border: 2px solid var(--einai-blue-accent);">
+                                CE
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0">Carlos Eduardo</h6>
+                                <span class="small text-muted">Aluno de PNL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 reveal-on-scroll reveal-delay-2">
+                    <div class="testimonial-card h-100 d-flex flex-column justify-content-between">
+                        <i class="fa-solid fa-quote-right testimonial-quote"></i>
+                        <div>
+                            <div class="stars-rating mb-3">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-light opacity-90 fst-italic mb-4">
+                                "O SER Jovem trouxe pro meu filho uma maturidade e responsabilidade incrível. Ver a
+                                evolução dele com a família foi um presente."
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top border-secondary border-opacity-25">
+                            <div class="rounded-circle bg-info bg-opacity-25 text-info d-flex align-items-center justify-content-center fw-bold"
+                                style="width: 48px; height: 48px; border: 2px solid var(--einai-blue-accent);">
+                                PM
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0">Patricia Mendes</h6>
+                                <span class="small text-muted">Mãe de Aluno SER Jovem</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <div class="container py-4 py-xl-5">
-        <div class="row gy-4 gy-md-0" style="background: #0C2836;border-radius: 50px;padding: 40px;">
-            <div class="col-md-6">
-                <div class="m-xl-5 p-xl-5"><img class="rounded img-fluid object-fit-cover w-100" style="min-height: 300px;" src="assets/img/EINAI.png"></div>
+
+    <!-- ========== FAQ ACCORDION ========== -->
+    <section class="py-5" id="faq">
+        <div class="container">
+            <div class="text-center mb-5 reveal-on-scroll">
+                <span class="text-info text-uppercase fw-semibold">Tire Suas Dúvidas</span>
+                <h2 class="text-white fw-bold mt-2" style="font-family: Aboreto, serif;">Perguntas Frequentes</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Confira as respostas para as principais dúvidas
+                    sobre nossos treinamentos.</p>
             </div>
-            <div class="col-md-6 d-md-flex align-items-md-center">
-                <div style="max-width: 350px;">
-                    <h2 class="text-uppercase fw-bold color-white" style="font-family: Aboreto, serif;">Instituto Einai</h2>
-                    <p class="my-3 color-white">O Instituto EINAI, possui uma equipe treinada e especializada para desenvolver técnicas específicas que contribuem no resgate das respostas que você procura. Eles farão você conhecer as funções biológicas das emoções para que saiba usá-las a seu favor. Tudo isso, sob o comando do Head Trainer Anderson Avila - Trainer Master Practitioner em Programação Neurolinguística, Coaching Practitioner.</p>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-10 reveal-on-scroll">
+                    <div class="accordion accordion-einai" id="accordionEinaiFaq">
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeadingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseOne" aria-expanded="true"
+                                    aria-controls="faqCollapseOne">
+                                    <i class="fa-solid fa-circle-question text-info me-3"></i> O que é o treinamento SER
+                                    e para quem é indicado?
+                                </button>
+                            </h2>
+                            <div id="faqCollapseOne" class="accordion-collapse collapse show"
+                                aria-labelledby="faqHeadingOne" data-bs-parent="#accordionEinaiFaq">
+                                <div class="accordion-body">
+                                    O <strong>SER</strong> é um treinamento vivencial de evolução humana e liderança. É
+                                    indicado para qualquer pessoa que busque compreender e dominar as quatro emoções
+                                    biológicas fundamentais (Medo, Raiva, Tristeza e Alegria) para alcançar
+                                    autoconhecimento, inteligência emocional e alta performance pessoal e profissional.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeadingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseTwo" aria-expanded="false"
+                                    aria-controls="faqCollapseTwo">
+                                    <i class="fa-solid fa-circle-question text-info me-3"></i> Preciso ter experiência
+                                    prévia com PNL ou Coaching?
+                                </button>
+                            </h2>
+                            <div id="faqCollapseTwo" class="accordion-collapse collapse" aria-labelledby="faqHeadingTwo"
+                                data-bs-parent="#accordionEinaiFaq">
+                                <div class="accordion-body">
+                                    Não! Nossos treinamentos são desenhados de forma acessível e profunda, atendendo
+                                    tanto iniciantes que buscam o primeiro contato com a Programação Neurolinguística
+                                    quanto profissionais experientes que querem aprimorar suas ferramentas de liderança
+                                    e comunicação.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeadingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseThree" aria-expanded="false"
+                                    aria-controls="faqCollapseThree">
+                                    <i class="fa-solid fa-circle-question text-info me-3"></i> Como funciona a imersão
+                                    nos treinamentos vivenciais?
+                                </button>
+                            </h2>
+                            <div id="faqCollapseThree" class="accordion-collapse collapse"
+                                aria-labelledby="faqHeadingThree" data-bs-parent="#accordionEinaiFaq">
+                                <div class="accordion-body">
+                                    As imersões como o SER acontecem ao longo de um final de semana completo em ambiente
+                                    especialmente preparado para garantir segurança, sigilo e o máximo aproveitamento
+                                    das dinâmicas vivenciais sob a condução do Head Trainer Anderson Avila.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeadingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseFour" aria-expanded="false"
+                                    aria-controls="faqCollapseFour">
+                                    <i class="fa-solid fa-circle-question text-info me-3"></i> Como posso garantir minha
+                                    vaga ou conversar com a equipe?
+                                </button>
+                            </h2>
+                            <div id="faqCollapseFour" class="accordion-collapse collapse"
+                                aria-labelledby="faqHeadingFour" data-bs-parent="#accordionEinaiFaq">
+                                <div class="accordion-body">
+                                    Basta clicar em qualquer botão de contato desta página para ser direcionado ao nosso
+                                    atendimento exclusivo via WhatsApp. Nossa equipe fornecerá todas as informações
+                                    sobre próximas turmas, investimento e tirar dúvidas específicas.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container py-4 py-xl-5">
-        <div class="row mb-5" id="treinamentos">
-            <div class="col-md-8 col-xl-6 text-center mx-auto">
-                <h2 class="color-white" style="font-family: Aboreto, serif;">Sente que chegou a hora de dar um basta?</h2>
-                <p class="color-blue">Veja nossos treinamentos e cursos que irão te ajudar</p>
-            </div>
-        </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/Group%2020.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">SER - EVOLUÇÃO E LIDERANÇA</h2>
-                    <p class="my-3" style="color: var(--bs-light);">O SER é um treinamento vivencial e transformador, de evolução humana e liderança, com situações baseadas em práticas comprovadas, que trarão à tona as suas emoções. Durante um final de semana, você irá entender a função biológica das quatro emoções que norteiam a nossa vida: Medo, Raiva, Tristeza e Alegria e ter consciência de como usá-las a seu favor.</p><a href="https://www.linkcurto.com.br/cae181" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.34%20(1).jpeg"></div>
-            </div>
-        </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.34.jpeg"></div>
-            </div>
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/Group%2020.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">SER JOVEM</h2>
-                    <p class="my-3" style="color: var(--bs-light);">Este é um treinamento que proporciona ao jovem uma nova consciência sobre as consequências de suas escolhas, sejam elas na vida escolar, na vida social, com os amigos, ou em casa. O SER Jovem desenvolve a interação social, introspecção, controle do estado interno, a importância do trabalho em equipe, a escolha de grupos com os valores passados pela família, dentre outros aspectos relevantes sobre a vida.</p><a href="https://www.linkcurto.com.br/cae181" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
+    </section>
+
+    <!-- ========== CTA BANNER FINAL ========== -->
+    <section class="py-5">
+        <div class="container">
+            <div class="cta-banner p-5 text-center reveal-zoom">
+                <div class="row justify-content-center position-relative z-1">
+                    <div class="col-lg-9">
+                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3 text-uppercase">
+                            <i class="fa-solid fa-bolt me-1"></i> Transforme sua vida hoje
+                        </span>
+                        <h2 class="text-white fw-bold mb-3 display-6" style="font-family: Aboreto, serif;">Pronto para
+                            viver a sua melhor versão?</h2>
+                        <p class="text-light opacity-90 fs-5 mb-4 mx-auto" style="max-width: 680px;">
+                            Não espere o tempo passar para realizar seus sonhos. Fale diretamente com nossa equipe e
+                            descubra qual formação é ideal para o seu momento.
+                        </p>
+                        <a class="btn-einai-gold fs-5 shadow-lg" role="button" href="https://wa.link/0oxist"
+                            target="_blank" rel="noopener">
+                            <i class="fa-brands fa-whatsapp fs-4"></i> Falar com Especialista via WhatsApp
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/curso-tag.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">INTRODUÇÃO À PNL</h2>
-                    <p class="my-3" style="color: var(--bs-light);">No curso de introdução à PNL, o participante irá adquirir ferramentas para melhorar a sua comunicação, seja para venda de uma ideia, educação, negócios ou, até mesmo, melhorar a sua convivência com as pessoas. Permitirá, também, entender melhor a sua estrutura neuropsicológica no tocante a comportamentos, crenças, ações e reações.</p><a href="introducao-pnl.html" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
+    </section>
+
+    <!-- ========== RODAPÉ (FOOTER) ========== -->
+    <footer class="footer-einai">
+        <div class="container">
+            <div class="row gy-4">
+
+                <!-- Coluna 1: Sobre & Logo -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img src="assets/img/EINAI.png" width="70" height="64" alt="Instituto EINAI Logo"
+                            class="img-fluid">
+                        <span class="fs-4 fw-bold text-white" style="font-family: Aboreto, serif;">EINAI</span>
+                    </div>
+                    <p class="small text-muted mb-4 leading-relaxed">
+                        O Instituto EINAI é referência em desenvolvimento humano, Programação Neurolinguística e
+                        treinamentos vivenciais. Nossa missão é proporcionar ferramentas científicas e práticas para
+                        resgatar sua autonomia emocional.
+                    </p>
+                    <div class="d-flex align-items-center">
+                        <a href="https://wa.link/0oxist" target="_blank" rel="noopener" class="social-icon-btn"
+                            title="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.link/0oxist" target="_blank" rel="noopener" class="social-icon-btn"
+                            title="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://wa.link/0oxist" target="_blank" rel="noopener" class="social-icon-btn"
+                            title="WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                        <a href="https://wa.link/0oxist" target="_blank" rel="noopener" class="social-icon-btn"
+                            title="LinkedIn">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://wa.link/0oxist" target="_blank" rel="noopener" class="social-icon-btn"
+                            title="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Navegação Rápida -->
+                <div class="col-lg-2 col-md-6 ms-auto">
+                    <h5 class="footer-title">Navegação</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#sobre"><i class="fa-solid fa-chevron-right"></i> Sobre Nós</a></li>
+                        <li><a href="#diferenciais"><i class="fa-solid fa-chevron-right"></i> Diferenciais</a></li>
+                        <li><a href="#treinamentos"><i class="fa-solid fa-chevron-right"></i> Treinamentos</a></li>
+                        <li><a href="#depoimentos"><i class="fa-solid fa-chevron-right"></i> Depoimentos</a></li>
+                        <li><a href="#faq"><i class="fa-solid fa-chevron-right"></i> FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 3: Formações & Cursos -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-title">Programas</h5>
+                    <ul class="footer-links">
+                        <li><a href="ser.html"><i class="fa-solid fa-angle-right"></i> SER Evolução e Liderança</a></li>
+                        <li><a href="#" onclick="openCourseModal('SER JOVEM'); return false;"><i
+                                    class="fa-solid fa-angle-right"></i> SER Jovem</a></li>
+                        <li><a href="introducao-pnl.html"><i class="fa-solid fa-angle-right"></i> Introdução à PNL</a>
+                        </li>
+                        <li><a href="#" onclick="openCourseModal('PRACTITIONER'); return false;"><i
+                                    class="fa-solid fa-angle-right"></i> Formação Practitioner em PNL</a></li>
+                        <li><a href="#" onclick="openCourseModal('COACHING'); return false;"><i
+                                    class="fa-solid fa-angle-right"></i> Formação em Coaching</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 4: Contato & Informações -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-title">Atendimento</h5>
+                    <div class="contact-info-item">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <div>
+                            <span class="d-block fw-semibold text-white">WhatsApp</span>
+                            <a href="https://wa.link/0oxist" target="_blank"
+                                class="text-muted text-decoration-none">Entre em contato direto</a>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <div>
+                            <span class="d-block fw-semibold text-white">E-mail</span>
+                            <span class="text-muted">contato@institutoeinai.com.br</span>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div>
+                            <span class="d-block fw-semibold text-white">Atendimento</span>
+                            <span class="text-muted">Brasil - Treinamentos Presenciais</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Rodapé Inferior -->
+            <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <p class="mb-0 text-muted small">
+                    &copy; 2026 Instituto EINAI. Todos os direitos reservados.
+                </p>
+                <div class="d-flex gap-3 small">
+                    <a href="https://wa.link/0oxist" class="text-muted text-decoration-none hover-white">Termos de
+                        Uso</a>
+                    <span class="text-muted">&bull;</span>
+                    <a href="https://wa.link/0oxist" class="text-muted text-decoration-none hover-white">Política de
+                        Privacidade</a>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33%20(2).jpeg"></div>
-            </div>
         </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33%20(1).jpeg"></div>
-            </div>
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/curso-tag.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">PRACTITIONER</h2>
-                    <p class="my-3" style="color: var(--bs-light);">Proporcionar o desenvolvimento de habilidades para entender e influenciar pessoas de maneira ética e eficaz. Melhorar a comunicação. Obter novos comportamentos e conduzir relações comerciais e pessoais de uma forma mais satisfatória e prazerosa com ferramentas que ajudam a abordar e formular adequadamente qualquer objetivo.</p><a href="https://www.linkcurto.com.br/cae181" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
-                </div>
-            </div>
-        </div>
-        <div class="row gy-4 gy-md-0">
-            <div class="col-md-6 d-flex d-md-flex justify-content-center align-items-md-center">
-                <div style="max-width: 350px;"><img src="assets/img/curso-tag.svg" width="167" height="16">
-                    <h2 class="text-uppercase fw-bold" style="color: var(--bs-light);font-family: Aboreto, serif;">COACHING</h2>
-                    <p class="my-3" style="color: var(--bs-light);">Desenvolva habilidades de alto impacto para entender e influenciar pessoas de forma ética e eficaz. Este curso de Coaching irá aprimorar drasticamente sua comunicação, permitindo que você adquira novos comportamentos e conduza relações comerciais e pessoais de maneira mais satisfatória. Aprenda ferramentas poderosas de coaching para abordar, formular e alcançar qualquer objetivo com clareza e precisão.</p><a href="https://www.linkcurto.com.br/cae181" style="color: #48b4f2;text-decoration: none;display: flex;gap: 1rem;">Saiba mais<img class="img-fluid" width="24" height="17" src="assets/img/arrow_downward_24px.svg"></a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="m-xl-5"><img class="img-fluid object-fit-cover w-100" style="min-height: 600px;border-radius: 100px;" src="assets/img/WhatsApp%20Image%202025-11-24%20at%2009.30.33.jpeg"></div>
-            </div>
-        </div>
-    </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
+    <!-- ========== MODAL EM BREVE ========== -->
+    <div class="modal fade" id="modalEmBreve" tabindex="-1" aria-labelledby="modalEmBreveLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-white"
+                style="background: var(--einai-card-bg); border: 1px solid rgba(72, 180, 242, 0.3); border-radius: 24px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="modalEmBreveLabel" style="font-family: Aboreto, serif;">
+                        <i class="fa-solid fa-sparkles text-info me-2"></i> Em Breve
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <div class="icon-box mx-auto mb-3" style="width: 70px; height: 70px; font-size: 2rem;">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <h4 class="fw-bold text-info mb-2" id="modalCourseTitle">Treinamento</h4>
+                    <p class="text-light opacity-90 mb-4 px-2">
+                        As vagas e informações completas para a próxima turma do curso <strong id="modalCourseNameText"
+                            class="text-white"></strong> estarão disponíveis em breve!
+                        <br><br>
+                        Deseja garantir sua vaga com prioridade ou falar diretamente com nossa equipe no WhatsApp?
+                    </p>
+                    <a id="modalWhatsappBtn" href="https://wa.link/0oxist" target="_blank" rel="noopener"
+                        class="btn-einai-gold fs-6 w-100 justify-content-center py-3">
+                        <i class="fa-brands fa-whatsapp fs-4"></i> Reservar Vaga no WhatsApp
+                    </a>
+                </div>
+                <div class="modal-footer border-0 pt-0 justify-content-center">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none"
+                        data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="assets/js/forms-einai.js"></script>
+
+    <!-- Modal & Scroll Reveal Scripts -->
+    <script>
+        function openCourseModal(courseName) {
+            document.getElementById("modalCourseTitle").textContent = courseName;
+            document.getElementById("modalCourseNameText").textContent = courseName;
+
+            const message = `Olá! Tenho interesse no treinamento ${courseName} e gostaria de reservar meu lugar na próxima turma.`;
+            const encodedMessage = encodeURIComponent(message);
+            document.getElementById("modalWhatsappBtn").href = `https://wa.link/0oxist?text=${encodedMessage}`;
+
+            const modal = new bootstrap.Modal(document.getElementById("modalEmBreve"));
+            modal.show();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Smart auto-hide navbar no scroll
+            let lastScrollY = window.scrollY;
+            const navbar = document.querySelector(".navbar-einai");
+
+            window.addEventListener("scroll", function () {
+                const currentScrollY = window.scrollY;
+                const navcol = document.getElementById("navcol-einai");
+                const isNavOpen = navcol && navcol.classList.contains("show");
+
+                if (currentScrollY > lastScrollY && currentScrollY > 120 && !isNavOpen) {
+                    navbar.classList.add("navbar-hidden");
+                } else {
+                    navbar.classList.remove("navbar-hidden");
+                }
+
+                lastScrollY = currentScrollY;
+            });
+
+            // IntersectionObserver para animações de rolagem
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observerInstance) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        observerInstance.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll(".reveal-on-scroll, .reveal-zoom");
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
 </body>
 
 </html>
