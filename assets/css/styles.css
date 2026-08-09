@@ -303,6 +303,15 @@ section, footer, nav, .container {
   background-color: var(--einai-card-hover);
 }
 
+/* mesmo tratamento do título dos cards de treinamento:
+   Aboreto em caixa alta, para os cards falarem a mesma língua */
+.diferencial-card-title {
+  font-family: Aboreto, serif;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
 .icon-box {
   width: 64px;
   height: 64px;
@@ -372,10 +381,45 @@ section, footer, nav, .container {
   animation: heroTextFadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
 }
 
+/* Word reveal com máscara (mesma técnica do site da Line):
+   cada palavra desliza por trás de um recorte, sem fade e sem blur.
+   O padding + margem negativa alarga a máscara pra não cortar
+   acentos e descidas (ÃO, Q, p) sem revelar a palavra escondida. */
+.hero-title-animate.is-split {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.hero-title-animate .hero-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding: 0.12em 0.06em 0.28em;
+  margin: -0.12em -0.06em -0.28em;
+}
+
+.hero-title-animate .hero-word-inner {
+  display: inline-block;
+  transform: translateY(140%);
+  will-change: transform;
+  animation: heroWordRise 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes heroWordRise {
+  to {
+    transform: translateY(0);
+  }
+}
+
 .hero-sub-animate {
   opacity: 0;
   transform: translateY(30px);
   animation: heroTextFadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.45s;
+}
+
+.hero-title-animate.is-split ~ .hero-sub-animate {
+  animation-delay: var(--hero-sub-delay, 0.45s);
 }
 
 .hero-btn-animate {
@@ -434,6 +478,379 @@ section, footer, nav, .container {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--einai-blue-accent);
+}
+
+/* ========== CARDS DE TREINAMENTO (grid, conteúdo no hover) ========== */
+/* a altura do card vem da janela; a largura sai da proporção 768x1365.
+   O container é limitado a 3 cards + 2 vãos, o que trava a fileira em 3
+   e mantém tudo centrado sem sobrar margem lateral. */
+/* a seção passa do limite de 1320px do .container do Bootstrap só o
+   necessário pra caber 4 cards por fileira sem encolher nenhum deles */
+#treinamentos {
+  --training-h: clamp(340px, 62vh, 560px);
+  --training-w: calc(var(--training-h) * 768 / 1365);
+  --training-gap: 28px;
+  max-width: min(100%, calc(var(--training-w) * 4 + var(--training-gap) * 3 + 32px));
+}
+
+.training-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--training-gap);
+  /* +4px de folga: sem isso o arredondamento sub-pixel quebra a fileira */
+  max-width: calc(var(--training-w) * 4 + var(--training-gap) * 3 + 4px);
+  margin-inline: auto;
+}
+
+.training-grid-item {
+  flex: 0 0 auto;
+  width: var(--training-w);
+  max-width: 100%;
+}
+
+@media (max-width: 991.98px) {
+  .training-grid {
+    max-width: 100%;
+  }
+
+  .training-grid-item {
+    width: min(330px, 100%);
+  }
+}
+
+.training-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  /* proporção 768 x 1365; a altura acompanha a janela pra fileira
+     inteira caber na tela sem scroll, e a largura vem da proporção */
+  aspect-ratio: 768 / 1365;
+  width: 100%;
+  margin-inline: auto;
+  background: #061c28;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+
+/* cada card tem sua foto de fundo; a logo fica por cima, na cor original */
+.training-card-media {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12%;
+  background: #061c28;
+}
+
+.training-card-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.training-card:hover .training-card-photo,
+.training-card:focus-visible .training-card-photo {
+  transform: scale(1.05);
+}
+
+/* logo na cor original, no topo da foto. Cada imagem foi gerada com a
+   luminosidade oposta à da sua logo, então o contraste vem da própria foto */
+.training-card-logo {
+  position: relative;
+  z-index: 1;
+  width: auto !important;
+  height: auto !important;
+  max-width: 100%;
+  max-height: 34%;
+  object-fit: contain !important;
+  align-self: flex-start;
+  margin-top: 4%;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+
+/* painel que sobe no hover */
+.training-card-body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px 28px 32px;
+  /* o topo termina 100% transparente: assim o painel não tem borda
+     visível e some no fundo em vez de aparecer como um retângulo */
+  background: linear-gradient(to top,
+      rgba(2, 16, 25, 0.97) 0%,
+      rgba(2, 16, 25, 0.95) 42%,
+      rgba(3, 20, 29, 0.78) 64%,
+      rgba(4, 26, 38, 0.42) 82%,
+      rgba(4, 26, 38, 0.14) 92%,
+      rgba(4, 26, 38, 0) 100%);
+  opacity: 0;
+  /* sem transform aqui: quem se move é o conteúdo, não o fundo */
+  transition: opacity 0.45s ease;
+}
+
+/* o deslize sutil fica só no texto */
+.training-card-body > * {
+  transform: translateY(12px);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.training-card:hover .training-card-body > *,
+.training-card:focus-visible .training-card-body > * {
+  transform: translateY(0);
+}
+
+.training-card:hover .training-card-logo,
+.training-card:focus-visible .training-card-logo {
+  transform: scale(0.92) translateY(-6%);
+  opacity: 0.28;
+}
+
+.training-card:hover .training-card-body,
+.training-card:focus-visible .training-card-body {
+  opacity: 1;
+}
+
+/* os dois SVGs têm proporções diferentes (277x28 e 181x22), então
+   largura igual renderiza letras de tamanhos diferentes. As larguras
+   abaixo igualam a altura das letras em ~8px nos dois */
+.training-card-tag {
+  height: auto;
+  margin-bottom: 16px;
+}
+
+.training-card-tag[src*="Group"] {
+  width: 173px;
+}
+
+.training-card-tag[src*="curso-tag"] {
+  width: 111px;
+}
+
+.training-card-title {
+  color: #ffffff;
+  font-family: Aboreto, serif;
+  font-size: 1.3rem;
+  line-height: 1.3;
+  margin-bottom: 14px;
+}
+
+.training-card-text {
+  color: var(--bs-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.88;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 12;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.training-card-link {
+  color: var(--einai-blue-accent);
+  text-decoration: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* treinamento ainda sem turma aberta: no lugar do "Saiba mais" */
+.training-card-soon {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 6px 16px;
+  border: 1px solid rgba(72, 180, 242, 0.45);
+  border-radius: 50px;
+  color: var(--einai-blue-accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* o card inteiro é o link; o "Saiba mais" virou apenas um rótulo visual */
+.training-card:focus-visible {
+  outline: 2px solid var(--einai-blue-accent);
+  outline-offset: 4px;
+}
+
+/* sem hover (toque): mostra o conteúdo direto, senão fica inacessível */
+@media (hover: none) {
+
+  .training-card-body {
+    opacity: 1;
+  }
+
+  .training-card-body > * {
+    transform: none;
+  }
+
+  .training-card-logo {
+    opacity: 0.28;
+  }
+
+  .training-card-text {
+    -webkit-line-clamp: 10;
+  }
+}
+
+/* ========== DEPOIMENTOS EM VÍDEO ========== */
+/* a capa entra como imagem leve; o player do Vimeo só é carregado
+   no clique, senão seriam 5 iframes pesando na abertura da página */
+.depo-video {
+  background: var(--einai-card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--einai-radius);
+  box-shadow: var(--einai-shadow);
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.depo-video:hover {
+  transform: translateY(-6px);
+  border-color: rgba(72, 180, 242, 0.4);
+  box-shadow: var(--einai-shadow-hover);
+}
+
+.depo-video-play {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 0;
+  background: #04141d;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.depo-video-play img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+}
+
+.depo-video:hover .depo-video-play img {
+  transform: scale(1.05);
+  filter: brightness(0.72);
+}
+
+.depo-video-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 20, 29, 0.55);
+  backdrop-filter: blur(4px);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+  font-size: 1.25rem;
+  padding-left: 4px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.35s ease;
+}
+
+.depo-video:hover .depo-video-icon {
+  transform: translate(-50%, -50%) scale(1.12);
+  background: var(--einai-blue-accent);
+  border-color: var(--einai-blue-accent);
+}
+
+.depo-video-play:focus-visible {
+  outline: 2px solid var(--einai-blue-accent);
+  outline-offset: -4px;
+}
+
+.depo-video-caption {
+  padding: 18px 22px 20px;
+}
+
+.depo-video iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+/* ========== PÁGINAS LEGAIS (termos e privacidade) ========== */
+.legal-page {
+  max-width: 820px;
+  padding-top: 120px;
+  padding-bottom: 100px;
+}
+
+.legal-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--einai-blue-accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-bottom: 36px;
+}
+
+.legal-back:hover {
+  color: #ffffff;
+}
+
+.legal-page h1 {
+  font-family: Aboreto, serif;
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.legal-updated {
+  color: var(--einai-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 36px;
+}
+
+.legal-page h2 {
+  font-family: Aboreto, serif;
+  color: #ffffff;
+  font-size: 1.35rem;
+  margin-top: 44px;
+  margin-bottom: 14px;
+}
+
+.legal-page p,
+.legal-page li {
+  color: var(--bs-light);
+  opacity: 0.88;
+  line-height: 1.75;
+}
+
+.legal-page ul {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.legal-page li {
+  margin-bottom: 10px;
+}
+
+.legal-page a {
+  color: var(--einai-blue-accent);
 }
 
 /* ========== FAQ ACCORDION ESCURO ========== */
