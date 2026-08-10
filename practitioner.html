@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Practitioner em PNL - Instituto EINAI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aboreto&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800&amp;display=swap">
+    <link rel="stylesheet" href="assets/css/Features-Image-icons.css">
+    <link rel="stylesheet" href="assets/css/forms-einai.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        body, input, select, textarea, button, .btn {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-background {
+            height: 800px;
+            background-image: url("assets/img/hero-practitioner.png") !important;
+            background-position: center !important;
+            background-size: cover !important;
+            background-repeat: no-repeat !important;
+        }
+
+        /* ========== Otimizações Mobile ========== */
+        @media (max-width: 768px) {
+            .hero-background {
+                height: auto !important;
+                min-height: 85vh;
+                padding-top: 100px;
+                padding-bottom: 60px;
+                background-position: 65% center !important;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+            }
+
+            /* Ajuste de fontes e botões no mobile */
+            h1.fw-bold {
+                font-size: 2rem !important;
+            }
+
+            h2.fw-bold {
+                font-size: 1.6rem !important;
+            }
+
+            .btn-amarelo-printcipal {
+                white-space: normal;
+            }
+        }
+
+        /* ========== Estilos de Vendas e Conversão ========== */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(222, 170, 77, 0.3) !important;
+        }
+
+        .promo-banner {
+            background: rgba(222, 170, 77, 0.12);
+            border: 1px solid rgba(222, 170, 77, 0.3);
+            border-radius: 50px;
+            padding: 8px 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.9);
+                opacity: 0.4;
+            }
+        }
+
+        .pulse-dot {
+            display: inline-block;
+            font-size: 10px;
+            color: #ff4d4d;
+            animation: pulse 1.8s infinite ease-in-out;
+        }
+
+        .btn-amarelo-printcipal {
+            transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+        }
+
+        .btn-amarelo-printcipal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(247, 172, 17, 0.5) !important;
+        }
+
+        .btn-amarelo-printcipal:active {
+            transform: translateY(1px);
+        }
+
+        .badge-exclusive {
+            background: linear-gradient(135deg, #F7AC11 0%, #C9820B 100%);
+            color: #000000;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(222, 170, 77, 0.3);
+        }
+
+        /* ========== Estilos do Bloco de Inscrição ========== */
+        #inscricao-section {
+            --bg: #ffffff;
+            --card: #ffffff;
+            --accent: #452F6A;
+            --accent-600: #33204F;
+            --muted: #93a0ab;
+            --text: #0f1720;
+            --radius: 14px;
+            --gap: 16px;
+            --maxw: 700px;
+            --shadow: 0 10px 30px rgba(10, 10, 12, 0.08);
+
+            display: block;
+            /* Inicia visível no final da página */
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            margin: 80px auto;
+            padding: 14px;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .insc-wrap {
+            width: 100%;
+            max-width: var(--maxw);
+            position: relative;
+            margin: auto;
+        }
+
+        .insc-card {
+            background: var(--card);
+            padding: 36px 28px 28px 28px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative !important;
+            animation: insc-fadeInUp 0.4s ease-out;
+        }
+
+        @keyframes insc-fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Botão Fechar Modal */
+        .insc-close-btn {
+            display: none !important;
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            background: transparent;
+            border: none;
+            color: #93a0ab;
+            font-size: 32px;
+            font-weight: 300;
+            cursor: pointer;
+            z-index: 10;
+            transition: color 0.2s, transform 0.2s;
+            line-height: 1;
+            padding: 4px;
+        }
+
+        .insc-close-btn:hover {
+            color: #0f1720;
+            transform: scale(1.1);
+        }
+
+        /* Etapas do Wizard */
+        .insc-step {
+            display: none;
+        }
+
+        .insc-step.active {
+            display: block;
+        }
+
+        /* Barra de Progresso e Indicadores */
+        .insc-progress-container {
+            margin-bottom: 24px;
+            padding: 0 10px;
+        }
+
+        .insc-progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .insc-progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.08);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .insc-progress-bar-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #F7AC11, #C9820B);
+            z-index: 2;
+            transform: translateY(-50%);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .insc-progress-step-dot {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: #94a3b8;
+            position: relative;
+            z-index: 3;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .insc-progress-step-dot.active {
+            border-color: #F7AC11;
+            color: #F7AC11;
+            background: #fff;
+            box-shadow: 0 0 12px rgba(222, 170, 77, 0.4);
+        }
+
+        .insc-progress-step-dot.completed {
+            border-color: #452F6A;
+            background: #452F6A;
+            color: #fff;
+        }
+
+        .insc-progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            padding: 0 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .insc-progress-label {
+            width: 70px;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+
+        .insc-progress-label.active {
+            color: #F7AC11;
+        }
+
+        .insc-navigation {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 20px;
+        }
+
+        .insc-hero {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .insc-hero img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            border: 1px solid #0000000d;
+        }
+
+        .insc-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+
+        .insc-titles h1 {
+            margin: 0;
+            font-size: 20px !important;
+            letter-spacing: -0.4px;
+            font-weight: 700;
+        }
+
+        .insc-subtitle {
+            margin: 0;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        .insc-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: left;
+        }
+
+        .insc-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .insc-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .insc-field label {
+            font-size: 13px;
+            color: #23303a;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .insc-field input[type="text"],
+        .insc-field input[type="email"],
+        .insc-field input[type="date"],
+        .insc-field input[type="tel"],
+        .insc-field select {
+            border-radius: 10px;
+            border: 1px solid #e6e9ee;
+            background: transparent;
+            padding: 14px;
+            font-size: 15px;
+            color: var(--text);
+            outline: none;
+            transition: box-shadow .15s ease, border-color .15s ease;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .insc-field input:focus,
+        .insc-field select:focus {
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+            border-color: var(--accent);
+        }
+
+        .insc-field input[readonly] {
+            background-color: #f9fbfd;
+            color: #777;
+        }
+
+        .insc-checkbox-grid {
+            padding: 0;
+            border: none;
+            background: transparent;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .insc-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e6e9ee;
+            transition: all .15s ease;
+            cursor: pointer;
+            user-select: none;
+            background: var(--card);
+            margin-bottom: 0;
+        }
+
+        .insc-option:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 20, 30, 0.06);
+            border-color: var(--accent);
+        }
+
+        .insc-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .insc-opt-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+
+        .insc-opt-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #101820;
+            margin-bottom: 0;
+        }
+
+        .insc-opt-desc {
+            font-size: 11.5px;
+            color: var(--muted);
+            line-height: 1.3;
+        }
+
+        .insc-helper {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 0px;
+            font-weight: 400;
+        }
+
+        .insc-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch;
+            margin-top: 10px;
+        }
+
+        .insc-btn {
+            appearance: none;
+            -webkit-appearance: none;
+            border: 0;
+            cursor: pointer;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            min-width: 140px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background .12s ease, transform .08s ease;
+            text-decoration: none;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .insc-btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .insc-btn-primary:hover:not(:disabled) {
+            background: var(--accent-600);
+            transform: translateY(-1px);
+        }
+
+        .insc-btn-primary:disabled {
+            opacity: 0.6;
+            transform: none;
+            cursor: default;
+        }
+
+        .insc-btn-outline {
+            background: #fff;
+            border: 1px solid #e6e9ee;
+            color: var(--text);
+        }
+
+        .insc-btn-outline:hover {
+            border-color: var(--accent);
+            background: #f9fbfd;
+            transform: translateY(-1px);
+        }
+
+        .insc-btn-outline.selected {
+            border-color: var(--accent);
+            background: rgba(13, 148, 136, 0.05);
+            color: var(--accent-600);
+        }
+
+        .insc-status {
+            font-size: 13px;
+            color: #ef4444;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .insc-payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .insc-checkout-step {
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .insc-pix-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .insc-qr-container {
+            padding: 10px;
+            border: 1px solid #e6e9ee;
+            border-radius: 12px;
+            background: #fff;
+            display: inline-block;
+        }
+
+        .insc-qr-container img {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .insc-pix-copy-box {
+            width: 100%;
+            display: flex;
+            gap: 8px;
+        }
+
+        .insc-pix-copy-box input {
+            background: #f5f7fa;
+            font-size: 13px;
+            color: #555;
+            border-radius: 10px;
+            border: 1px solid #e6e9ee;
+            padding: 14px;
+            width: 100%;
+        }
+
+        .insc-btn-copy {
+            background: var(--text);
+            color: white;
+            width: auto;
+            min-width: 80px;
+            padding: 0 16px;
+        }
+
+        .insc-btn-copy:hover {
+            background: #000;
+        }
+
+        .insc-copy-feedback {
+            font-size: 12px;
+            color: #00a86b;
+            height: 16px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .insc-copy-feedback.show {
+            opacity: 1;
+        }
+
+        .insc-spinner {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-top-color: rgba(255, 255, 255, 0.95);
+            animation: spin .8s linear infinite;
+        }
+
+        @media(min-width:550px) {
+            .insc-actions {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .insc-status {
+                text-align: left;
+            }
+
+            .insc-payment-methods {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .insc-checkout-step {
+                text-align: left;
+            }
+
+            .insc-pix-wrapper {
+                align-items: flex-start;
+            }
+        }
+
+        @media(min-width:700px) {
+            .insc-card {
+                padding: 28px
+            }
+
+            .insc-checkbox-grid {
+                grid-template-columns: 1fr 1fr 1fr
+            }
+        }
+
+        /* Modal Pix Overlay & Card */
+        .insc-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: insc-fadeIn 0.2s ease-out;
+        }
+
+        .insc-modal-content {
+            background: white;
+            width: 90%;
+            max-width: 440px;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 24px;
+            position: relative;
+            animation: insc-scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .insc-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: #94a3b8;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .insc-modal-close:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        @keyframes insc-fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes insc-scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        /* ========== Paleta do Practitioner (roxo + dourado da logo) ========== */
+        .card-mergulho {
+            background-color: #2C1D45 !important;
+            border-color: #F7AC11 !important;
+        }
+
+        .card-2-green {
+            background-color: #2C1D45 !important;
+        }
+
+        .btn-amarelo-printcipal {
+            background: linear-gradient(to right, #F7AC11, #C9820B) !important;
+            color: #1b1030 !important;
+        }
+    </style>
+</head>
+
+<body style="background-color: #F1F1F1 !important;font-family: 'Poppins', sans-serif;">
+    <section>
+        <div class="hero-background">
+            <div class="container h-100">
+                <div class="row h-100">
+                    <div
+                        class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-end justify-content-md-start align-items-md-center justify-content-xl-center">
+                        <div class="flex-column" style="display: flex;max-width: 90%;gap: 16px;">
+                            <div class="d-flex align-items-end img-hero" data-aos="fade-down"><img src="assets/img/EINAI.png" width="117" height="106"><img src="assets/img/practitioner-logo.png" width="190" height="102" alt="Practitioner em PNL"></div>
+                            <div class="div-text-hero" data-aos="fade-up" data-aos-delay="200">
+                                <h2 class="fw-bold color-white">Reprogramar o passado, programar o presente e o futuro.</h2>
+                                <p class="my-3 color-white">Nove dias de imersão na formação mais profunda em Programação Neurolinguística do Instituto EINAI.</p><a class="btn btn-primary btn-lg btn-amarelo-printcipal"
+                                    role="button" href="javascript:void(0)" onclick="openInscricaoModal()">QUERO ME FORMAR EM PNL</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container py-4 py-xl-5">
+        <div class="row row-cols-1">
+            <div class="col d-flex flex-column justify-content-start align-items-center">
+                <div style="max-width: 100%;text-align: center;" data-aos="fade-up">
+                    <h4 class="fw-bold">Como seria se você aprendesse a identificar e desenvolver várias ferramentas de forma consciente, ampliando o seu potencial?</h4>
+                    <p class="my-3">A PNL parte de uma ideia simples: mente, corpo e linguagem formam um elo, e é esse elo que constrói a percepção que você tem do mundo. Uma percepção que pode ser modificada através de técnicas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container py-4 py-xl-5">
+        <div class="row row-cols-1 row-cols-md-2 gy-4 align-items-center">
+            <div class="col d-flex justify-content-center" data-aos="fade-right"><img
+                    class="img-fluid rounded object-fit-cover w-100" style="min-height: 300px; max-width: 630px;"
+                    src="assets/img/cards/practitioner.jpg" alt="Practitioner em PNL"></div>
+            <div class="col d-flex flex-column justify-content-center align-items-center p-4" data-aos="fade-left">
+                <div style="max-width: 90%;height: 100%;">
+                    <h1 class="fw-bold">Sobre o curso</h1>
+                    <p class="my-3">O Practitioner é a formação completa em Programação Neurolinguística do
+                        Instituto EINAI.&nbsp;<br><br>São nove dias intensos de introspecção e muita prática. É o
+                        curso mais profundo em PNL do Instituto, e é nele que você passa a entender a estrutura por
+                        trás de todos os outros treinamentos.<br><br>Você vai aprender a reprogramar o passado,
+                        programar o presente e o futuro, estabelecer rapport e empatia, lidar com limitações e
+                        fobias, e usar a linguagem para perceber o mundo pela perspectiva de outra pessoa.<br><br>A
+                        PNL traz o suporte que você precisa para alinhar as suas escolhas com as suas ações, através
+                        do conhecimento da mente humana.&nbsp;</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center w-100 mt-5">
+            <a class="btn btn-primary btn-lg btn-amarelo-printcipal" role="button" href="javascript:void(0)"
+                onclick="openInscricaoModal()" style="max-width: 600px;" data-aos="zoom-in">ESSE CURSO É PARA MIM</a>
+        </div>
+    </div>
+    <section class="w-100 py-4 py-xl-5" style="background-color: #2C1D45; overflow: hidden;">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
+                    <h2 class="fw-bolder color-white">Durante 9 dias de imersão, você vai mergulhar em temas como:</h2>
+                </div>
+            </div>
+            <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
+                <div class="col" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="51" height="51"
+                                src="assets/img/icons/programaneuro.svg">
+                            <h4 class="card-title">Reprogramação</h4>
+                            <p class="card-text">Reprogramar o passado, programar o presente e o futuro, gerando novos comportamentos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="41" height="42"
+                                src="assets/img/icons/mapas%20e%20filtros.svg">
+                            <h4 class="card-title">Mapas e filtros</h4>
+                            <p class="card-text">Como você filtra a realidade e por que duas pessoas veem o mesmo fato de formas diferentes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="63" height="63"
+                                src="assets/img/icons/rapport.svg">
+                            <h4 class="card-title">Rapport e empatia</h4>
+                            <p class="card-text">Criar conexão verdadeira e enxergar o mundo pela perspectiva do outro</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="50" height="51"
+                                src="assets/img/icons/sistemas.svg">
+                            <h4 class="card-title">Sistemas representacionais</h4>
+                            <p class="card-text">Visual, auditivo e cinestésico: como cada pessoa organiza a própria experiência</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="51" height="51"
+                                src="assets/img/icons/calibragem.svg">
+                            <h4 class="card-title">Metamodelo de linguagem</h4>
+                            <p class="card-text">Linguagem não verbal, âncoras e o que as palavras revelam além do que dizem</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="51" height="51"
+                                src="assets/img/icons/niveis.svg">
+                            <h4 class="card-title">Crenças</h4>
+                            <p class="card-text">Transformar crenças limitantes em possibilitadoras e potencializar os pontos fortes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="51" height="51"
+                                src="assets/img/icons/metas.svg">
+                            <h4 class="card-title">Objetivos bem formulados</h4>
+                            <p class="card-text">Mapeamento do estado atual e do estado desejado, com comparativo de resultados</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="51" height="51"
+                                src="assets/img/icons/sucesso.svg">
+                            <h4 class="card-title">Linha temporal e valores</h4>
+                            <p class="card-text">Alinhar escolhas e ações a partir do que realmente importa para você</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100" style="background: #2C1D45;">
+                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="51" height="51"
+                                src="assets/img/icons/check.svg">
+                            <h4 class="card-title">Limitações e fobias</h4>
+                            <p class="card-text">Reestruturação em seis passos, squash visual e transformação de resistência em mudança</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container py-4 py-xl-5">
+        <div class="row mb-5">
+            <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
+                <h2 style="font-weight: 800;">O que você leva do Practitioner</h2>
+                <p>Ferramentas que saem da sala e entram no seu dia a dia, no trabalho e nas suas relações.</p>
+            </div>
+        </div>
+        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-4">
+            <div class="col" data-aos="flip-up" data-aos-delay="100">
+                <div class="card h-100">
+                    <div class="card-body p-4 card-2-green"><img width="55" height="55" src="assets/img/Frame47.png">
+                        <p class="card-text">Entender e conduzir pessoas de maneira ética e eficaz</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col" data-aos="flip-up" data-aos-delay="200">
+                <div class="card h-100">
+                    <div class="card-body d-flex p-4 card-2-green"><img width="55" height="55"
+                            src="assets/img/Frame47.png">
+                        <h4 class="card-title"></h4>
+                        <p class="card-text">Comunicação mais clara, em qualquer contexto</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col" data-aos="flip-up" data-aos-delay="300">
+                <div class="card h-100">
+                    <div class="card-body p-4 card-2-green"><img class="img-fluid" width="55" height="55"
+                            src="assets/img/Frame47.png">
+                        <h4 class="card-title"></h4>
+                        <p class="card-text">Novos comportamentos no lugar dos padrões antigos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col" data-aos="flip-up" data-aos-delay="400">
+                <div class="card h-100">
+                    <div class="card-body p-4 card-2-green"><img class="img-fluid" width="55" height="55"
+                            src="assets/img/Frame47.png">
+                        <h4 class="card-title"></h4>
+                        <p class="card-text">Ferramentas para formular e alcançar qualquer objetivo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container py-4 py-xl-5">
+        <div class="row row-cols-1 row-cols-md-2 gy-4 align-items-center">
+            <div class="col p-4 p-md-5 d-flex justify-content-center" data-aos="fade-right"><img
+                    class="img-fluid rounded object-fit-cover w-100 h-100" style="min-height: 300px; max-width: 500px;"
+                    src="assets/img/einai-logo2.png"></div>
+            <div class="col d-flex flex-column justify-content-start p-4" data-aos="fade-left">
+                <div style="max-width: 400px;height: 100%;">
+                    <h1 class="fw-bold">Quem vai te conduzir?</h1>
+                    <p class="my-3">O Practitioner é conduzido por Anderson Ávila, Trainer Master Practitioner em PNL e
+                        Coaching Practitioner, com anos de experiência formando pessoas e liderando processos de
+                        transformação profunda.<br>Junto da equipe do Instituto EINAI, você terá acompanhamento
+                        próximo, com um método estruturado e apoio profissional em todas as etapas da formação.</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center w-100 mt-5">
+            <a class="btn btn-primary btn-lg btn-amarelo-printcipal" role="button" href="javascript:void(0)"
+                onclick="openInscricaoModal()" style="max-width: 600px;" data-aos="zoom-in">ESSE CURSO É PARA MIM</a>
+        </div>
+    </div>
+    <section class="w-100 py-4 py-xl-5" style="background-color: #2C1D45; overflow: hidden;">
+        <div class="container">
+            <div class="row mb-5 mt-4 mt-md-5 pt-md-4 mx-0 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-6 text-center p-4 p-md-5 glass-card" data-aos="fade-up">
+                    <!-- Badge exclusiva -->
+                    <div class="mb-3">
+                        <span class="badge-exclusive">Oferta Especial Ativa</span>
+                    </div>
+
+                    <h2 class="fw-bolder color-white mb-2">Garanta sua vaga na próxima turma!</h2>
+                    <p class="mb-4 color-white"
+                        style="color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 400;">
+                        Nove dias de imersão para dominar as ferramentas da Programação Neurolinguística.
+                    </p>
+
+                    <!-- Cronômetro de escassez -->
+                    <div id="promo-banner-container" class="mb-4 d-none">
+                        <div class="promo-banner">
+                            <span class="pulse-dot">🔴</span>
+                            <span style="font-size: 14px;">A oferta especial termina em:</span>
+                            <strong id="promo-countdown"
+                                style="color: #F7AC11; font-family: monospace; font-size: 1.15rem; letter-spacing: 0.5px;">00:00:00</strong>
+                        </div>
+                    </div>
+
+                    <!-- Detalhes do curso: Data & Local com design premium -->
+                    <div class="d-flex flex-wrap justify-content-center gap-3 mb-4 text-white">
+                        <div class="d-flex align-items-center gap-2 px-3 py-2"
+                            style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <svg width="18" height="18" fill="none" stroke="#F7AC11" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span id="dynamic-date-practitioner" style="font-weight: 500; font-size: 14px;">Carregando
+                                data...</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 px-3 py-2"
+                            style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <svg width="18" height="18" fill="none" stroke="#F7AC11" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span style="font-weight: 500; font-size: 14px;">9 dias de imersão</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 px-3 py-2"
+                            style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <svg width="18" height="18" fill="none" stroke="#F7AC11" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span id="dynamic-location-practitioner" style="font-weight: 500; font-size: 14px;">Carregando
+                                local...</span>
+                        </div>
+                    </div>
+
+                    <!-- Valores e Conversão de Preço -->
+                    <div class="my-4 py-2">
+                        <div id="old-price-container" class="d-none"
+                            style="color: rgba(255,255,255,0.55); font-size: 1.1rem; text-decoration: line-through; margin-bottom: 2px;">
+                            De R$ <span id="dynamic-old-price-practitioner">---,---</span>
+                        </div>
+                        <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+                            Por apenas <span style="color: #F7AC11;">R$ <span
+                                    id="dynamic-price-practitioner">Carregando...</span></span>
+                        </div>
+                        <div style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">
+                            ou em até <strong style="color: #ffffff;"><span id="dynamic-installments-practitioner">12</span>x de R$ <span
+                                    id="installment-price-practitioner">---,---</span></strong> no cartão de crédito
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary btn-lg mb-3 btn-amarelo-printcipal color-white w-100 mt-2" role="button"
+                        href="javascript:void(0)" onclick="openInscricaoModal()"
+                        style="max-width: 480px; font-weight: 700; font-size: 1.1rem; padding: 16px; border: none; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                        QUERO ME APROFUNDAR EM PNL </a>
+
+                    <!-- Selos de Confiança -->
+                    <div class="d-flex justify-content-center align-items-center gap-4 mt-3"
+                        style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">
+                        <div class="d-flex align-items-center gap-1">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <span>Pagamento 100% Seguro</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span>Garantia de 7 Dias</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOCO DE INSCRIÇÃO -->
+    <div id="inscricao-section">
+        <main class="insc-wrap mx-auto">
+            <!-- Barra de Progresso compartilhada -->
+            <div class="insc-progress-container">
+                <div class="insc-progress-steps">
+                    <div class="insc-progress-bar-fill" id="insc-progress-fill"></div>
+                    <div class="insc-progress-step-dot active" id="dot-1">1</div>
+                    <div class="insc-progress-step-dot" id="dot-2">2</div>
+                    <div class="insc-progress-step-dot" id="dot-3">3</div>
+                    <div class="insc-progress-step-dot" id="dot-4">4</div>
+                    <div class="insc-progress-step-dot" id="dot-5">5</div>
+                </div>
+                <div class="insc-progress-labels">
+                    <span class="insc-progress-label active" id="label-1">Cadastro</span>
+                    <span class="insc-progress-label" id="label-2">Endereço</span>
+                    <span class="insc-progress-label" id="label-3">Perfil</span>
+                    <span class="insc-progress-label" id="label-4">Pagamento</span>
+                    <span class="insc-progress-label" id="label-5">Conclusão</span>
+                </div>
+            </div>
+
+            <!-- CARD DE INSCRIÇÃO (Wizard Passos 1 a 3) -->
+            <section class="insc-card" id="insc-registration-card" aria-labelledby="title">
+                <button type="button" class="insc-close-btn" aria-label="Fechar"
+                    onclick="closeInscricaoModal()">&times;</button>
+                <div class="insc-hero">
+                    <div
+                        style="width: 56px; height: 56px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">
+                        E</div>
+                    <div class="insc-titles">
+                        <h1 id="title">Inscreva-se no Treinamento</h1>
+                        <p class="insc-subtitle">Preencha seus dados para avançar ao pagamento.</p>
+                    </div>
+                </div>
+
+                <form id="insc-form" class="insc-form" novalidate>
+                    <!-- PASSO 1: DADOS PESSOAIS -->
+                    <div class="insc-step active" id="step-1">
+                        <div class="insc-field">
+                            <label for="nome">Nome completo</label>
+                            <input id="nome" name="nome" type="text" inputmode="text" autocomplete="name"
+                                placeholder="Seu nome completo" required>
+                        </div>
+
+                        <div class="insc-row">
+                            <div class="insc-field">
+                                <label for="nascimento">Data de nascimento</label>
+                                <input id="nascimento" name="nascimento" type="tel" inputmode="numeric"
+                                    placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off" required>
+                            </div>
+
+                            <div class="insc-field">
+                                <label for="telefone">Telefone</label>
+                                <input id="telefone" name="telefone" type="tel" inputmode="tel"
+                                    placeholder="(51) 99999-9999" required>
+                            </div>
+                        </div>
+
+                        <div class="insc-field">
+                            <label for="cpf">CPF</label>
+                            <input id="cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00"
+                                required>
+                        </div>
+
+                        <div class="insc-field">
+                            <label for="email">E-mail</label>
+                            <input id="email" name="email" type="email" autocomplete="email"
+                                placeholder="seu@exemplo.com" required>
+                        </div>
+
+                        <div class="insc-field">
+                            <label for="empresa">Empresa <span style="color: #64748b; font-weight: normal; font-size: 11px;">(Opcional)</span></label>
+                            <input id="empresa" name="empresa" type="text" placeholder="Empresa onde trabalha">
+                        </div>
+
+                        <div class="insc-status" id="insc-status-step1"
+                            style="color: red; font-size: 13px; font-weight: 600; margin-top: 8px;"></div>
+
+                        <div class="insc-navigation">
+                            <button type="button" class="insc-btn insc-btn-primary"
+                                onclick="validateAndGoToStep(2)">Avançar &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- PASSO 2: ENDEREÇO -->
+                    <div class="insc-step" id="step-2">
+                        <p
+                            style="font-size:14px; font-weight:600; margin:0 0 10px 0; color:var(--accent-600); text-align: left;">
+                            Endereço</p>
+
+                        <div class="insc-field">
+                            <label for="cep">CEP</label>
+                            <input id="cep" name="cep" type="text" inputmode="numeric" placeholder="00000-000" required>
+                        </div>
+
+                        <div class="insc-row">
+                            <div class="insc-field" style="flex:2;">
+                                <label for="logradouro">Rua / Logradouro</label>
+                                <input id="logradouro" name="logradouro" type="text" required>
+                            </div>
+                            <div class="insc-field" style="flex:1;">
+                                <label for="numero">Número</label>
+                                <input id="numero" name="numero" type="text" required>
+                            </div>
+                        </div>
+
+                        <div class="insc-row">
+                            <div class="insc-field">
+                                <label for="bairro">Bairro</label>
+                                <input id="bairro" name="bairro" type="text" required>
+                            </div>
+                            <div class="insc-field">
+                                <label for="complemento">Complemento <span
+                                        style="font-weight:400; color:var(--muted);">(Opcional)</span></label>
+                                <input id="complemento" name="complemento" type="text">
+                            </div>
+                        </div>
+
+                        <div class="insc-row">
+                            <div class="insc-field" style="flex:2;">
+                                <label for="cidade">Cidade</label>
+                                <input id="cidade" name="cidade" type="text" required>
+                            </div>
+                            <div class="insc-field" style="flex:1;">
+                                <label for="uf">UF</label>
+                                <input id="uf" name="uf" type="text" maxlength="2" required>
+                            </div>
+                        </div>
+
+                        <div class="insc-status" id="insc-status-step2"
+                            style="color: red; font-size: 13px; font-weight: 600; margin-top: 8px;"></div>
+
+                        <div class="insc-navigation">
+                            <button type="button" class="insc-btn insc-btn-outline" onclick="goToStep(1)">&larr;
+                                Voltar</button>
+                            <button type="button" class="insc-btn insc-btn-primary"
+                                onclick="validateAndGoToStep(3)">Avançar &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- PASSO 3: PERFIL E MOTIVAÇÃO -->
+                    <div class="insc-step" id="step-3">
+                        <div class="insc-field">
+                            <label>Por que você quer fazer o curso/treinamento? <span class="insc-helper">(Escolha uma
+                                    ou mais)</span></label>
+                            <div class="insc-checkbox-grid" role="group">
+                                <label class="insc-option">
+                                    <input type="checkbox" name="motivo" value="Aprender algo novo">
+                                    <div class="insc-opt-text">
+                                        <span class="insc-opt-title">Aprender algo novo</span>
+                                        <span class="insc-opt-desc">Quero habilidades práticas para crescer.</span>
+                                    </div>
+                                </label>
+                                <label class="insc-option">
+                                    <input type="checkbox" name="motivo" value="Mudar de área">
+                                    <div class="insc-opt-text">
+                                        <span class="insc-opt-title">Mudar de área</span>
+                                        <span class="insc-opt-desc">Estou buscando transição de carreira.</span>
+                                    </div>
+                                </label>
+                                <label class="insc-option">
+                                    <input type="checkbox" name="motivo" value="Melhorar resultados">
+                                    <div class="insc-opt-text">
+                                        <span class="insc-opt-title">Melhorar resultados</span>
+                                        <span class="insc-opt-desc">Desejo aplicar no trabalho.</span>
+                                    </div>
+                                </label>
+                                <label class="insc-option">
+                                    <input type="checkbox" name="motivo" value="Recomendado">
+                                    <div class="insc-opt-text">
+                                        <span class="insc-opt-title">Recomendado</span>
+                                        <span class="insc-opt-desc">Alguém me indicou.</span>
+                                    </div>
+                                </label>
+                                <label class="insc-option">
+                                    <input type="checkbox" name="motivo" value="Interesse no conteúdo">
+                                    <div class="insc-opt-text">
+                                        <span class="insc-opt-title">Interesse no conteúdo</span>
+                                        <span class="insc-opt-desc">O tema me interessa.</span>
+                                    </div>
+                                </label>
+                                <label class="insc-option">
+                                    <input type="checkbox" name="motivo" value="Outro">
+                                    <div class="insc-opt-text">
+                                        <span class="insc-opt-title">Outro</span>
+                                        <span class="insc-opt-desc">Outro motivo.</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="insc-status" id="insc-status" role="status" aria-atomic="true"></div>
+
+                        <div class="insc-navigation">
+                            <button type="button" class="insc-btn insc-btn-outline" onclick="goToStep(2)">&larr;
+                                Voltar</button>
+                            <button type="submit" id="insc-submitBtn" class="insc-btn insc-btn-primary"
+                                aria-live="polite">
+                                <span id="insc-btnLabel">Enviar e ir para pagamento</span>
+                                <span id="insc-btnSpinner" class="insc-spinner" style="display:none"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <!-- CARD DE CHECKOUT (Wizard Passo 4) -->
+            <section class="insc-card" id="insc-checkout-card" style="display:none;" aria-labelledby="checkout-title">
+                <button type="button" class="insc-close-btn" aria-label="Fechar"
+                    onclick="closeInscricaoModal()">&times;</button>
+                <div style="margin-bottom: 16px; text-align: left;">
+                    <button type="button" onclick="goBackToForm()"
+                        style="background: transparent; color: var(--muted); border: none; padding: 0; min-width: auto; justify-content: flex-start; font-size: 14px; font-weight: 500;">&larr;
+                        Voltar e editar dados</button>
+                </div>
+                <div class="insc-hero">
+                    <div
+                        style="width: 56px; height: 56px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">
+                        E</div>
+                    <div class="insc-titles">
+                        <h1 id="checkout-title">Pagamento Seguro</h1>
+                        <p class="insc-subtitle">Escolha como deseja finalizar sua inscrição.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top:24px;">
+                    <label
+                        style="margin-bottom:8px; display:block; text-align: left; font-size:13px; font-weight:600; color:#23303a;">Selecione
+                        o método:</label>
+                    <div class="insc-payment-methods">
+                        <button type="button" class="insc-btn insc-btn-outline" id="btn-pix"
+                            onclick="selectPayment('pix')">
+                            Pix (QR Code)
+                        </button>
+                        <button type="button" class="insc-btn insc-btn-outline" id="btn-card"
+                            onclick="selectPayment('card')">
+                            Cartão de Crédito
+                        </button>
+                    </div>
+
+                    <div id="pix-area" class="insc-checkout-step" style="display:none;">
+                        <div class="insc-pix-wrapper">
+                            <p style="font-size:14px; margin:0;">Abra o app do seu banco e escaneie:</p>
+
+                            <div class="insc-qr-container">
+                                <img id="pix-qr-img" src="" alt="QR Code Pix">
+                            </div>
+
+                            <div style="width:100%">
+                                <label style="font-size:12px; margin-bottom:4px; display:block; text-align:left;">Ou
+                                    copie a chave pix abaixo, e cole no aplicativo do seu banco:</label>
+                                <div class="insc-pix-copy-box">
+                                    <input type="text" id="pix-code-input" readonly>
+                                    <button type="button" class="insc-btn insc-btn-copy"
+                                        onclick="copyPixCode()">Copiar</button>
+                                </div>
+                                <div id="copy-feedback" class="insc-copy-feedback">Código copiado com sucesso!</div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div id="card-area" class="insc-checkout-step" style="display:none; text-align:left;">
+                        <!-- MODO 1: CHECKOUT TRANSPARENTE -->
+                        <div id="cc-transparent-fields" style="display:none;">
+                            <div class="insc-field" style="margin-bottom:12px;">
+                                <label for="cc-numero">Número do Cartão</label>
+                                <input type="text" id="cc-numero" placeholder="0000 0000 0000 0000" maxlength="19">
+                            </div>
+                            <div class="insc-field" style="margin-bottom:12px;">
+                                <label for="cc-nome">Nome Impresso no Cartão</label>
+                                <input type="text" id="cc-nome" placeholder="NOME DO TITULAR">
+                            </div>
+                            <div class="insc-row" style="margin-bottom:12px;">
+                                <div class="insc-field">
+                                    <label for="cc-validade">Validade (MM/AA)</label>
+                                    <input type="text" id="cc-validade" placeholder="MM/AA" maxlength="5">
+                                </div>
+                                <div class="insc-field">
+                                    <label for="cc-cvv">CVV</label>
+                                    <input type="text" id="cc-cvv" placeholder="123" maxlength="4">
+                                </div>
+                            </div>
+                            <div class="insc-field">
+                                <label for="installments">Em quantas vezes deseja fazer?</label>
+                                <select id="installments">
+                                        <option value="" disabled selected>Selecione as parcelas...</option>
+                                        <option value="1">1x (À vista)</option>
+                                        <option value="3">3x sem juros</option>
+                                        <option value="6">6x sem juros</option>
+                                        <option value="10">10x sem juros</option>
+                                        <option value="12">12x sem juros</option>
+                                </select>
+                            </div>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; text-align: center;">
+                                <p style="margin: 0; font-size: 14px; color: var(--muted);">Valor do Investimento</p>
+                                <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span id="dynamic-price-display">...</span></h3>
+                            </div>
+
+                            <div class="insc-actions" style="margin-top:16px;">
+                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-card">Finalizar pagamento</button>
+                            </div>
+                            <p id="card-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por favor, preencha todos os campos do cartão corretamente.</p>
+                        </div>
+
+                        <!-- MODO 2: REDIRECIONAMENTO (LINKS) -->
+                        <div id="cc-redirect-fields" style="display:none;">
+                            <div class="insc-field">
+                                <label for="payment-link-select">Escolha a opção de pagamento:</label>
+                                <select id="payment-link-select">
+                                    <option value="" disabled selected>Selecione uma opção...</option>
+                                </select>
+                            </div>
+                            <div class="insc-actions" style="margin-top:16px;">
+                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-link" onclick="openPaymentLink()">Ir para pagamento</button>
+                            </div>
+                            <p id="redirect-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por favor, selecione uma opção de pagamento.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARD DE SUCESSO (Wizard Passo 5) -->
+            <section class="insc-card" id="insc-success-card"
+                style="display:none; text-align: center; padding: 40px 24px; border-top: 8px solid #10b981;">
+                <button type="button" class="insc-close-btn" aria-label="Fechar"
+                    onclick="closeInscricaoModal()">&times;</button>
+                <div
+                    style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 80px; border-radius: 50%; background-color: #d1fae5; color: #10b981; margin-bottom: 24px;">
+                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"
+                        style="width: 40px; height: 40px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h1 style="font-size: 28px; color: var(--text); margin-bottom: 12px; font-weight: bold;">Inscrição
+                    Concluída!</h1>
+                <p style="color: var(--muted); font-size: 16px; margin-bottom: 24px;">Seu pagamento foi processado e sua
+                    vaga no treinamento está garantida.</p>
+                <p style="font-size: 14px; color: var(--text); font-weight: 500;">Enviaremos o comprovante e os próximos
+                    passos para o seu e-mail.</p>
+            </section>
+
+            <!-- Modal Pix -->
+            <div id="pix-modal" class="insc-modal-overlay" style="display:none;">
+                <div class="insc-modal-content">
+                    <button type="button" class="insc-modal-close" onclick="closePixModal()">&times;</button>
+                    <div style="margin-bottom: 16px; text-align: left;">
+                        <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1e293b;">Pagamento via Pix</h2>
+                        <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b; line-height: 1.4;">Escaneie o QR Code ou copie o código abaixo para finalizar sua inscrição.</p>
+                    </div>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div class="insc-qr-container" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; display: inline-block;">
+                            <img id="pix-modal-qr-img" src="" alt="QR Code Pix" style="width: 180px; height: 180px; display: block; object-fit: contain;">
+                        </div>
+                    </div>
+                    <div style="width:100%">
+                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; text-align: left; color: #475569;">Código Pix (Copia e Cola):</label>
+                        <div class="insc-pix-copy-box" style="display: flex; gap: 8px;">
+                            <input type="text" id="pix-modal-code-input" readonly style="background: #f1f5f9; font-size: 13px; color: #334155; border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px; width: 100%;" onclick="this.select()">
+                            <button type="button" class="insc-btn insc-btn-copy" onclick="copyPixModalCode()" style="background: var(--text); color: white; border: none; border-radius: 8px; padding: 0 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Copiar</button>
+                        </div>
+                        <div id="modal-copy-feedback" class="insc-copy-feedback" style="margin-top: 6px; text-align: left;">Código copiado com sucesso!</div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button type="button" class="insc-btn insc-btn-primary" onclick="confirmPixModalPayment()" style="width: 100%; padding: 12px; border: none; border-radius: 8px; background: #10b981; color: white; font-weight: 600; cursor: pointer; text-align: center;">Concluir</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            disable: 'mobile',
+            duration: 800, // duração em milissegundos
+            once: true,    // garante que anima só uma vez ao chegar na área
+            offset: 100    // o quão antes (em pixels) o elemento deve disparar
+        });
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, addDoc, getDocs, query, where, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-functions.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCWughEoZ0eUB6298L9kpe-u1mzBuV3p3k",
+            authDomain: "einia-21bc1.firebaseapp.com",
+            projectId: "einia-21bc1",
+            storageBucket: "einia-21bc1.firebasestorage.app",
+            messagingSenderId: "803375582521",
+            appId: "1:803375582521:web:284b60e3b2960e0b7c6ce8",
+            measurementId: "G-PNT1Z10N3T"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = initializeFirestore(app, {
+            localCache: persistentLocalCache({
+                tabManager: persistentMultipleTabManager()
+            })
+        });
+        const functions = getFunctions(app);
+
+        const STORAGE_PREFIX = 'einai_practitioner_';
+
+        const PIX_IMG_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAYAAACHjumMAAAQAElEQVR4AeydjW6cR7JD5+T93znXkpEb21t0hlb3fD9zAkuxqTKLfVogghaw+9ff/iMBCUhgE4G/Hv4jAQlIYBMBC2YTWG0lIIHHw4Lxu+C2BDzY8QQsmOPvwAQSuC2BsWCAB5z/I90KnCu7OdfeR8szzScdurzJJ+kw+7fzMPvAMfqUfyyYaVBNAhKQQEvAgmmJPTnvmAQk8PCR128CCUhgHwH/C2YfW50l8PYELJi3/xYQgARKAsV4VTB///3344iP4jyfoynj5xeLT8mn1dPK5JPmk558kp58gPGnh61Pml+lp/ytDvN5W580D7N/4pB8kp58duspz6RXBTMZqElAAhJIBCyYREZdAhL4MgEL5ssINXgpAZddioAFc6nrMqwErkXAgrnWfZlWApcisKRgYH4th05fRQ7mva0/7PWBzj/9dCCdC2b/5JP05N/Ow5wn+UM3n3xW6e15V+1tfWDmBp3e7p3mlxTMZHxLzUNJQAIVAQumwuWwBCTQELBgGlrOSkACFQELpsLlsATuSmDPuSyYPVx1lYAEvhGwYL5B2P2r/elDmoc1PwWA2ecoDnBMnnTexD/Ntzqc67xt/mbegmloOSsBCVQELJgKl8N7COh6VwIWzF1v1nNJ4AQELJgTXIIRJHBXAhbMXW/Wc0ngBARuWTDppwCznv9X+tL9QPdTANg7n86V8icd5pywV0/5k57y79ah47A7zxX8b1kwVwBvRgm8AwEL5h1u2TNK4CACFsxB4F0rgRcQOHyFBXP4FRhAAvclYMHc9249mQQOJ7CkYNJrf6uvogHza3/rn/K3Pmm+9W/n096kJ/9Wb/3TPMz3CLOecib/pEPnn/a2esrT6u3eNN/uneaXFMxkrPb2BAQggYcF4zeBBCSwjYAFsw2txhKQgAXj94AEJLCNwF0LZhswjSUggecJVAUD8+s67NWfP86fTcKc/8/cXv+3YM6/6qcDMPuvOinM/rvz7/ZPfGA+b5pPOsw+sFdPeSa9KpjJQE0CEpBAImDBJDLqEjgpgSvFsmCudFtmlcDFCFgwF7sw40rgSgQsmCvdllklcDECY8Gk1/Wz6S1rmF/X07lgzXzKCZ1/8mnzJ5+k/+j/4+/TfNJhPm+aT/qPGX78PRzj/2OGH38Pc54fZ378fXveH//uGX4/5R8LZhpUk4AEJNASsGBaYs5LQAJPE7BgnkbloAQk0BK4VMG0h3NeAhI4loAFcyx/t0vg1gTGgoH59RtmPRGCbr71gdk/vai3/mm+1ds8yR/m88Kst3th9oFOT/lbHdbsXcUh+cCcM50X5nlYo6/a2/pM82PBTINqEpDARgI3tbZgbnqxHksCZyBgwZzhFswggZsSsGBuerEeSwJnIGDBnOEWjs7gfglsIrC1YFa9uiefpLeskk/Sk//Z5mH+qUSbvz3XKv92b5qHmQPMesqf9LS31ZN/q8Oac8Hsk8415dxaMNNCNQlI4H0IWDDvc9eeVAIvJ3B8wbz8yC6UgAReRcCCeRVp90jgDQlYMG946R5ZAq8iUBVMej2G+bUZZj35pEPD7LNqPvm0Osw5odPbvS3P1n/3PMx80t7d513lD9250nmTnnLu1uH5c1UFkw6qLgEJSGAiYMFMVNQkIIElBCyYJRg1kYAEJgIWzETlFpqHkMDxBCyY4+/ABBK4LYGxYNIr9FEUUh6YX7PT/FH5096UE+Zzway3/u3e5J/03f6whkPKn3RYsxdmn8Qt6Sln0mHeC7OefBp9LJjGwFkJSEACicCmgknr1CUggXciYMG80217Vgm8mIAF82LgrpPAOxGwYN7ptj3rCgJ6FASqgoH5tTm9cicdZh/o9OKcS0dhzpmWJA5pPunJB7o8q/zbPGk+5YHuXNDNp72tDvNemPXEAeb5lAfmeZj1tDfpMPukPJNeFcxkoCYBCUggEbBgEhl1CUjgywQsmC8jfKmByyRwKQIWzKtIu0cCb0jAgnnDS/fIEngVgapg0usxzK/QMOvpcDDPQ6fv9m85tHmS/1E+sIZ/e672vGk+6SlP0mENhznP4wGdP8zzj/AP7J2f1lYFMxmoSUACEkgELJhERl0CEvgyAQvmywg1kIAEEgELJpF5K93DSmAPAQtmD1ddJSCBbwSqgoH5FTq9uif9297q126f3f7psGkv7OWc9ia9zZ98YD4XzHrySTrMPik/zPMw62lv8k/6bp/kv0qHmc903qpgJgM1CUhAAomABZPIqEtAAl8mYMF8GeFpDQwmgcMJWDCHX4EBJHBfAhbMfe/Wk0ngcAJjwcD8erw7Lcx7d7+iw7wXOj3xafOneViTJ+WE2T/lafV2L8x5kk/SU06Y/dN88ofZJ82v0mHeC7O+am/jMxZMYxBmlSUgAQk8LBi/CSQggW0ELJhtaDWWwG0JPH0wC+ZpVA5KQAItAQumJea8BCTwNIGtBQPzazZ0enrNTqeEzj/5tHvTPMx5Vu1NPkfpMJ838WlzrvJp98J8ruQD8zzM+qpzrfJJ52r0rQXTBHFWAk8ScOxCBCyYC12WUSVwNQIWzNVuzLwSuBABC+ZCl2VUCVyNgAXT3ZjTEpBAQaAqmPZ1etU8zK/u6Zxpb9KTD8x7YdaTT9qb9OQD816Y9danzZP8Wz3tTXryh5kDzHrr0+ZJ/q1Pmk962gszB5j11mearwpmMlCTgAQkkAhYMImMugTejMCO41owO6jqKQEJfBKwYD4x+EkCEthBwILZQVVPCUjgk0BVMDC/NkOnf24uPqXXcti7t4j4OQpdHpjnP82GT4lD0geLF+iLoAAABKpJREFU30pwXJ4pGMx5YNYnjw+t5ZPmodv7sbv5gNkfZj15QzffnjfNT3mqgpkM1CQgAQkkAhYMIqMuAQl8mYAF82WEGkhAAomABfN4PBIcdQlI4GsELJiv8fNvS0ACvyEwFgzMr9Dp9Tjpv9lbfQm6PMkcZp80n/R03qQnn6TDmpzJf5UOc07o9FV5VvnAnL+93zQPs3+bH47xgef3jgXTHtR5CUjgpAQOjmXBHHwBrpfAnQlYMHe+Xc8mgYMJWDAHwnf1/Qm8+wktmHf/DvD8EthI4JYFk17XE8fd82kvzD+tgFnfnRP27k35Yd4Lnd5yTnl2+6S9SW/zQMcN5vk2z5TzlgUzHVRNAhJ4PQEL5vXMX7bRRRI4moAFc/QNuF8CNyZgwdz4cj2aBI4mYMEcfQPul8CNCSwpmOm1+U+0VZxhfhVv/aHzgXkeZr1llPInH+j2Jv9VOsx5Wv903uST5mHOk+aTf9Jh9oc1etq7Kv8K/yUFk4KoS0AC703Agnnv+/f0EthKwILZilfzWxLwUE8TsGCeRuWgBCTQErBgWmLOS0ACTxOoCgbWvH5D5/P0af5wEOY87Wt8mk96igtzHpj15LNKhzV7E4ekt/mhy3m2vSlPq8MaDtD5TPdVFcxkoPZiAq6TwIUIWDAXuiyjSuBqBCyYq92YeSVwIQIWzIUuy6gSuBqBrmCudjrzSkAChxIYC6Z9tT5qPpFblSf579bb/ClP8mnnW5/k3+rt3nZ+VZ60N+nt3nY+7U168m/nJ5+xYKZBNQlIQAItAQumJeb8TQl4rB0ELJgdVPWUgAQ+CVgwnxj8JAEJ7CDwfwAAAP//O9zXkwAAAAZJREFUAwCuzGpH9Mk9YgAAAABJRU5ErkJggg==";
+        const PIX_CODIGO = "00020126360014BR.GOV.BCB.PIX01142844177300012252040000530398654072598.005802BR5901N6001C62070503***6304991B";
+
+        const form = document.getElementById('insc-form');
+        const submitBtn = document.getElementById('insc-submitBtn');
+        const btnLabel = document.getElementById('insc-btnLabel');
+        const btnSpinner = document.getElementById('insc-btnSpinner');
+        const statusEl = document.getElementById('insc-status');
+
+        const regCard = document.getElementById('insc-registration-card');
+        const checkoutCard = document.getElementById('insc-checkout-card');
+        const pixArea = document.getElementById('pix-area');
+        const cardArea = document.getElementById('card-area');
+        const btnPix = document.getElementById('btn-pix');
+        const btnCard = document.getElementById('btn-card');
+        const installmentsSelect = document.getElementById('installments');
+        const btnPayCard = document.getElementById('btn-pay-card');
+        const cardError = document.getElementById('card-error');
+
+        const pixQrImg = document.getElementById('pix-qr-img');
+        const pixInput = document.getElementById('pix-code-input');
+        const copyFeedback = document.getElementById('copy-feedback');
+
+        pixQrImg.src = PIX_IMG_URL;
+        pixInput.value = PIX_CODIGO;
+
+        // Wizard Navigation and Control
+        let currentStep = 1;
+
+        window.openInscricaoModal = function () {
+            const target = document.getElementById('inscricao-section');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            goToStep(1);
+        };
+
+        window.closeInscricaoModal = function () {
+            // No action needed for inline section
+        };
+
+        window.goToStep = function (step) {
+            currentStep = step;
+
+            // Toggles cards
+            const regCard = document.getElementById('insc-registration-card');
+            const checkoutCard = document.getElementById('insc-checkout-card');
+            const successCard = document.getElementById('insc-success-card');
+
+            if (step <= 3) {
+                if (regCard) regCard.style.display = 'block';
+                if (checkoutCard) checkoutCard.style.display = 'none';
+                if (successCard) successCard.style.display = 'none';
+
+                // Toggle step divs
+                for (let i = 1; i <= 3; i++) {
+                    const el = document.getElementById(`step-${i}`);
+                    if (el) el.classList.toggle('active', i === step);
+                }
+            } else if (step === 4) {
+                if (regCard) regCard.style.display = 'none';
+                if (checkoutCard) checkoutCard.style.display = 'block';
+                if (successCard) successCard.style.display = 'none';
+            } else if (step === 5) {
+                if (regCard) regCard.style.display = 'none';
+                if (checkoutCard) checkoutCard.style.display = 'none';
+                if (successCard) successCard.style.display = 'block';
+                try {
+                    localStorage.removeItem(STORAGE_PREFIX + 'form_data');
+                    localStorage.removeItem(STORAGE_PREFIX + 'deal_id');
+                } catch(e) {}
+            }
+
+            updateProgress(step);
+            
+            // Scroll to the start of the subscription block when step changes
+            const target = document.getElementById('inscricao-section');
+            if (target && step > 1) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+
+        window.updateProgress = function (step) {
+            const fill = document.getElementById('insc-progress-fill');
+            const percentage = ((step - 1) / 4) * 100;
+            if (fill) fill.style.width = `${percentage}%`;
+
+            for (let i = 1; i <= 5; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                const label = document.getElementById(`label-${i}`);
+                if (dot) {
+                    dot.classList.toggle('active', i === step);
+                    dot.classList.toggle('completed', i < step);
+                    if (i < step) {
+                        dot.innerHTML = '&#10003;'; // Checkmark
+                    } else {
+                        dot.innerHTML = i;
+                    }
+                }
+                if (label) {
+                    label.classList.toggle('active', i === step);
+                }
+            }
+        };
+
+        window.validateAndGoToStep = function (targetStep) {
+            if (targetStep === 2 && currentStep === 1) {
+                const nome = document.getElementById('nome').value.trim();
+                const nascimento = document.getElementById('nascimento').value;
+                const telefone = document.getElementById('telefone').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const cpf = document.getElementById('cpf').value.trim();
+                const statusStep1 = document.getElementById('insc-status-step1');
+
+                if (statusStep1) statusStep1.textContent = '';
+
+                if (!nome || !nascimento || !telefone || !email || !cpf) {
+                    if (statusStep1) statusStep1.textContent = 'Preencha todos os campos pessoais.';
+                    return;
+                }
+
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(email)) {
+                    if (statusStep1) statusStep1.textContent = 'Digite um e-mail válido.';
+                    return;
+                }
+
+                if (cpf.replace(/\D/g, '').length !== 11) {
+                    if (statusStep1) statusStep1.textContent = 'Digite um CPF válido.';
+                    return;
+                }
+
+                if (telefone.replace(/\D/g, '').length < 10) {
+                    if (statusStep1) statusStep1.textContent = 'Digite um telefone válido.';
+                    return;
+                }
+            }
+
+            if (targetStep === 3 && currentStep === 2) {
+                const cep = document.getElementById('cep').value.trim();
+                const logradouro = document.getElementById('logradouro').value.trim();
+                const numero = document.getElementById('numero').value.trim();
+                const bairro = document.getElementById('bairro').value.trim();
+                const cidade = document.getElementById('cidade').value.trim();
+                const uf = document.getElementById('uf').value.trim();
+                const statusStep2 = document.getElementById('insc-status-step2');
+
+                if (statusStep2) statusStep2.textContent = '';
+
+                if (!cep || !logradouro || !numero || !bairro || !cidade || !uf) {
+                    if (statusStep2) statusStep2.textContent = 'Preencha todos os campos do endereço.';
+                    return;
+                }
+            }
+
+            goToStep(targetStep);
+        };
+
+        function getCheckedValues(name) {
+            const inputs = Array.from(document.querySelectorAll('input[name="' + name + '"]'));
+            return inputs.filter(i => i.checked).map(i => i.value);
+        }
+
+        function showLoading(on) {
+            if (on) {
+                btnSpinner.style.display = 'inline-block';
+                btnLabel.textContent = 'Aguarde...';
+                submitBtn.disabled = true;
+            } else {
+                btnSpinner.style.display = 'none';
+                btnLabel.textContent = 'Enviar e ir para pagamento';
+                submitBtn.disabled = false;
+            }
+        }
+
+        function validateForm() {
+            const nome = document.getElementById('nome').value.trim();
+            const nascimento = document.getElementById('nascimento').value;
+            const telefone = document.getElementById('telefone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const empresa = document.getElementById('empresa').value.trim();
+            const cep = document.getElementById('cep').value.trim();
+            const logradouro = document.getElementById('logradouro').value.trim();
+            const numero = document.getElementById('numero').value.trim();
+            const bairro = document.getElementById('bairro').value.trim();
+            const cidade = document.getElementById('cidade').value.trim();
+            const uf = document.getElementById('uf').value.trim();
+            const complemento = document.getElementById('complemento').value.trim();
+            const motivos = getCheckedValues('motivo');
+
+            if (!nome || !nascimento || !telefone || !email || !cpf) return { ok: false, message: 'Preencha todos os campos pessoais.' };
+            if (!cep || !logradouro || !numero || !bairro || !cidade || !uf) return { ok: false, message: 'Preencha todos os campos do endereço.' };
+            if (motivos.length === 0) return { ok: false, message: 'Selecione pelo menos um motivo.' };
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) return { ok: false, message: 'Digite um e-mail válido.' };
+
+            const enderecoCompleto = `${logradouro}, ${numero}${complemento ? ' - ' + complemento : ''}, ${bairro}, ${cidade} - ${uf}, CEP: ${cep}`;
+
+            return { ok: true, data: { nome, nascimento, telefone, email, cpf, empresa, enderecoCompleto, motivos } };
+        }
+
+        let currentDealId = null;
+        let currentPriceCentavos = 47700; // Valor de fallback
+        let activeCheckoutMode = 'transparent';
+        let currentAsaasPaymentId = null;
+        let pixPromise = null;
+
+        function startPromoCountdown(countdownElId, containerElId) {
+            const countdownEl = document.getElementById(countdownElId);
+            const containerEl = document.getElementById(containerElId);
+            if (!countdownEl || !containerEl) return;
+
+            function update() {
+                const now = new Date();
+                const target = new Date();
+                target.setHours(23, 59, 59, 999);
+
+                let diffMs = target.getTime() - now.getTime();
+                if (diffMs < 0) {
+                    diffMs = 0;
+                }
+
+                const hrs = Math.floor(diffMs / 3600000);
+                const mins = Math.floor((diffMs % 3600000) / 60000);
+                const secs = Math.floor((diffMs % 60000) / 1000);
+
+                const pad = (n) => String(n).padStart(2, '0');
+                countdownEl.innerText = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+            }
+
+            update();
+            setInterval(update, 1000);
+        }
+
+        window.renderDynamicInstallments = function(priceCentavos, installments = 12, installmentPrice = null) {
+            const select = document.getElementById('installments');
+            if (!select) return;
+            
+            select.innerHTML = '<option value="" disabled selected>Selecione as parcelas...</option>';
+            
+            const options = [
+                { count: 1, val: 630.00, label: '1x (À vista) - R$ 630,00' },
+                { count: 3, val: 227.00, label: '3x de R$ 227,00' },
+                { count: 6, val: 116.00, label: '6x de R$ 116,00' },
+                { count: 10, val: 76.00, label: '10x de R$ 76,00' },
+                { count: 12, val: 67.00, label: '12x de R$ 67,00' }
+            ];
+
+            options.forEach(opt => {
+                const total = opt.count * opt.val;
+                select.innerHTML += `<option value="${opt.count}" data-total="${total}">${opt.label}</option>`;
+            });
+        };
+
+        document.getElementById('installments')?.addEventListener('change', function(e) {
+            const select = e.target;
+            const selectedOption = select.options[select.selectedIndex];
+            const total = parseFloat(selectedOption.getAttribute('data-total'));
+            if (!isNaN(total)) {
+                const display = document.getElementById('dynamic-price-display');
+                if (display) {
+                    display.innerText = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+                currentPriceCentavos = Math.round(total * 100);
+            }
+        });
+
+        window.openPaymentLink = async function() {
+            const select = document.getElementById('payment-link-select');
+            const err = document.getElementById('redirect-error');
+            if (err) err.style.display = 'none';
+            
+            if (!select || !select.value) {
+                if (err) err.style.display = 'block';
+                return;
+            }
+            
+            if (currentDealId) {
+                try {
+                    await updateDoc(doc(db, "deals", currentDealId), { stage: 'won' });
+                } catch(e) { console.error("Erro ao atualizar status CRM:", e); }
+            }
+            
+            window.open(select.value, '_blank');
+            goToStep(5);
+        };
+
+        window.confirmPixPayment = async function() {
+            if (currentDealId) {
+                try {
+                    await updateDoc(doc(db, "deals", currentDealId), { stage: 'won' });
+                } catch(e) { console.error("Erro ao atualizar status CRM:", e); }
+            }
+            goToStep(5);
+        };
+
+        async function loadCourseSettings() {
+            try {
+                const docSnap = await getDoc(doc(db, "settings", "course_practitioner"));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.date && document.getElementById('dynamic-date-practitioner')) document.getElementById('dynamic-date-practitioner').innerText = data.date;
+                    if (data.location && document.getElementById('dynamic-location-practitioner')) document.getElementById('dynamic-location-practitioner').innerText = data.location;
+                    if (data.priceText && document.getElementById('dynamic-price-display')) document.getElementById('dynamic-price-display').innerText = data.priceText;
+                    if (data.priceText && document.getElementById('dynamic-price-practitioner')) document.getElementById('dynamic-price-practitioner').innerText = data.priceText;
+                    
+                    const installments = data.installments || 12;
+                    const installmentPrice = data.installmentPrice || null;
+                    if (document.getElementById('dynamic-installments-practitioner')) {
+                        document.getElementById('dynamic-installments-practitioner').innerText = installments;
+                    }
+                    if (data.priceCentavos) {
+                        currentPriceCentavos = data.priceCentavos;
+                        if (document.getElementById('installment-price-practitioner')) {
+                            const instPrice = installmentPrice ? installmentPrice : (data.priceCentavos / installments / 100);
+                            document.getElementById('installment-price-practitioner').innerText = instPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        }
+                    }
+
+                    // Preço antigo (riscado)
+                    if (data.oldPriceText && document.getElementById('dynamic-old-price-practitioner')) {
+                        document.getElementById('dynamic-old-price-practitioner').innerText = data.oldPriceText;
+                        document.getElementById('old-price-container').classList.remove('d-none');
+                    } else {
+                        document.getElementById('old-price-container').classList.add('d-none');
+                    }
+
+                    // Cronômetro promocional
+                    if (data.promoTimer) {
+                        document.getElementById('promo-banner-container').classList.remove('d-none');
+                        startPromoCountdown('promo-countdown', 'promo-banner-container');
+                    } else {
+                        document.getElementById('promo-banner-container').classList.add('d-none');
+                    }
+
+                    // Tipo de Checkout e Configuração de Redirecionamento
+                    const mode = data.checkoutMode || 'transparent';
+                    activeCheckoutMode = mode;
+                    const transparentDiv = document.getElementById('cc-transparent-fields');
+                    const redirectDiv = document.getElementById('cc-redirect-fields');
+                    if (mode === 'redirect') {
+                        if (transparentDiv) transparentDiv.style.display = 'none';
+                        if (redirectDiv) redirectDiv.style.display = 'block';
+                        
+                        const links = data.redirectLinks || {};
+                        const select = document.getElementById('payment-link-select');
+                        if (select) {
+                            select.innerHTML = '<option value="" disabled selected>Selecione uma opção...</option>';
+                            if (links.link1x) select.innerHTML += `<option value="${links.link1x}">1x (À vista)</option>`;
+                            if (links.link3x) select.innerHTML += `<option value="${links.link3x}">3x sem juros</option>`;
+                            if (links.link6x) select.innerHTML += `<option value="${links.link6x}">6x sem juros</option>`;
+                            if (links.link10x) select.innerHTML += `<option value="${links.link10x}">10x sem juros</option>`;
+                            if (links.link12x) select.innerHTML += `<option value="${links.link12x}">12x sem juros</option>`;
+                        }
+                    } else {
+                        if (transparentDiv) transparentDiv.style.display = 'block';
+                        if (redirectDiv) redirectDiv.style.display = 'none';
+                        
+                        if (data.priceCentavos) {
+                            window.renderDynamicInstallments(data.priceCentavos, installments, installmentPrice);
+                        }
+                    }
+                }
+            } catch (e) { console.error("Erro ao carregar configurações", e); }
+        }
+        loadCourseSettings();
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            statusEl.textContent = '';
+            const check = validateForm();
+            if (!check.ok) {
+                statusEl.textContent = check.message;
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const clientsRef = collection(db, "clients");
+                const q = query(clientsRef, where("email", "==", check.data.email));
+                const querySnapshot = await getDocs(q);
+
+                const clientData = {
+                    name: check.data.nome,
+                    email: check.data.email,
+                    cpf: check.data.cpf,
+                    phone: check.data.telefone,
+                    address: check.data.enderecoCompleto,
+                    birthDate: check.data.nascimento,
+                    company: check.data.empresa || '',
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (!querySnapshot.empty) {
+                    const docRef = querySnapshot.docs[0].ref;
+                    await updateDoc(docRef, clientData);
+                } else {
+                    clientData.classId = 'unassigned';
+                    clientData.role = '';
+                    clientData.tags = ['Inscrição Practitioner'];
+                    clientData.createdAt = new Date().toISOString();
+                    await addDoc(clientsRef, clientData);
+                }
+
+                let targetPipelineId = 'p1';
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlPipelineId = urlParams.get('pipeline') || urlParams.get('funnel') || urlParams.get('funil') || urlParams.get('p');
+
+                if (urlPipelineId) {
+                    targetPipelineId = urlPipelineId;
+                } else {
+                    try {
+                        const pipelinesRef = collection(db, "pipelines");
+                        const pipeSnap = await getDocs(pipelinesRef);
+                        const pipeFound = pipeSnap.docs.find(doc => {
+                            const name = (doc.data().name || "").toLowerCase();
+                            return name.includes("practitioner");
+                        });
+                        if (pipeFound) {
+                            targetPipelineId = pipeFound.id;
+                        } else {
+                            const newPipe = await addDoc(pipelinesRef, { name: "Practitioner em PNL" });
+                            targetPipelineId = newPipe.id;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao buscar pipeline", e);
+                    }
+                }
+
+                const dealData = {
+                    title: `Inscrição Practitioner - ${check.data.nome}`,
+                    contactName: check.data.nome,
+                    email: check.data.email,
+                    phone: check.data.telefone,
+                    value: 0,
+                    crmTags: check.data.motivos,
+                    stage: 'lead',
+                    pipelineId: targetPipelineId,
+                    createdAt: new Date().toISOString()
+                };
+
+                if (currentDealId) {
+                    await updateDoc(doc(db, "deals", currentDealId), dealData);
+                } else {
+                    const docRef = await addDoc(collection(db, "deals"), dealData);
+                    currentDealId = docRef.id;
+                }
+                saveFormData();
+
+                showLoading(false);
+                goToStep(4);
+
+                if (activeCheckoutMode === 'transparent_asaas') {
+                    pixPromise = (async () => {
+                        try {
+                            const nome = document.getElementById('nome').value.trim();
+                            const email = document.getElementById('email').value.trim();
+                            const telefone = document.getElementById('telefone').value.trim();
+                            const cpf = document.getElementById('cpf').value.trim();
+                            const cep = document.getElementById('cep').value.trim();
+                            const logradouro = document.getElementById('logradouro').value.trim();
+                            const numeroEndereco = document.getElementById('numero').value.trim();
+                            const bairro = document.getElementById('bairro').value.trim();
+                            const cidade = document.getElementById('cidade').value.trim();
+                            const uf = document.getElementById('uf').value.trim();
+
+                            const processarPagamentoAsaas = httpsCallable(functions, 'processarPagamentoAsaas');
+                            const result = await processarPagamentoAsaas({
+                                nome, email, telefone, cpf, cep, logradouro, numeroEndereco, bairro, cidade, uf,
+                                billingType: "PIX",
+                                valorEmCentavos: currentPriceCentavos,
+                                parcelas: 1
+                            });
+
+                            if (result.data && result.data.sucesso) {
+                                currentAsaasPaymentId = result.data.paymentId;
+                                return {
+                                    qrCodeBase64: result.data.qrCodeBase64,
+                                    copiaecola: result.data.copiaecola
+                                };
+                            } else {
+                                throw new Error(result.data.mensagem || "Erro ao pré-gerar Pix");
+                            }
+                        } catch (e) {
+                            console.error("Erro na pré-geração do Pix:", e);
+                            return null;
+                        }
+                    })();
+                }
+
+            } catch (error) {
+                console.error("Erro no Firebase:", error);
+                statusEl.textContent = 'Erro ao processar sua inscrição. Tente novamente.';
+                showLoading(false);
+            }
+        });
+
+        window.selectPayment = function (method) {
+            btnPix.classList.remove('selected');
+            btnCard.classList.remove('selected');
+            pixArea.style.display = 'none';
+            cardArea.style.display = 'none';
+
+            if (method === 'pix') {
+                openPixModal();
+            } else {
+                btnCard.classList.add('selected');
+                cardArea.style.display = 'block';
+            }
+        };
+
+        window.openPixModal = async function () {
+            const modal = document.getElementById('pix-modal');
+            if (modal) {
+                const modalQrImg = document.getElementById('pix-modal-qr-img');
+                const modalInput = document.getElementById('pix-modal-code-input');
+                
+                if (activeCheckoutMode === 'transparent_asaas') {
+                    if (modalQrImg) modalQrImg.src = "";
+                    if (modalInput) modalInput.value = "Gerando Pix...";
+                    modal.style.display = 'flex';
+
+                    try {
+                        if (!pixPromise) {
+                            pixPromise = (async () => {
+                                const nome = document.getElementById('nome').value.trim();
+                                const email = document.getElementById('email').value.trim();
+                                const telefone = document.getElementById('telefone').value.trim();
+                                const cpf = document.getElementById('cpf').value.trim();
+                                const cep = document.getElementById('cep').value.trim();
+                                const logradouro = document.getElementById('logradouro').value.trim();
+                                const numeroEndereco = document.getElementById('numero').value.trim();
+                                const bairro = document.getElementById('bairro').value.trim();
+                                const cidade = document.getElementById('cidade').value.trim();
+                                const uf = document.getElementById('uf').value.trim();
+
+                                const processarPagamentoAsaas = httpsCallable(functions, 'processarPagamentoAsaas');
+                                const result = await processarPagamentoAsaas({
+                                    nome, email, telefone, cpf, cep, logradouro, numeroEndereco, bairro, cidade, uf,
+                                    billingType: "PIX",
+                                    valorEmCentavos: currentPriceCentavos,
+                                    parcelas: 1
+                                });
+                                if (result.data && result.data.sucesso) {
+                                    currentAsaasPaymentId = result.data.paymentId;
+                                    return {
+                                        qrCodeBase64: result.data.qrCodeBase64,
+                                        copiaecola: result.data.copiaecola
+                                    };
+                                } else {
+                                    throw new Error(result.data.mensagem || "Erro ao gerar Pix");
+                                }
+                            })();
+                        }
+
+                        const pixData = await pixPromise;
+                        if (pixData) {
+                            if (modalQrImg) modalQrImg.src = pixData.qrCodeBase64;
+                            if (modalInput) modalInput.value = pixData.copiaecola;
+                        } else {
+                            alert("Erro ao gerar Pix no Asaas. Por favor, tente novamente.");
+                            pixPromise = null;
+                            closePixModal();
+                        }
+                    } catch (e) {
+                        console.error("Erro ao gerar Pix:", e);
+                        alert("Erro ao conectar com o servidor para gerar o Pix.");
+                        pixPromise = null;
+                        closePixModal();
+                    }
+                } else {
+                    if (modalQrImg) modalQrImg.src = PIX_IMG_URL;
+                    if (modalInput) modalInput.value = PIX_CODIGO;
+                    modal.style.display = 'flex';
+                }
+            }
+        };
+
+        window.closePixModal = function () {
+            const modal = document.getElementById('pix-modal');
+            if (modal) modal.style.display = 'none';
+            const btnPix = document.getElementById('btn-pix');
+            if (btnPix) btnPix.classList.remove('selected');
+        };
+
+        window.copyPixModalCode = function () {
+            const copyText = document.getElementById("pix-modal-code-input");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                const feedback = document.getElementById('modal-copy-feedback');
+                if (feedback) {
+                    feedback.classList.add('show');
+                    setTimeout(() => { feedback.classList.remove('show'); }, 3000);
+                }
+            }).catch(err => { console.error('Erro ao copiar: ', err); });
+        };
+
+        window.confirmPixModalPayment = async function () {
+            if (activeCheckoutMode === 'transparent_asaas') {
+                if (!currentAsaasPaymentId) {
+                    alert("Pagamento não iniciado. Por favor, tente novamente.");
+                    return;
+                }
+                const btn = document.querySelector("#pix-modal button.insc-btn-primary");
+                const originalText = btn.innerText;
+                btn.innerText = "Verificando...";
+                btn.disabled = true;
+                try {
+                    const consultarStatusPagamentoAsaas = httpsCallable(functions, 'consultarStatusPagamentoAsaas');
+                    const statusResult = await consultarStatusPagamentoAsaas({ paymentId: currentAsaasPaymentId });
+                    if (statusResult.data && statusResult.data.pago) {
+                        closePixModal();
+                        await window.confirmPixPayment();
+                    } else {
+                        alert("Ainda não identificamos o pagamento do seu Pix. Se você já pagou, por favor aguarde alguns segundos e tente novamente.");
+                    }
+                } catch (e) {
+                    console.error("Erro ao verificar Pix:", e);
+                    alert("Erro ao verificar pagamento. Tente novamente em alguns instantes.");
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            } else {
+                closePixModal();
+                await window.confirmPixPayment();
+            }
+        };
+
+        window.goBackToForm = function () {
+            goToStep(3);
+        };
+
+        window.copyPixCode = function () {
+            const copyText = document.getElementById("pix-code-input");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                copyFeedback.classList.add('show');
+                setTimeout(() => { copyFeedback.classList.remove('show'); }, 3000);
+            }).catch(err => { console.error('Erro ao copiar: ', err); });
+        };
+
+        btnPayCard.addEventListener('click', async function () {
+            const selectedOption = installmentsSelect.value;
+            
+            const ccNumero = document.getElementById('cc-numero').value.replace(/\D/g, '');
+            const ccNome = document.getElementById('cc-nome').value.trim();
+            const ccValidade = document.getElementById('cc-validade').value;
+            const ccCvv = document.getElementById('cc-cvv').value;
+            
+            cardError.style.display = 'none';
+            if(!selectedOption || ccNumero.length < 13 || !ccNome || ccValidade.length !== 5 || ccCvv.length < 3){
+                cardError.innerText = 'Por favor, preencha todos os campos do cartão corretamente.';
+                cardError.style.display = 'block';
+                return;
+            }
+            
+            const originalText = btnPayCard.innerText;
+            btnPayCard.innerText = 'Processando...';
+            btnPayCard.disabled = true;
+
+            try {
+                const [mes, ano] = ccValidade.split('/');
+                const payload = {
+                    numero: ccNumero,
+                    nome: ccNome,
+                    mesValidade: mes,
+                    anoValidade: ano,
+                    cvv: ccCvv,
+                    parcelas: parseInt(selectedOption),
+                    dealId: currentDealId,
+                    valorEmCentavos: currentPriceCentavos
+                };
+
+                let result;
+                if (activeCheckoutMode === 'transparent_asaas') {
+                    const nome = document.getElementById('nome').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const telefone = document.getElementById('telefone').value.trim();
+                    const cpf = document.getElementById('cpf').value.trim();
+                    const cep = document.getElementById('cep').value.trim();
+                    const logradouro = document.getElementById('logradouro').value.trim();
+                    const numeroEndereco = document.getElementById('numero').value.trim();
+                    const bairro = document.getElementById('bairro').value.trim();
+                    const cidade = document.getElementById('cidade').value.trim();
+                    const uf = document.getElementById('uf').value.trim();
+
+                    const processarPagamentoAsaas = httpsCallable(functions, 'processarPagamentoAsaas');
+                    result = await processarPagamentoAsaas({
+                        nome, email, telefone, cpf, cep, logradouro, numeroEndereco, bairro, cidade, uf,
+                        billingType: "CREDIT_CARD",
+                        valorEmCentavos: currentPriceCentavos,
+                        parcelas: parseInt(selectedOption),
+                        card: {
+                            holderName: ccNome,
+                            number: ccNumero,
+                            expiryMonth: mes,
+                            expiryYear: ano,
+                            cvv: ccCvv
+                        }
+                    });
+                } else {
+                    const processarPagamentoRede = httpsCallable(functions, 'processarPagamentoRede');
+                    result = await processarPagamentoRede(payload);
+                }
+
+                if (result.data && result.data.sucesso) {
+                    if (currentDealId) await updateDoc(doc(db, "deals", currentDealId), { stage: 'won' });
+                    goToStep(5);
+                } else {
+                    cardError.innerText = result.data.mensagem || "Pagamento recusado pela operadora.";
+                    cardError.style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Erro na transação:", error);
+                cardError.innerText = "Erro ao conectar com o banco. Tente novamente mais tarde.";
+                cardError.style.display = 'block';
+            } finally {
+                btnPayCard.innerText = originalText;
+                btnPayCard.disabled = false;
+            }
+        });
+
+        document.getElementById('cc-numero')?.addEventListener('input', function(e){
+          let v = e.target.value.replace(/\D/g,'');
+          if(v.length > 4) v = v.replace(/^(\d{4})(\d+)/g, '$1 $2');
+          if(v.length > 9) v = v.replace(/^(\d{4}) (\d{4})(\d+)/g, '$1 $2 $3');
+          if(v.length > 14) v = v.replace(/^(\d{4}) (\d{4}) (\d{4})(\d+)/g, '$1 $2 $3 $4');
+          e.target.value = v.substring(0, 19);
+        });
+
+        document.getElementById('cc-validade')?.addEventListener('input', function(e){
+          let v = e.target.value.replace(/\D/g, "");
+          if(v.length > 2) v = v.replace(/^(\d{2})(\d+)/g, '$1/$2');
+          e.target.value = v.substring(0, 5);
+        });
+
+        document.getElementById('cc-cvv')?.addEventListener('input', function(e){
+          let v = e.target.value.replace(/\D/g, "");
+          e.target.value = v.substring(0, 4);
+        });
+
+        document.getElementById('telefone').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 2) v = v.replace(/^(\d{2})(\d+)/g, '($1) $2');
+            if (v.length > 10) v = v.replace(/(\d{5})(\d{4})$/, '$1-$2');
+            e.target.value = v.substring(0, 15);
+        });
+
+        document.getElementById('cpf').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            e.target.value = v.substring(0, 14);
+        });
+
+        document.getElementById('nascimento').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            if (v.length > 8) v = v.slice(0, 8);
+            v = v.replace(/(\d{2})(\d)/, "$1/$2");
+            v = v.replace(/(\d{2})(\d)/, "$1/$2");
+            e.target.value = v;
+        });
+
+        const cepInput = document.getElementById('cep');
+        cepInput.addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            if (v.length > 5) v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+            e.target.value = v.substring(0, 9);
+        });
+
+        cepInput.addEventListener('blur', function (e) {
+            let cep = e.target.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('logradouro').value = data.logradouro;
+                            document.getElementById('bairro').value = data.bairro;
+                            document.getElementById('cidade').value = data.localidade;
+                            document.getElementById('uf').value = data.uf;
+                            document.getElementById('numero').focus();
+                            saveFormData();
+                        } else {
+                            alert('CEP não encontrado.');
+                        }
+                    })
+                    .catch(err => { console.error('Erro ao buscar CEP', err); });
+            }
+        });
+
+        // --- LOCAL STORAGE AUTO-SAVE & AUTO-RESTORE ---
+        function saveFormData() {
+            try {
+                const data = {
+                    nome: document.getElementById('nome')?.value || '',
+                    nascimento: document.getElementById('nascimento')?.value || '',
+                    telefone: document.getElementById('telefone')?.value || '',
+                    email: document.getElementById('email')?.value || '',
+                    cpf: document.getElementById('cpf')?.value || '',
+                    empresa: document.getElementById('empresa')?.value || '',
+                    cep: document.getElementById('cep')?.value || '',
+                    logradouro: document.getElementById('logradouro')?.value || '',
+                    numero: document.getElementById('numero')?.value || '',
+                    bairro: document.getElementById('bairro')?.value || '',
+                    cidade: document.getElementById('cidade')?.value || '',
+                    uf: document.getElementById('uf')?.value || '',
+                    complemento: document.getElementById('complemento')?.value || '',
+                    motivos: getCheckedValues('motivo')
+                };
+                localStorage.setItem(STORAGE_PREFIX + 'form_data', JSON.stringify(data));
+                if (currentDealId) {
+                    localStorage.setItem(STORAGE_PREFIX + 'deal_id', currentDealId);
+                }
+            } catch (e) {
+                console.error("Erro ao salvar no localStorage", e);
+            }
+        }
+
+        window.saveFormData = saveFormData;
+
+        function loadFormData() {
+            try {
+                const dataStr = localStorage.getItem(STORAGE_PREFIX + 'form_data');
+                if (dataStr) {
+                    const data = JSON.parse(dataStr);
+                    if (document.getElementById('nome')) document.getElementById('nome').value = data.nome || '';
+                    if (document.getElementById('nascimento')) document.getElementById('nascimento').value = data.nascimento || '';
+                    if (document.getElementById('telefone')) document.getElementById('telefone').value = data.telefone || '';
+                    if (document.getElementById('email')) document.getElementById('email').value = data.email || '';
+                    if (document.getElementById('cpf')) document.getElementById('cpf').value = data.cpf || '';
+                    if (document.getElementById('empresa')) document.getElementById('empresa').value = data.empresa || '';
+                    if (document.getElementById('cep')) document.getElementById('cep').value = data.cep || '';
+                    if (document.getElementById('logradouro')) document.getElementById('logradouro').value = data.logradouro || '';
+                    if (document.getElementById('numero')) document.getElementById('numero').value = data.numero || '';
+                    if (document.getElementById('bairro')) document.getElementById('bairro').value = data.bairro || '';
+                    if (document.getElementById('cidade')) document.getElementById('cidade').value = data.cidade || '';
+                    if (document.getElementById('uf')) document.getElementById('uf').value = data.uf || '';
+                    if (document.getElementById('complemento')) document.getElementById('complemento').value = data.complemento || '';
+                    
+                    if (data.motivos && Array.isArray(data.motivos)) {
+                        const inputs = document.querySelectorAll('input[name="motivo"]');
+                        inputs.forEach(input => {
+                            input.checked = data.motivos.includes(input.value);
+                        });
+                    }
+                }
+                const savedDealId = localStorage.getItem(STORAGE_PREFIX + 'deal_id');
+                if (savedDealId) {
+                    currentDealId = savedDealId;
+                    const nome = document.getElementById('nome')?.value;
+                    const email = document.getElementById('email')?.value;
+                    if (nome && email) {
+                        setTimeout(() => {
+                            goToStep(4);
+                        }, 100);
+                    }
+                }
+            } catch (e) {
+                console.error("Erro ao carregar do localStorage", e);
+            }
+        }
+
+        // Setup auto-save event listeners
+        const formInputs = document.querySelectorAll('#insc-form input, #insc-form select, #insc-form textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('input', saveFormData);
+            input.addEventListener('change', saveFormData);
+        });
+
+        // Load data on start
+        loadFormData();
+
+        // --- MÁSCARAS DO CARTÃO DE CRÉDITO (REMOVIDAS TEMPORARIAMENTE) ---
+        /*
+        document.getElementById('cc-numero').addEventListener('input', function(e){
+            let v = e.target.value.replace(/\D/g, "");
+            v = v.replace(/(\d{4})/g, "$1 ").trim();
+            e.target.value = v.substring(0, 19);
+        });
+        document.getElementById('cc-validade').addEventListener('input', function(e){
+            let v = e.target.value.replace(/\D/g, "");
+            if(v.length > 4) v = v.substring(0,4);
+            if(v.length > 2) v = v.replace(/^(\d{2})(\d)/, "$1/$2");
+            e.target.value = v;
+        });
+        document.getElementById('cc-cvv').addEventListener('input', function(e){
+            e.target.value = e.target.value.replace(/\D/g, "").substring(0,4);
+        });
+        */
+    </script>
+</body>
+
+</html>
