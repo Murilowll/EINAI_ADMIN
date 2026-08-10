@@ -691,6 +691,12 @@ section, footer, nav, .container {
    pelo JS da home. */
 @media (hover: none), (max-width: 991.98px) {
 
+  /* o quadro passa a ter a proporção exata do arquivo (760x1361),
+     em vez de 768x1365: assim o cover não corta nada da foto */
+  .training-card {
+    aspect-ratio: 760 / 1361;
+  }
+
   .training-card-body {
     opacity: 0 !important;
   }
