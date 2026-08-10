@@ -691,10 +691,44 @@ section, footer, nav, .container {
    pelo JS da home. */
 @media (hover: none), (max-width: 991.98px) {
 
-  /* o quadro passa a ter a proporção exata do arquivo (760x1361),
-     em vez de 768x1365: assim o cover não corta nada da foto */
+  /* O Safari do iPhone não resolve bem a altura vinda de aspect-ratio
+     quando os filhos são posicionados por inset, e sobra uma faixa vazia
+     embaixo. Aqui a altura vem de um pseudo-elemento com padding
+     percentual (1361 / 760 = 179,08%), que todo navegador entende. */
+  /* .einai-card recebe padding: 24px !important no mobile (regra pensada
+     para os cards de Diferenciais). No card de treinamento esse padding
+     encolhia a área da foto e deixava a faixa vazia embaixo. */
+  .einai-card.training-card {
+    padding: 0 !important;
+  }
+
   .training-card {
-    aspect-ratio: 760 / 1361;
+    aspect-ratio: auto;
+    height: auto;
+  }
+
+  .training-card::before {
+    content: "";
+    display: block;
+    flex: 0 0 auto;
+    width: 0;
+    padding-top: 179.08%;
+  }
+
+  /* inset é recente no Safari; as propriedades longas valem em todas as versões */
+  .training-card-media,
+  .training-card-body,
+  .training-card-photo {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  /* se algum arquivo futuro tiver proporção diferente, o corte sai do
+     céu e a base da foto sempre encosta na borda do card */
+  .training-card-photo {
+    object-position: center bottom;
   }
 
   .training-card-body {
