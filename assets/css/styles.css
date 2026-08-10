@@ -689,10 +689,16 @@ section, footer, nav, .container {
 /* No toque não existe hover: o card nasce limpo, o primeiro toque revela
    as informações e o segundo abre a página. A classe .is-open é posta
    pelo JS da home. */
-@media (hover: none) {
+@media (hover: none), (max-width: 991.98px) {
 
   .training-card-body {
-    opacity: 0;
+    opacity: 0 !important;
+  }
+
+  .training-card:hover .training-card-logo,
+  .training-card:hover .training-card-photo {
+    transform: none;
+    opacity: 1;
   }
 
   .training-card-body > * {
@@ -700,7 +706,7 @@ section, footer, nav, .container {
   }
 
   .training-card.is-open .training-card-body {
-    opacity: 1;
+    opacity: 1 !important;
   }
 
   .training-card.is-open .training-card-body > * {
@@ -708,7 +714,7 @@ section, footer, nav, .container {
   }
 
   .training-card.is-open .training-card-logo {
-    opacity: 0.28;
+    opacity: 0.28 !important;
     transform: scale(0.92) translateY(-6%);
   }
 
@@ -818,7 +824,7 @@ section, footer, nav, .container {
   }
 
   .hero-sub-animate.lead {
-    font-size: 1.06rem;
+    font-size: 0.95rem;
     font-weight: 400;
     line-height: 1.6;
   }

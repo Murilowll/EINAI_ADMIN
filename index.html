@@ -27,7 +27,7 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="assets/css/Features-Image-icons.css">
     <link rel="stylesheet" href="assets/css/forms-einai.css">
-    <link rel="stylesheet" href="assets/css/styles.css?v=2">
+    <link rel="stylesheet" href="assets/css/styles.css?v=3">
 </head>
 
 <body>
@@ -630,7 +630,7 @@
             // Treinamentos no toque: 1º toque abre as informações, 2º entra na página.
             // O ouvinte fica na grade em fase de captura para rodar antes do
             // onclick dos cards que abrem modal.
-            const semHover = window.matchMedia("(hover: none)").matches;
+            const semHover = window.matchMedia("(hover: none), (max-width: 991.98px)").matches;
             const grade = document.querySelector(".training-grid");
 
             if (semHover && grade) {
