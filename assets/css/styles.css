@@ -715,7 +715,8 @@ section, footer, nav, .container {
     padding-top: 179.08%;
   }
 
-  /* inset é recente no Safari; as propriedades longas valem em todas as versões */
+  /* inset é recente no Safari; as propriedades longas valem em todas as versões.
+     A altura fixada em 100% evita que a área da foto fique menor que o card. */
   .training-card-media,
   .training-card-body,
   .training-card-photo {
@@ -723,6 +724,8 @@ section, footer, nav, .container {
     right: 0;
     bottom: 0;
     left: 0;
+    height: 100% !important;
+    width: 100% !important;
   }
 
   /* se algum arquivo futuro tiver proporção diferente, o corte sai do
