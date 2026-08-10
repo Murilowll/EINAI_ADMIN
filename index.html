@@ -142,7 +142,7 @@
     </section>
 
     <!-- ========== TREINAMENTOS ========== -->
-    <div class="container py-4 py-xl-5" id="treinamentos">
+    <div class="container py-5" id="treinamentos">
         <div class="text-center mb-5 reveal-on-scroll">
             <h2 class="text-white fw-bold mx-auto" style="font-family: Aboreto, serif; max-width: 720px;">
                 Sente que chegou a hora de dar um basta?</h2>
@@ -627,6 +627,34 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
+            // Treinamentos no toque: 1º toque abre as informações, 2º entra na página.
+            // O ouvinte fica na grade em fase de captura para rodar antes do
+            // onclick dos cards que abrem modal.
+            const semHover = window.matchMedia("(hover: none)").matches;
+            const grade = document.querySelector(".training-grid");
+
+            if (semHover && grade) {
+                grade.addEventListener("click", function (e) {
+                    const card = e.target.closest(".training-card");
+                    if (!card) return;
+
+                    if (!card.classList.contains("is-open")) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        grade.querySelectorAll(".training-card.is-open")
+                            .forEach(function (outro) { outro.classList.remove("is-open"); });
+                        card.classList.add("is-open");
+                    }
+                }, true);
+
+                // tocar fora fecha o card aberto
+                document.addEventListener("click", function (e) {
+                    if (e.target.closest(".training-card")) return;
+                    grade.querySelectorAll(".training-card.is-open")
+                        .forEach(function (card) { card.classList.remove("is-open"); });
+                });
+            }
+
             // Depoimentos: carrega o player do Vimeo só no clique
             document.querySelectorAll(".depo-video-play").forEach(function (botao) {
                 botao.addEventListener("click", function () {

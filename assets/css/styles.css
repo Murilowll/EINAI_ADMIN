@@ -686,19 +686,34 @@ section, footer, nav, .container {
   outline-offset: 4px;
 }
 
-/* sem hover (toque): mostra o conteúdo direto, senão fica inacessível */
+/* No toque não existe hover: o card nasce limpo, o primeiro toque revela
+   as informações e o segundo abre a página. A classe .is-open é posta
+   pelo JS da home. */
 @media (hover: none) {
 
   .training-card-body {
-    opacity: 1;
+    opacity: 0;
   }
 
   .training-card-body > * {
-    transform: none;
+    transform: translateY(12px);
   }
 
-  .training-card-logo {
+  .training-card.is-open .training-card-body {
+    opacity: 1;
+  }
+
+  .training-card.is-open .training-card-body > * {
+    transform: translateY(0);
+  }
+
+  .training-card.is-open .training-card-logo {
     opacity: 0.28;
+    transform: scale(0.92) translateY(-6%);
+  }
+
+  .training-card.is-open .training-card-photo {
+    transform: scale(1.05);
   }
 
   .training-card-text {
@@ -789,6 +804,54 @@ section, footer, nav, .container {
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 0;
+}
+
+/* ========== AJUSTES DE MOBILE ==========
+   No desktop o corpo de texto tinha quatro tamanhos (20 / 16 / 15,2 / 14px),
+   herdados das classes .lead, .fs-5 e .small do Bootstrap. Em tela pequena
+   essa variação fica evidente, então aqui os textos convergem para dois
+   tamanhos: 17px nos parágrafos de destaque e 15px no corpo comum. */
+@media (max-width: 767.98px) {
+
+  .hero-section-full {
+    padding: 110px 0 70px 0;
+  }
+
+  .hero-sub-animate.lead {
+    font-size: 1.06rem;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  /* .fs-5 do Bootstrap é !important; sem repetir aqui, não sobrescreve */
+  #sobre p.fs-5,
+  .cta-banner p.fs-5 {
+    font-size: 1.06rem !important;
+    line-height: 1.6;
+  }
+
+  #treinamentos > .text-center p.text-muted,
+  #diferenciais .text-muted.small,
+  .training-card-text {
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+
+  .diferencial-card-title {
+    font-size: 1rem;
+  }
+
+  .training-card-title {
+    font-size: 1.12rem;
+  }
+
+  .accordion-einai .accordion-button {
+    font-size: 1rem;
+  }
+
+  .footer-title {
+    font-size: 1.05rem;
+  }
 }
 
 /* ========== PÁGINAS LEGAIS (termos e privacidade) ========== */
