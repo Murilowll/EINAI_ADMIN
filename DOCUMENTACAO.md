@@ -304,7 +304,53 @@ nas bordas suavizadas (`rgb = (rgb - 255*(1-k)) / k`), senão o antisserrilhado 
 
 ---
 
-## 8. Pendências
+## 8. Cache do CSS — passo obrigatório antes de publicar
+
+> ⚠️ **Toda vez que `assets/css/styles.css` mudar, rodar antes do commit:**
+>
+> ```
+> python versionar-css.py
+> ```
+
+O `<link>` do CSS carrega uma versão no fim do endereço:
+
+```html
+<link rel="stylesheet" href="assets/css/styles.css?v=6f7ce295">
+```
+
+Essa versão é o **hash do conteúdo do arquivo**, não um número escolhido à mão.
+O script recalcula o hash e atualiza o `<link>` de todas as páginas, inclusive
+`links/index.html`.
+
+### Por que isso importa
+
+O navegador guarda o CSS pelo endereço. Se o endereço não muda, ele **não busca
+de novo** — serve a cópia velha, mesmo depois de publicar. No iPhone o problema é
+pior: Safari e Chrome compartilham o mesmo cache do sistema, então trocar de
+navegador não adianta, e "recarregar forçado" nem sempre resolve.
+
+Isso já custou uma sessão inteira de depuração: o correto estava publicado, o
+aparelho continuava mostrando o layout antigo, e a investigação foi parar no CSS
+achando que era bug de Safari.
+
+### O erro que não pode se repetir
+
+Marcar `?v=3` e depois editar o CSS mais vezes **sem trocar o número**. A partir
+daí todo aparelho que já tinha baixado o `v=3` fica preso na versão errada, de
+forma permanente. Por isso o hash: o endereço muda sozinho junto com o conteúdo.
+
+### Fluxo de publicação
+
+```
+1. editar assets/css/styles.css
+2. python versionar-css.py
+3. git add -A && git commit
+4. deploy
+```
+
+---
+
+## 9. Pendências
 
 - [ ] Links reais do Instagram e Facebook no rodapé
 - [ ] Documento `settings/course_practitioner` no Firestore (preço e data)
@@ -318,7 +364,7 @@ nas bordas suavizadas (`rgb = (rgb - 255*(1-k)) / k`), senão o antisserrilhado 
 
 ---
 
-## 9. Decisões que não são óbvias
+## 10. Decisões que não são óbvias
 
 Registradas para não serem "corrigidas" por engano depois:
 
@@ -336,3 +382,13 @@ Registradas para não serem "corrigidas" por engano depois:
 6. **Termos e Política existem como páginas reais**, não como link para WhatsApp.
    Inclui o direito de arrependimento de 7 dias (art. 49 do CDC), que se aplica por a
    compra ser online, mesmo o treinamento sendo presencial.
+
+7. **O card de treinamento zera o padding no mobile** com o seletor
+   `.einai-card.training-card`. A regra `.einai-card { padding: 24px !important }`
+   do bloco mobile foi escrita para os cards de Diferenciais, mas o card de
+   treinamento também usa `.einai-card` — e o padding encolhia a foto, deixando
+   uma faixa vazia embaixo. As duas classes no seletor são necessárias: a outra
+   regra vem depois no arquivo e, com `!important` dos dois lados, ganharia por
+   ordem.
+8. **A versão do CSS é o hash do arquivo**, gerada por `versionar-css.py`.
+   Ver a seção 8.
