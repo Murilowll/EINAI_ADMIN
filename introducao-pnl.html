@@ -52,11 +52,12 @@
             .hero-img-mobile {
                 display: block;
                 position: relative;
-                height: 46vh;
-                margin-bottom: 28px;
+                aspect-ratio: 4 / 5;
+                width: 100%;
+                margin-bottom: 16px;
                 background-image: url("assets/img/HERO1.png");
                 background-size: cover;
-                background-position: 72% center;
+                background-position: 96% center;
                 background-repeat: no-repeat;
             }
 
@@ -86,6 +87,18 @@
 
             .btn-amarelo-printcipal {
                 white-space: normal;
+            }
+
+            .img-hero {
+                justify-content: center;
+            }
+
+            /* o deslize horizontal do AOS (fade-left/fade-right) desloca o
+               elemento 100px antes de assentar; em tela estreita isso
+               empurra o conteudo pra fora da viewport por um instante,
+               as vezes ficando visivelmente cortado na borda */
+            [data-aos] {
+                transform: none !important;
             }
         }
 
