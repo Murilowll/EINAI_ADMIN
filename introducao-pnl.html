@@ -148,8 +148,8 @@
             --maxw: 700px;
             --shadow: 0 10px 30px rgba(10, 10, 12, 0.08);
 
-            display: block;
-            /* Inicia visível no final da página */
+            display: none;
+            /* só aparece via openInscricaoModal() */
             position: relative;
             z-index: 1;
             width: 100%;
@@ -735,8 +735,8 @@
                         class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-end justify-content-md-start align-items-md-center justify-content-xl-center">
                         <div class="flex-column" style="display: flex;max-width: 90%;gap: 16px;">
                             <div class="d-flex align-items-end img-hero" data-aos="fade-down"><img
-                                    src="assets/img/EINAI.png" width="117" height="106"><img
-                                    src="assets/img/INTRODUÇÃO.png" width="140" height="83"></div>
+                                    src="assets/img/introducao-logo.png" width="140" height="83"
+                                    alt="Introdução à PNL"></div>
                             <div class="div-text-hero" data-aos="fade-up" data-aos-delay="200">
                                 <h2 class="fw-bold color-white">A direção da sua vida muda quando você muda o mapa que
                                     está usando.</h2>
@@ -752,15 +752,13 @@
         </div>
     </section>
     <div class="container py-4 py-xl-5">
-        <div class="row row-cols-1">
-            <div class="col d-flex flex-column justify-content-start align-items-center">
-                <div style="max-width: 100%;text-align: center;" data-aos="fade-up">
-                    <h4 class="fw-bold">Já se perguntou por que algumas pessoas conseguem influenciar, se conectar e
-                        conquistar seus objetivos com mais facilidade...</h4>
-                    <p class="my-3">Enquanto outras travam, repetem padrões e sentem que estão sempre lutando contra si
-                        mesmas?Talvez você esteja tentando mudar os resultados da sua vida sem mudar a forma como a
-                        sua mente processa o mundo.</p>
-                </div>
+        <div class="row mb-0">
+            <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
+                <h2 class="fw-bold">Já se perguntou por que algumas pessoas conseguem influenciar, se conectar e
+                    conquistar seus objetivos com mais facilidade...</h2>
+                <p class="my-3">Enquanto outras travam, repetem padrões e sentem que estão sempre lutando contra si
+                    mesmas? Talvez você esteja tentando mudar os resultados da sua vida sem mudar a forma como a sua
+                    mente processa o mundo.</p>
             </div>
         </div>
     </div>
@@ -885,7 +883,7 @@
     <div class="container py-4 py-xl-5">
         <div class="row mb-5">
             <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
-                <h2 style="font-weight: 800;">Comunicação que começa em você</h2>
+                <h2 class="fw-bold">Comunicação que começa em você</h2>
                 <p>Neste curso, você também vai aprender a se expressar melhor com o mundo ao seu redor e,
                     principalmente, com você mesmo.</p>
             </div>
@@ -932,7 +930,7 @@
         <div class="row row-cols-1 row-cols-md-2 gy-4 align-items-center">
             <div class="col p-4 p-md-5 d-flex justify-content-center" data-aos="fade-right"><img
                     class="img-fluid rounded object-fit-cover w-100 h-100" style="min-height: 300px; max-width: 500px;"
-                    src="assets/img/einai-logo2.png"></div>
+                    src="assets/img/pic-anderson.png" alt="Anderson Ávila"></div>
             <div class="col d-flex flex-column justify-content-start p-4" data-aos="fade-left">
                 <div style="max-width: 400px;height: 100%;">
                     <h1 class="fw-bold">Quem vai te conduzir?</h1>
@@ -952,26 +950,11 @@
         <div class="container">
             <div class="row mb-5 mt-4 mt-md-5 pt-md-4 mx-0 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-6 text-center p-4 p-md-5 glass-card" data-aos="fade-up">
-                    <!-- Badge exclusiva -->
-                    <div class="mb-3">
-                        <span class="badge-exclusive">Oferta Especial Ativa</span>
-                    </div>
-
                     <h2 class="fw-bolder color-white mb-2">Garanta sua vaga na próxima turma!</h2>
                     <p class="mb-4 color-white"
                         style="color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 400;">
                         Três noites, um novo jeito de pensar, agir e se comunicar com o mundo.
                     </p>
-
-                    <!-- Cronômetro de escassez -->
-                    <div id="promo-banner-container" class="mb-4 d-none">
-                        <div class="promo-banner">
-                            <span class="pulse-dot">🔴</span>
-                            <span style="font-size: 14px;">A oferta especial termina em:</span>
-                            <strong id="promo-countdown"
-                                style="color: #DEAA4D; font-family: monospace; font-size: 1.15rem; letter-spacing: 0.5px;">00:00:00</strong>
-                        </div>
-                    </div>
 
                     <!-- Detalhes do curso: Data & Local com design premium -->
                     <div class="d-flex flex-wrap justify-content-center gap-3 mb-4 text-white">
@@ -1015,12 +998,11 @@
                             De R$ <span id="dynamic-old-price-pnl">---,---</span>
                         </div>
                         <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
-                            Por apenas <span style="color: #DEAA4D;">R$ <span
-                                    id="dynamic-price-pnl">Carregando...</span></span>
+                            Por <span style="color: #DEAA4D;"><span id="dynamic-installments-pnl">12</span>x de R$ <span
+                                    id="installment-price-pnl">---,---</span></span>
                         </div>
                         <div style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">
-                            ou em até <strong style="color: #ffffff;"><span id="dynamic-installments-pnl">12</span>x de R$ <span
-                                    id="installment-price-pnl">---,---</span></strong> no cartão de crédito
+                            Ou R$ <span id="dynamic-price-pnl">Carregando...</span> à vista
                         </div>
                     </div>
 
@@ -1029,6 +1011,16 @@
                         style="max-width: 480px; font-weight: 700; font-size: 1.1rem; padding: 16px; border: none; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
                         QUERO APRENDER ESSAS TÉCNICAS
                     </a>
+
+                    <!-- Cronômetro de escassez: agora abaixo do botão -->
+                    <div id="promo-banner-container" class="mt-3 mb-1 d-none">
+                        <div class="promo-banner">
+                            <span class="pulse-dot">🔴</span>
+                            <span style="font-size: 14px;">A oferta especial termina em:</span>
+                            <strong id="promo-countdown"
+                                style="color: #DEAA4D; font-family: monospace; font-size: 1.15rem; letter-spacing: 0.5px;">00:00:00</strong>
+                        </div>
+                    </div>
 
                     <!-- Selos de Confiança -->
                     <div class="d-flex justify-content-center align-items-center gap-4 mt-3"
@@ -1497,6 +1489,7 @@
         window.openInscricaoModal = function () {
             const target = document.getElementById('inscricao-section');
             if (target) {
+                target.style.display = 'block';
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
             goToStep(1);
