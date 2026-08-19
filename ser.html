@@ -29,15 +29,50 @@
             background-repeat: no-repeat;
         }
 
+        /* imagem separada do texto no mobile: fica escondida no desktop */
+        .hero-img-mobile {
+            display: none;
+        }
+
         /* ========== Otimizações Mobile ========== */
         @media (max-width: 768px) {
+            /* a foto some do fundo do bloco de texto; vira um cartão
+               próprio no topo, e o texto passa a ficar sobre a cor
+               sólida extraída da base da foto (mesmo tom, sem corte) */
             .hero-background-ser {
                 height: auto !important;
-                min-height: 85vh;
-                padding-top: 100px;
-                padding-bottom: 60px;
-                background-position: 65% center !important;
+                min-height: 0;
+                padding: 0 0 48px;
+                background-image: none !important;
+                background-color: #1F150E;
             }
+
+            .hero-img-mobile {
+                display: block;
+                position: relative;
+                height: 46vh;
+                margin-bottom: 28px;
+                background-image: url("assets/img/hero-ser.png");
+                background-size: cover;
+                background-position: 72% center;
+                background-repeat: no-repeat;
+            }
+
+            /* o degradê faz a base da foto se dissolver na cor sólida:
+               parece que a imagem continua, em vez de cortar seco */
+            .hero-img-mobile::after {
+                content: "";
+                position: absolute;
+                inset: auto 0 0 0;
+                height: 55%;
+                background: linear-gradient(to bottom, rgba(31, 21, 14, 0) 0%, #1F150E 100%);
+            }
+
+            .hero-background-ser .container {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
             /* Ajuste de fontes e botões no mobile */
             h1.fw-bold { font-size: 2rem !important; }
             h2.fw-bold { font-size: 1.6rem !important; }
@@ -652,6 +687,7 @@
 <body style="background-color: #F1F1F1 !important;font-family: 'Poppins', sans-serif;">
     <section>
         <div class="hero-background-ser">
+            <div class="hero-img-mobile" aria-hidden="true"></div>
             <div class="container h-100">
                 <div class="row h-100">
                     <div class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-end justify-content-md-start align-items-md-center justify-content-xl-center">
@@ -693,7 +729,7 @@
       <div class="container">
         <div class="row mb-5">
             <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
-                <h2 class="fw-bolder color-white">Qual foi o último final de semana que você dedicou a você mesmo?</h2>
+                <h2 class="fw-bold color-white">Qual foi o último final de semana que você dedicou a você mesmo?</h2>
             </div>
         </div>
         <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
@@ -799,7 +835,7 @@
       <div class="container">
         <div class="row mb-5 mt-4 mt-md-5 pt-md-4 mx-0 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-6 text-center p-4 p-md-5 glass-card" data-aos="fade-up">
-                <h2 class="fw-bolder color-white mb-2">Garanta sua vaga na próxima turma!</h2>
+                <h2 class="fw-bold color-white mb-2">Garanta sua vaga na próxima turma!</h2>
                 <p class="mb-4 color-white" style="color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 400;">
                     Três noites, um novo jeito de pensar, agir e se comunicar com o mundo.
                 </p>

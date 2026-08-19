@@ -31,16 +31,48 @@
             background-repeat: no-repeat !important;
         }
 
+        /* imagem separada do texto no mobile: fica escondida no desktop */
+        .hero-img-mobile {
+            display: none;
+        }
+
         /* ========== Otimizações Mobile ========== */
         @media (max-width: 768px) {
+            /* a foto some do fundo do bloco de texto; vira um cartão
+               próprio no topo, e o texto passa a ficar sobre a cor
+               sólida extraída da base da foto (mesmo tom, sem corte) */
             .hero-background {
                 height: auto !important;
-                min-height: 85vh;
-                padding-top: 100px;
-                padding-bottom: 60px;
-                background-position: 65% center !important;
-                background-size: cover !important;
-                background-repeat: no-repeat !important;
+                min-height: 0;
+                padding: 0 0 48px;
+                background-image: none !important;
+                background-color: #01180F;
+            }
+
+            .hero-img-mobile {
+                display: block;
+                position: relative;
+                height: 46vh;
+                margin-bottom: 28px;
+                background-image: url("assets/img/HERO1.png");
+                background-size: cover;
+                background-position: 72% center;
+                background-repeat: no-repeat;
+            }
+
+            /* o degradê faz a base da foto se dissolver na cor sólida:
+               parece que a imagem continua, em vez de cortar seco */
+            .hero-img-mobile::after {
+                content: "";
+                position: absolute;
+                inset: auto 0 0 0;
+                height: 55%;
+                background: linear-gradient(to bottom, rgba(1, 24, 15, 0) 0%, #01180F 100%);
+            }
+
+            .hero-background .container {
+                padding-left: 24px;
+                padding-right: 24px;
             }
 
             /* Ajuste de fontes e botões no mobile */
@@ -729,6 +761,7 @@
 <body style="background-color: #F1F1F1 !important;font-family: 'Poppins', sans-serif;">
     <section>
         <div class="hero-background">
+            <div class="hero-img-mobile" aria-hidden="true"></div>
             <div class="container h-100">
                 <div class="row h-100">
                     <div
@@ -790,7 +823,7 @@
         <div class="container">
             <div class="row mb-5">
                 <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
-                    <h2 class="fw-bolder color-white">Durante 3 dias de curso, você vai mergulhar em temas como:</h2>
+                    <h2 class="fw-bold color-white">Durante 3 dias de curso, você vai mergulhar em temas como:</h2>
                 </div>
             </div>
             <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
@@ -872,7 +905,7 @@
                 <div class="col-md-8 col-xl-6 text-center mx-auto p-4 p-md-5"
                     style="background: linear-gradient(to bottom, rgba(255,255,255,0.52) 0%, transparent 100%);border-radius: 16px;"
                     data-aos="fade-up">
-                    <h2 class="fw-bolder color-white">E o melhor:</h2>
+                    <h2 class="fw-bold color-white">E o melhor:</h2>
                     <p class="my-3 color-white"> tudo com técnicas que você já pode aplicar no dia seguinte.</p><a
                         class="btn btn-primary btn-lg mt-4 btn-amarelo-printcipal" role="button"
                         href="javascript:void(0)" onclick="openInscricaoModal()">QUERO APRENDER ESSAS TÉCNICAS </a>
@@ -884,7 +917,7 @@
         <div class="row mb-5">
             <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
                 <h2 class="fw-bold">Comunicação que começa em você</h2>
-                <p>Neste curso, você também vai aprender a se expressar melhor com o mundo ao seu redor e,
+                <p class="my-3">Neste curso, você também vai aprender a se expressar melhor com o mundo ao seu redor e,
                     principalmente, com você mesmo.</p>
             </div>
         </div>
@@ -950,7 +983,7 @@
         <div class="container">
             <div class="row mb-5 mt-4 mt-md-5 pt-md-4 mx-0 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-6 text-center p-4 p-md-5 glass-card" data-aos="fade-up">
-                    <h2 class="fw-bolder color-white mb-2">Garanta sua vaga na próxima turma!</h2>
+                    <h2 class="fw-bold color-white mb-2">Garanta sua vaga na próxima turma!</h2>
                     <p class="mb-4 color-white"
                         style="color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 400;">
                         Três noites, um novo jeito de pensar, agir e se comunicar com o mundo.
