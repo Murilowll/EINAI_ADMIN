@@ -13,14 +13,22 @@
     <link rel="stylesheet" href="assets/css/forms-einai.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        html, body {
+        html,
+        body {
             max-width: 100%;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        body, input, select, textarea, button, .btn {
+
+        body,
+        input,
+        select,
+        textarea,
+        button,
+        .btn {
             font-family: 'Poppins', sans-serif;
         }
+
         .hero-background-ser {
             height: 800px;
             background-image: url("assets/img/hero-ser.png") !important;
@@ -36,6 +44,7 @@
 
         /* ========== Otimizações Mobile ========== */
         @media (max-width: 768px) {
+
             /* a foto some do fundo do bloco de texto; vira um cartão
                próprio no topo, e o texto passa a ficar sobre a cor
                sólida extraída da base da foto (mesmo tom, sem corte) */
@@ -75,10 +84,21 @@
             }
 
             /* Ajuste de fontes e botões no mobile */
-            h1.fw-bold { font-size: 2rem !important; }
-            h2.fw-bold { font-size: 1.6rem !important; }
-            .btn-amarelo-printcipal { white-space: normal; }
-            .img-hero { justify-content: center; }
+            h1.fw-bold {
+                font-size: 2rem !important;
+            }
+
+            h2.fw-bold {
+                font-size: 1.6rem !important;
+            }
+
+            .btn-amarelo-printcipal {
+                white-space: normal;
+            }
+
+            .img-hero {
+                justify-content: center;
+            }
 
             /* o deslize horizontal do AOS (fade-left/fade-right) desloca o
                elemento 100px antes de assentar; em tela estreita isso
@@ -103,9 +123,11 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, border-color 0.3s ease;
         }
+
         .glass-card:hover {
             border-color: rgba(222, 170, 77, 0.3) !important;
         }
+
         .promo-banner {
             background: rgba(222, 170, 77, 0.12);
             border: 1px solid rgba(222, 170, 77, 0.3);
@@ -118,27 +140,44 @@
             font-weight: 500;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
+
         @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 0.4; }
-            50% { transform: scale(1.15); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.4; }
+            0% {
+                transform: scale(0.9);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.9);
+                opacity: 0.4;
+            }
         }
+
         .pulse-dot {
             display: inline-block;
             font-size: 10px;
             color: #ff4d4d;
             animation: pulse 1.8s infinite ease-in-out;
         }
+
         .btn-amarelo-printcipal {
             transition: transform 0.2s ease, box-shadow 0.2s ease !important;
         }
+
         .btn-amarelo-printcipal:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(222, 170, 77, 0.5) !important;
         }
+
         .btn-amarelo-printcipal:active {
             transform: translateY(1px);
         }
+
         .badge-exclusive {
             background: linear-gradient(135deg, #DEAA4D 0%, #B8860B 100%);
             color: #000000;
@@ -157,15 +196,16 @@
             --bg: #ffffff;
             --card: #ffffff;
             --accent: #0d9488;
-            --accent-600:#0f766e;
+            --accent-600: #0f766e;
             --muted: #93a0ab;
             --text: #0f1720;
             --radius: 14px;
             --gap: 16px;
             --maxw: 700px;
-            --shadow: 0 10px 30px rgba(10,10,12,0.08);
-            
-            display: none; /* só aparece via openInscricaoModal() */
+            --shadow: 0 10px 30px rgba(10, 10, 12, 0.08);
+
+            display: none;
+            /* só aparece via openInscricaoModal() */
             position: relative;
             z-index: 1;
             width: 100%;
@@ -175,26 +215,33 @@
             box-sizing: border-box;
         }
 
-        .insc-wrap{
-            width:100%;
-            max-width:var(--maxw);
+        .insc-wrap {
+            width: 100%;
+            max-width: var(--maxw);
             position: relative;
             margin: auto;
         }
 
-        .insc-card{
-            background:var(--card);
-            padding:36px 28px 28px 28px;
+        .insc-card {
+            background: var(--card);
+            padding: 36px 28px 28px 28px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            overflow:hidden;
+            overflow: hidden;
             position: relative !important;
             animation: insc-fadeInUp 0.4s ease-out;
         }
 
         @keyframes insc-fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Botão Fechar Modal */
@@ -214,6 +261,7 @@
             line-height: 1;
             padding: 4px;
         }
+
         .insc-close-btn:hover {
             color: #0f1720;
             transform: scale(1.1);
@@ -223,6 +271,7 @@
         .insc-step {
             display: none;
         }
+
         .insc-step.active {
             display: block;
         }
@@ -232,12 +281,14 @@
             margin-bottom: 24px;
             padding: 0 10px;
         }
+
         .insc-progress-steps {
             display: flex;
             justify-content: space-between;
             position: relative;
             margin-bottom: 8px;
         }
+
         .insc-progress-steps::before {
             content: '';
             position: absolute;
@@ -249,6 +300,7 @@
             z-index: 1;
             transform: translateY(-50%);
         }
+
         .insc-progress-bar-fill {
             position: absolute;
             top: 50%;
@@ -260,6 +312,7 @@
             transition: width 0.3s ease;
             width: 0%;
         }
+
         .insc-progress-step-dot {
             width: 34px;
             height: 34px;
@@ -275,19 +328,22 @@
             position: relative;
             z-index: 3;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
+
         .insc-progress-step-dot.active {
             border-color: #DEAA4D;
             color: #DEAA4D;
             background: #fff;
             box-shadow: 0 0 12px rgba(222, 170, 77, 0.4);
         }
+
         .insc-progress-step-dot.completed {
             border-color: #0d9488;
             background: #0d9488;
             color: #fff;
         }
+
         .insc-progress-labels {
             display: flex;
             justify-content: space-between;
@@ -298,15 +354,17 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         .insc-progress-label {
             width: 70px;
             text-align: center;
             transition: color 0.3s ease;
         }
+
         .insc-progress-label.active {
             color: #DEAA4D;
         }
-        
+
         .insc-navigation {
             display: flex;
             justify-content: flex-end;
@@ -316,68 +374,68 @@
             padding-top: 20px;
         }
 
-        .insc-hero{
-            display:flex;
-            gap:14px;
-            align-items:center;
+        .insc-hero {
+            display: flex;
+            gap: 14px;
+            align-items: center;
         }
 
-        .insc-hero img{
-            width:56px;
-            height:56px;
-            object-fit:cover;
-            border-radius:10px;
-            flex-shrink:0;
-            border:1px solid #0000000d;
+        .insc-hero img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            border: 1px solid #0000000d;
         }
 
-        .insc-titles{
-            display:flex;
-            flex-direction:column;
-            gap:2px;
+        .insc-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
             text-align: left;
         }
 
-        .insc-titles h1{
-            margin:0;
-            font-size:20px !important;
-            letter-spacing:-0.4px;
+        .insc-titles h1 {
+            margin: 0;
+            font-size: 20px !important;
+            letter-spacing: -0.4px;
             font-weight: 700;
         }
 
-        .insc-subtitle{
-            margin:0;
-            font-size:12px;
-            color:var(--muted);
+        .insc-subtitle {
+            margin: 0;
+            font-size: 12px;
+            color: var(--muted);
             font-weight: 400;
         }
 
-        .insc-form{
-            margin-top:20px;
-            display:flex;
-            flex-direction:column;
-            gap:16px;
+        .insc-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
             text-align: left;
         }
 
-        .insc-row{
-            display:flex;
-            gap:12px;
-            align-items:flex-start;
+        .insc-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
         }
 
-        .insc-field{
-            display:flex;
-            flex-direction:column;
-            gap:8px;
-            width:100%;
+        .insc-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
             text-align: left;
         }
 
-        .insc-field label{
-            font-size:13px;
-            color:#23303a;
-            font-weight:600;
+        .insc-field label {
+            font-size: 13px;
+            color: #23303a;
+            font-weight: 600;
             margin-bottom: 0;
         }
 
@@ -386,178 +444,183 @@
         .insc-field input[type="date"],
         .insc-field input[type="tel"],
         .insc-field select {
-            border-radius:10px;
-            border:1px solid #e6e9ee;
-            background:transparent;
-            padding:14px;
-            font-size:15px;
-            color:var(--text);
-            outline:none;
-            transition:box-shadow .15s ease, border-color .15s ease;
+            border-radius: 10px;
+            border: 1px solid #e6e9ee;
+            background: transparent;
+            padding: 14px;
+            font-size: 15px;
+            color: var(--text);
+            outline: none;
+            transition: box-shadow .15s ease, border-color .15s ease;
             font-family: inherit;
             width: 100%;
         }
 
-        .insc-field input:focus, .insc-field select:focus {
-            box-shadow:0 0 0 3px rgba(13, 148, 136, 0.15);
+        .insc-field input:focus,
+        .insc-field select:focus {
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
             border-color: var(--accent);
         }
-        
+
         .insc-field input[readonly] {
             background-color: #f9fbfd;
             color: #777;
         }
 
-        .insc-checkbox-grid{
-            padding:0;
-            border:none;
-            background:transparent;
-            display:grid;
+        .insc-checkbox-grid {
+            padding: 0;
+            border: none;
+            background: transparent;
+            display: grid;
             grid-template-columns: 1fr;
-            gap:10px;
+            gap: 10px;
         }
 
-        .insc-option{
-            display:flex;
-            align-items:flex-start;
-            gap:10px;
-            padding:12px;
-            border-radius:10px;
-            border:1px solid #e6e9ee;
-            transition:all .15s ease;
-            cursor:pointer;
-            user-select:none;
-            background:var(--card);
+        .insc-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e6e9ee;
+            transition: all .15s ease;
+            cursor: pointer;
+            user-select: none;
+            background: var(--card);
             margin-bottom: 0;
         }
 
-        .insc-option:hover{
-            transform:translateY(-1px);
-            box-shadow: 0 4px 12px rgba(15,20,30,0.06);
+        .insc-option:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 20, 30, 0.06);
             border-color: var(--accent);
         }
 
-        .insc-option input[type="checkbox"]{
-            width:20px;
-            height:20px;
-            margin-top:2px;
+        .insc-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
             accent-color: var(--accent);
-            flex-shrink:0;
+            flex-shrink: 0;
         }
 
-        .insc-opt-text{
-            display:flex;
-            flex-direction:column;
-            gap:2px;
+        .insc-opt-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
             text-align: left;
         }
 
-        .insc-opt-title{
-            font-weight:600;
-            font-size:14px;
-            color:#101820;
+        .insc-opt-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #101820;
             margin-bottom: 0;
         }
 
-        .insc-opt-desc{
-            font-size:11.5px;
-            color:var(--muted);
-            line-height:1.3;
+        .insc-opt-desc {
+            font-size: 11.5px;
+            color: var(--muted);
+            line-height: 1.3;
         }
 
-        .insc-helper{
-            font-size:12px;
-            color:var(--muted);
-            margin-top:0px;
+        .insc-helper {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 0px;
             font-weight: 400;
         }
 
-        .insc-actions{
-            display:flex;
+        .insc-actions {
+            display: flex;
             flex-direction: column;
-            gap:12px;
-            align-items:stretch;
-            margin-top:10px;
+            gap: 12px;
+            align-items: stretch;
+            margin-top: 10px;
         }
 
         .insc-btn {
-            appearance:none;
-            -webkit-appearance:none;
-            border:0;
-            cursor:pointer;
-            padding:14px 16px;
-            border-radius:10px;
-            font-weight:600;
-            font-size:15px;
-            min-width:140px;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            gap:10px;
-            transition:background .12s ease, transform .08s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            border: 0;
+            cursor: pointer;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            min-width: 140px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background .12s ease, transform .08s ease;
             text-decoration: none;
             width: 100%;
             font-family: inherit;
         }
 
-        .insc-btn-primary{
-            background:var(--accent);
-            color:white;
-        }
-        .insc-btn-primary:hover:not(:disabled){
-            background:var(--accent-600);
-            transform:translateY(-1px);
-        }
-        .insc-btn-primary:disabled{
-            opacity:0.6;
-            transform:none;
-            cursor:default;
+        .insc-btn-primary {
+            background: var(--accent);
+            color: white;
         }
 
-        .insc-btn-outline{
+        .insc-btn-primary:hover:not(:disabled) {
+            background: var(--accent-600);
+            transform: translateY(-1px);
+        }
+
+        .insc-btn-primary:disabled {
+            opacity: 0.6;
+            transform: none;
+            cursor: default;
+        }
+
+        .insc-btn-outline {
             background: #fff;
             border: 1px solid #e6e9ee;
             color: var(--text);
         }
-        .insc-btn-outline:hover{
+
+        .insc-btn-outline:hover {
             border-color: var(--accent);
             background: #f9fbfd;
-            transform:translateY(-1px);
+            transform: translateY(-1px);
         }
-        .insc-btn-outline.selected{
+
+        .insc-btn-outline.selected {
             border-color: var(--accent);
             background: rgba(13, 148, 136, 0.05);
             color: var(--accent-600);
         }
 
-        .insc-status{
-            font-size:13px;
-            color:#ef4444; 
-            font-weight:600;
+        .insc-status {
+            font-size: 13px;
+            color: #ef4444;
+            font-weight: 600;
             text-align: center;
         }
 
-        .insc-payment-methods{
+        .insc-payment-methods {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             margin-bottom: 20px;
         }
-        
-        .insc-checkout-step{
+
+        .insc-checkout-step {
             margin-top: 10px;
             padding-top: 20px;
             border-top: 1px solid #f0f0f0;
             text-align: center;
         }
 
-        .insc-pix-wrapper{
+        .insc-pix-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 16px;
         }
-        
+
         .insc-qr-container {
             padding: 10px;
             border: 1px solid #e6e9ee;
@@ -565,7 +628,7 @@
             background: #fff;
             display: inline-block;
         }
-        
+
         .insc-qr-container img {
             width: 180px;
             height: 180px;
@@ -583,9 +646,9 @@
             background: #f5f7fa;
             font-size: 13px;
             color: #555;
-            border-radius:10px;
-            border:1px solid #e6e9ee;
-            padding:14px;
+            border-radius: 10px;
+            border: 1px solid #e6e9ee;
+            padding: 14px;
             width: 100%;
         }
 
@@ -596,42 +659,64 @@
             min-width: 80px;
             padding: 0 16px;
         }
+
         .insc-btn-copy:hover {
             background: #000;
         }
 
         .insc-copy-feedback {
             font-size: 12px;
-            color: #00a86b; 
+            color: #00a86b;
             height: 16px;
             font-weight: 600;
             opacity: 0;
             transition: opacity 0.3s;
         }
+
         .insc-copy-feedback.show {
             opacity: 1;
         }
 
-        .insc-spinner{
-            width:16px;
-            height:16px;
-            border-radius:50%;
-            border:2px solid rgba(255,255,255,0.25);
-            border-top-color: rgba(255,255,255,0.95);
-            animation:spin .8s linear infinite;
+        .insc-spinner {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-top-color: rgba(255, 255, 255, 0.95);
+            animation: spin .8s linear infinite;
         }
 
-        @media(min-width:550px){
-            .insc-actions{ flex-direction: row; align-items:center; }
-            .insc-status{ text-align: left; }
-            .insc-payment-methods{ grid-template-columns: 1fr 1fr; }
-            .insc-checkout-step{ text-align: left; }
-            .insc-pix-wrapper{ align-items: flex-start; }
+        @media(min-width:550px) {
+            .insc-actions {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .insc-status {
+                text-align: left;
+            }
+
+            .insc-payment-methods {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .insc-checkout-step {
+                text-align: left;
+            }
+
+            .insc-pix-wrapper {
+                align-items: flex-start;
+            }
         }
 
-        @media(min-width:700px){
-            .insc-card{padding:28px}
-            .insc-checkbox-grid{grid-template-columns: 1fr 1fr 1fr}
+        @media(min-width:700px) {
+            .insc-card {
+                padding: 28px
+            }
+
+            .insc-checkbox-grid {
+                grid-template-columns: 1fr 1fr 1fr
+            }
         }
 
         /* Modal Pix Overlay & Card */
@@ -687,13 +772,25 @@
         }
 
         @keyframes insc-fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes insc-scaleIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -704,12 +801,19 @@
             <div class="hero-img-mobile" aria-hidden="true"></div>
             <div class="container h-100">
                 <div class="row h-100">
-                    <div class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-end justify-content-md-start align-items-md-center justify-content-xl-center">
+                    <div
+                        class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-end justify-content-md-start align-items-md-center justify-content-xl-center">
                         <div class="flex-column" style="display: flex;max-width: 90%;gap: 16px;">
-                            <div class="d-flex align-items-end img-hero" data-aos="fade-down"><img class="img-fluid" width="208" height="208" src="assets/img/ser-logo.png"></div>
+                            <div class="d-flex align-items-end img-hero" data-aos="fade-down"><img class="img-fluid"
+                                    width="208" height="208" src="assets/img/ser-logo.png"></div>
                             <div class="div-text-hero" data-aos="fade-up" data-aos-delay="200">
-                                <h2 class="fw-bold color-white">A Jornada que vai levar você a se conectar com seu verdadeiro potencial</h2>
-                                <p class="my-3 color-white">Um treinamento vivencial para potencializar sua liderança e inteligência emocional.</p><a class="btn btn-primary btn-lg btn-amarelo-printcipal color-white" role="button" href="javascript:void(0)" onclick="openInscricaoModal()">QUERO CONECTAR COM O MEU POTENCIAL</a>
+                                <h2 class="fw-bold color-white">A Jornada que vai levar você a se conectar com seu
+                                    verdadeiro potencial</h2>
+                                <p class="my-3 color-white">Um treinamento vivencial para potencializar sua liderança e
+                                    inteligência emocional.</p><a
+                                    class="btn btn-primary btn-lg btn-amarelo-printcipal color-white" role="button"
+                                    href="javascript:void(0)" onclick="openInscricaoModal()">QUERO CONECTAR COM O MEU
+                                    POTENCIAL</a>
                             </div>
                         </div>
                     </div>
@@ -720,75 +824,100 @@
     <div class="container py-4 py-xl-5">
         <div class="row mb-0">
             <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
-                <h2 class="fw-bold">A missão do SER – Evolução e Liderança é te levar a um passeio inesquecível dentro de você mesmo</h2>
-                <p class="my-3">Você irá resgatar seus sonhos, intensificar aquilo que há de melhor e encontrar ferramentas para lidar com valores como a confiança, superação, ética, responsabilidade e compromisso e isso te levará a um outro nível de capacidade e resultados.</p>
+                <h2 class="fw-bold">A missão do SER – Evolução e Liderança é te levar a um passeio inesquecível dentro
+                    de você mesmo</h2>
+                <p class="my-3">Você irá resgatar seus sonhos, intensificar aquilo que há de melhor e encontrar
+                    ferramentas para lidar com valores como a confiança, superação, ética, responsabilidade e
+                    compromisso e isso te levará a um outro nível de capacidade e resultados.</p>
             </div>
         </div>
     </div>
     <div class="container py-4 py-xl-5">
         <div class="row row-cols-1 row-cols-md-2 gy-4 align-items-center">
-            <div class="col d-flex justify-content-center align-items-center" data-aos="fade-right"><img class="img-fluid" style="max-width: 420px; width: 100%; height: auto;" src="assets/img/logos/cards/ser.png" alt="SER - Evolução e Liderança"></div>
+            <div class="col d-flex justify-content-center align-items-center" data-aos="fade-right"><img
+                    class="img-fluid" style="max-width: 420px; width: 100%; height: auto;"
+                    src="assets/img/logos/cards/ser.png" alt="SER - Evolução e Liderança"></div>
             <div class="col d-flex flex-column justify-content-center align-items-center p-4" data-aos="fade-left">
                 <div style="max-width: 90%;height: 100%;">
                     <h1 class="fw-bold">SER – Evolução e Liderança</h1>
-                    <p class="my-3">Durante um final de semana, você irá entender a função biológica das quatro emoções que norteiam a nossa vida: Medo, Raiva, Tristeza e Alegria e ter consciência de como usá-las a seu favor possibilitando melhores tomadas de decisões e ações.<br><br>O SER – Evolução e Liderança é um treinamento que permite você desenvolva o controle emocional para lidar com desafios, ampliando suas capacidades e habilidades. Permitindo uma jornada de autoconhecimento e evolução. <br><br>Você entenderá como suas emoções influenciam suas ações, proporcionando uma nova forma de viver com mais clareza e confiança impactando positivamente diversas áreas de sua vida.</p>
+                    <p class="my-3">Durante um final de semana, você irá entender a função biológica das quatro emoções
+                        que norteiam a nossa vida: Medo, Raiva, Tristeza e Alegria e ter consciência de como usá-las a
+                        seu favor possibilitando melhores tomadas de decisões e ações.<br><br>O SER – Evolução e
+                        Liderança é um treinamento que permite você desenvolver o controle emocional para lidar com
+                        desafios, ampliando suas capacidades e habilidades. Percorrendo uma jornada de autoconhecimento
+                        e evolução. <br><br>Você entenderá como suas emoções influenciam suas ações, proporcionando uma
+                        nova forma de viver com mais clareza e confiança impactando positivamente diversas áreas de sua
+                        vida.</p>
                 </div>
             </div>
         </div>
         <div class="d-flex justify-content-center w-100 mt-5">
-            <a class="btn btn-primary btn-lg btn-amarelo-printcipal color-white" role="button" href="javascript:void(0)" onclick="openInscricaoModal()" style="max-width: 600px;" data-aos="zoom-in">QUERO DESPERTAR A MINHA MELHOR VERSÃO</a>
+            <a class="btn btn-primary btn-lg btn-amarelo-printcipal color-white" role="button" href="javascript:void(0)"
+                onclick="openInscricaoModal()" style="max-width: 600px;" data-aos="zoom-in">QUERO DESPERTAR A MINHA
+                MELHOR VERSÃO</a>
         </div>
     </div>
     <section class="w-100 py-4 py-xl-5" style="background-color: #022B54; overflow: hidden;">
-      <div class="container">
-        <div class="row mb-5">
-            <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
-                <h2 class="fw-bold color-white">Qual foi o último final de semana que você dedicou a você mesmo?</h2>
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
+                    <h2 class="fw-bold color-white">Qual foi o último final de semana que você dedicou a você mesmo?
+                    </h2>
+                </div>
+            </div>
+            <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
+                <div class="col" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100" style="background: #12362e;">
+                        <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img
+                                class="img-fluid" width="51" height="51" src="assets/img/icons/programaneuro.svg">
+                            <h4 class="card-title">Desenvolvimento de Habilidades e Liderança:</h4>
+                            <p class="card-text"> Torne-se um líder mais eficaz, seja no trabalho ou em sua vida
+                                pessoal.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100" style="background: #12362e;">
+                        <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img
+                                class="img-fluid" width="41" height="42" src="assets/img/icons/mapas%20e%20filtros.svg">
+                            <h4 class="card-title"> Controle Emocional:</h4>
+                            <p class="card-text">Conheça a função biológica das quatro emoções principais que norteiam
+                                nossa vida — Medo, Raiva, Tristeza e Alegria e aprenda a controlá-las.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100" style="background: #12362e;">
+                        <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img
+                                class="img-fluid" width="63" height="63" src="assets/img/icons/rapport.svg">
+                            <h4 class="card-title">Capacidade de Superação:</h4>
+                            <p class="card-text">Supere limitações emocionais e mentais, e desenvolva habilidades para
+                                melhor lidar com desafios e obstáculos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card h-100" style="background: #12362e;">
+                        <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img
+                                class="img-fluid" width="50" height="51" src="assets/img/icons/sistemas.svg">
+                            <h4 class="card-title">Relações Interpessoais e Intrapessoais:</h4>
+                            <p class="card-text">Aprenda a melhorar seus relacionamentos e a comunicar-se de maneira
+                                mais eficaz, com mais confiança e assertividade.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" data-aos="fade-up" data-aos-delay="500">
+                    <div class="card h-100" style="background: #12362e;">
+                        <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img
+                                class="img-fluid" width="50" height="51" src="assets/img/icons/calibragem.svg">
+                            <h4 class="card-title">Realização de Objetivos</h4>
+                            <p class="card-text">Desenvolva um plano prático para alcançar seus objetivos, com foco em
+                                soluções e resultados concretos.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
-            <div class="col" data-aos="fade-up" data-aos-delay="100">
-                <div class="card h-100" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="51" height="51" src="assets/img/icons/programaneuro.svg">
-                        <h4 class="card-title">Desenvolvimento de Habilidades e Liderança:</h4>
-                        <p class="card-text"> Torne-se um líder mais eficaz, seja no trabalho ou em sua vida pessoal.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col" data-aos="fade-up" data-aos-delay="200">
-                <div class="card h-100" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="41" height="42" src="assets/img/icons/mapas%20e%20filtros.svg">
-                        <h4 class="card-title"> Controle Emocional:</h4>
-                        <p class="card-text">Conheça as quatro emoções principais que norteiam nossa vida — Medo, Raiva, Tristeza e Alegria e aprenda a controlá-las.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col" data-aos="fade-up" data-aos-delay="300">
-                <div class="card h-100" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="63" height="63" src="assets/img/icons/rapport.svg">
-                        <h4 class="card-title">Capacidade de Superação:</h4>
-                        <p class="card-text">Supere bloqueios emocionais e mentais, e desenvolva habilidades para lidar com desafios e obstáculos.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col" data-aos="fade-up" data-aos-delay="400">
-                <div class="card h-100" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="50" height="51" src="assets/img/icons/sistemas.svg">
-                        <h4 class="card-title">Relações Interpessoais e Intrapessoais:</h4>
-                        <p class="card-text">Aprenda a melhorar seus relacionamentos e a comunicar-se de maneira mais eficaz, com mais confiança e assertividade.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col" data-aos="fade-up" data-aos-delay="500">
-                <div class="card h-100" style="background: #12362e;">
-                    <div class="card-body p-4 card-mergulho h-100" style="background-color: #022B54;"><img class="img-fluid" width="50" height="51" src="assets/img/icons/calibragem.svg">
-                        <h4 class="card-title">Realização de Objetivos</h4>
-                        <p class="card-text">Desenvolva um plano prático para alcançar seus objetivos, com foco em soluções e resultados concretos.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
     </section>
     <div class="container py-4 py-xl-5">
         <div class="row mb-5">
@@ -800,14 +929,16 @@
         <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-4">
             <div class="col" data-aos="flip-up" data-aos-delay="100">
                 <div class="card h-100">
-                    <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img width="49" height="49" src="assets/img/icons/check.svg">
+                    <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img width="49"
+                            height="49" src="assets/img/icons/check.svg">
                         <p class="card-text">Lidar com a ansiedade, insegurança e timidez.</p>
                     </div>
                 </div>
             </div>
             <div class="col" data-aos="flip-up" data-aos-delay="200">
                 <div class="card h-100">
-                    <div class="card-body d-flex p-4 card-2-green" style="background-color: #022B54;"><img width="49" height="49" src="assets/img/icons/check.svg">
+                    <div class="card-body d-flex p-4 card-2-green" style="background-color: #022B54;"><img width="49"
+                            height="49" src="assets/img/icons/check.svg">
                         <h4 class="card-title"></h4>
                         <p class="card-text">Desbloquear seu verdadeiro potencial, promovendo harmonia e realização.</p>
                     </div>
@@ -815,7 +946,8 @@
             </div>
             <div class="col" data-aos="flip-up" data-aos-delay="300">
                 <div class="card h-100">
-                    <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img class="img-fluid" width="49" height="49" src="assets/img/icons/check.svg">
+                    <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img class="img-fluid"
+                            width="49" height="49" src="assets/img/icons/check.svg">
                         <h4 class="card-title"></h4>
                         <p class="card-text">Criar soluções para situações complexas e desafiadoras.</p>
                     </div>
@@ -823,9 +955,11 @@
             </div>
             <div class="col" data-aos="flip-up" data-aos-delay="400">
                 <div class="card h-100">
-                    <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img class="img-fluid" width="49" height="49" src="assets/img/icons/check.svg">
+                    <div class="card-body p-4 card-2-green" style="background-color: #022B54;"><img class="img-fluid"
+                            width="49" height="49" src="assets/img/icons/check.svg">
                         <h4 class="card-title"></h4>
-                        <p class="card-text">Capacidade para estabelecer relacionamentos <br>interpessoal e intrapessoal.</p>
+                        <p class="card-text">Capacidade para estabelecer relacionamentos <br>interpessoal e
+                            intrapessoal.</p>
                     </div>
                 </div>
             </div>
@@ -833,80 +967,115 @@
     </div>
     <div class="container py-4 py-xl-5">
         <div class="row row-cols-1 row-cols-md-2 gy-4 align-items-center">
-            <div class="col p-4 p-md-5 d-flex justify-content-center" data-aos="fade-right"><img class="img-fluid rounded object-fit-cover w-100 h-100" style="min-height: 300px; max-width: 500px;" src="assets/img/pic-anderson.png"></div>
+            <div class="col p-4 p-md-5 d-flex justify-content-center" data-aos="fade-right"><img
+                    class="img-fluid rounded object-fit-cover w-100 h-100" style="min-height: 300px; max-width: 500px;"
+                    src="assets/img/pic-anderson.png"></div>
             <div class="col d-flex flex-column justify-content-start p-4" data-aos="fade-left">
                 <div style="max-width: 400px;height: 100%;">
                     <h1 class="fw-bold">Quem vai te conduzir?</h1>
-                    <p class="my-3">O treinamento é conduzido por Anderson Ávila, Trainer Master Practitioner em PNL e Coaching Practitioner, com anos de experiência formando pessoas e liderando processos de transformação profunda.<br>Junto da equipe do Instituto EINAI, você terá acompanhamento próximo, com um método estruturado e apoio profissional em todas as etapas do treinamento.</p>
+                    <p class="my-3">O treinamento é conduzido por Anderson Avila, Trainer Master Practitioner em PNL,
+                        com mais de 25 anos de experiência formando pessoas e liderando processos de transformação
+                        profunda.<br>Junto da equipe do Instituto EINAI, você terá acompanhamento próximo, com um método
+                        estruturado e apoio profissional em todas as etapas do treinamento.</p>
                 </div>
             </div>
         </div>
         <div class="d-flex justify-content-center w-100 mt-5">
-            <a class="btn btn-primary btn-lg btn-amarelo-printcipal color-white" role="button" href="javascript:void(0)" onclick="openInscricaoModal()" style="max-width: 600px;" data-aos="zoom-in">ESSE TREINAMENTO É PARA MIM</a>
+            <a class="btn btn-primary btn-lg btn-amarelo-printcipal color-white" role="button" href="javascript:void(0)"
+                onclick="openInscricaoModal()" style="max-width: 600px;" data-aos="zoom-in">ESSE TREINAMENTO É PARA
+                MIM</a>
         </div>
     </div>
     <section class="w-100 py-4 py-xl-5" style="background-color: #022B54; overflow: hidden;">
-      <div class="container">
-        <div class="row mb-5 mt-4 mt-md-5 pt-md-4 mx-0 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-6 text-center p-4 p-md-5 glass-card" data-aos="fade-up">
-                <h2 class="fw-bold color-white mb-2">Garanta sua vaga na próxima turma!</h2>
-                <p class="mb-4 color-white" style="color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 400;">
-                    Três noites, um novo jeito de pensar, agir e se comunicar com o mundo.
-                </p>
-                
-                <!-- Detalhes do treinamento: Data & Local com design premium -->
-                <div class="d-flex flex-wrap justify-content-center gap-3 mb-4 text-white">
-                    <div class="d-flex align-items-center gap-2 px-3 py-2" style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                        <svg width="18" height="18" fill="none" stroke="#DEAA4D" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        <span id="dynamic-date-ser" style="font-weight: 500; font-size: 14px;">Carregando data...</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2 px-3 py-2" style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                        <svg width="18" height="18" fill="none" stroke="#DEAA4D" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <span id="dynamic-location-ser" style="font-weight: 500; font-size: 14px;">Carregando local...</span>
-                    </div>
-                </div>
+        <div class="container">
+            <div class="row mb-5 mt-4 mt-md-5 pt-md-4 mx-0 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-6 text-center p-4 p-md-5 glass-card" data-aos="fade-up">
+                    <h2 class="fw-bold color-white mb-2">Garanta sua vaga na próxima turma!</h2>
+                    <p class="mb-4 color-white"
+                        style="color: rgba(255,255,255,0.85); font-size: 16px; font-weight: 400;">
+                        Três noites, um novo jeito de pensar, agir e se comunicar com o mundo.
+                    </p>
 
-                <!-- Valores e Conversão de Preço -->
-                <div class="my-4 py-2">
-                    <div id="old-price-container" class="d-none" style="color: rgba(255,255,255,0.55); font-size: 1.1rem; text-decoration: line-through; margin-bottom: 2px;">
-                        De R$ <span id="dynamic-old-price-ser">---,---</span>
+                    <!-- Detalhes do treinamento: Data & Local com design premium -->
+                    <div class="d-flex flex-wrap justify-content-center gap-3 mb-4 text-white">
+                        <div class="d-flex align-items-center gap-2 px-3 py-2"
+                            style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <svg width="18" height="18" fill="none" stroke="#DEAA4D" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span id="dynamic-date-ser" style="font-weight: 500; font-size: 14px;">Carregando
+                                data...</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 px-3 py-2"
+                            style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <svg width="18" height="18" fill="none" stroke="#DEAA4D" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span id="dynamic-location-ser" style="font-weight: 500; font-size: 14px;">Carregando
+                                local...</span>
+                        </div>
                     </div>
-                    <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
-                        Por <span style="color: #DEAA4D;"><span id="dynamic-installments-ser">12</span>x de <br class="d-md-none">R$ <span id="installment-price-ser">---,---</span></span>
-                    </div>
-                    <div style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">
-                        Ou R$ <span id="dynamic-price-ser">Carregando...</span> à vista
-                    </div>
-                </div>
 
-                <a class="btn btn-primary btn-lg mb-3 btn-amarelo-printcipal color-white w-100 mt-2" role="button" href="javascript:void(0)" onclick="openInscricaoModal()" style="max-width: 480px; font-weight: 700; font-size: 1.1rem; padding: 16px; border: none; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
-                    QUERO DESBLOQUEAR MINHA MELHOR VERSÃO
-                </a>
-
-                <!-- Cronômetro de escassez: agora abaixo do botão -->
-                <div id="promo-banner-container" class="mt-3 mb-1 d-none">
-                    <div class="promo-banner">
-                        <span class="pulse-dot">🔴</span>
-                        <span style="font-size: 14px;">A oferta especial termina em:</span>
-                        <strong id="promo-countdown" style="color: #DEAA4D; font-family: monospace; font-size: 1.15rem; letter-spacing: 0.5px;">00:00:00</strong>
+                    <!-- Valores e Conversão de Preço -->
+                    <div class="my-4 py-2">
+                        <div id="old-price-container" class="d-none"
+                            style="color: rgba(255,255,255,0.55); font-size: 1.1rem; text-decoration: line-through; margin-bottom: 2px;">
+                            De R$ <span id="dynamic-old-price-ser">---,---</span>
+                        </div>
+                        <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+                            Por <span style="color: #DEAA4D;"><span id="dynamic-installments-ser">12</span>x de <br
+                                    class="d-md-none">R$ <span id="installment-price-ser">---,---</span></span>
+                        </div>
+                        <div style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">
+                            Ou R$ <span id="dynamic-price-ser">Carregando...</span> à vista
+                        </div>
                     </div>
-                </div>
 
-                <!-- Selos de Confiança -->
-                <div class="d-flex justify-content-center align-items-center gap-4 mt-3" style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">
-                    <div class="d-flex align-items-center gap-1">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                        <span>Pagamento 100% Seguro</span>
+                    <a class="btn btn-primary btn-lg mb-3 btn-amarelo-printcipal color-white w-100 mt-2" role="button"
+                        href="javascript:void(0)" onclick="openInscricaoModal()"
+                        style="max-width: 480px; font-weight: 700; font-size: 1.1rem; padding: 16px; border: none; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                        QUERO DESBLOQUEAR MINHA MELHOR VERSÃO
+                    </a>
+
+                    <!-- Cronômetro de escassez: agora abaixo do botão -->
+                    <div id="promo-banner-container" class="mt-3 mb-1 d-none">
+                        <div class="promo-banner">
+                            <span class="pulse-dot">🔴</span>
+                            <span style="font-size: 14px;">A oferta especial termina em:</span>
+                            <strong id="promo-countdown"
+                                style="color: #DEAA4D; font-family: monospace; font-size: 1.15rem; letter-spacing: 0.5px;">00:00:00</strong>
+                        </div>
                     </div>
-                    <div class="d-flex align-items-center gap-1">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                        <span>Garantia de 7 Dias</span>
+
+                    <!-- Selos de Confiança -->
+                    <div class="d-flex justify-content-center align-items-center gap-4 mt-3"
+                        style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">
+                        <div class="d-flex align-items-center gap-1">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <span>Pagamento 100% Seguro</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span>Garantia de 7 Dias</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- BLOCO DE INSCRIÇÃO -->
     <div id="inscricao-section">
@@ -932,9 +1101,12 @@
 
             <!-- CARD DE INSCRIÇÃO (Wizard Passos 1 a 3) -->
             <section class="insc-card" id="insc-registration-card" aria-labelledby="title">
-                <button type="button" class="insc-close-btn" aria-label="Fechar" onclick="closeInscricaoModal()">&times;</button>
+                <button type="button" class="insc-close-btn" aria-label="Fechar"
+                    onclick="closeInscricaoModal()">&times;</button>
                 <div class="insc-hero">
-                    <div style="width: 56px; height: 56px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">E</div>
+                    <div
+                        style="width: 56px; height: 56px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">
+                        E</div>
                     <div class="insc-titles">
                         <h1 id="title">Inscreva-se no Treinamento</h1>
                         <p class="insc-subtitle">Preencha seus dados para avançar ao pagamento.</p>
@@ -946,46 +1118,56 @@
                     <div class="insc-step active" id="step-1">
                         <div class="insc-field">
                             <label for="nome">Nome completo</label>
-                            <input id="nome" name="nome" type="text" inputmode="text" autocomplete="name" placeholder="Seu nome completo" required>
+                            <input id="nome" name="nome" type="text" inputmode="text" autocomplete="name"
+                                placeholder="Seu nome completo" required>
                         </div>
 
                         <div class="insc-row">
                             <div class="insc-field">
                                 <label for="nascimento">Data de nascimento</label>
-                                <input id="nascimento" name="nascimento" type="tel" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off" required>
+                                <input id="nascimento" name="nascimento" type="tel" inputmode="numeric"
+                                    placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off" required>
                             </div>
 
                             <div class="insc-field">
                                 <label for="telefone">Telefone</label>
-                                <input id="telefone" name="telefone" type="tel" inputmode="tel" placeholder="(51) 99999-9999" required>
+                                <input id="telefone" name="telefone" type="tel" inputmode="tel"
+                                    placeholder="(51) 99999-9999" required>
                             </div>
                         </div>
 
                         <div class="insc-field">
                             <label for="cpf">CPF</label>
-                            <input id="cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00" required>
+                            <input id="cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00"
+                                required>
                         </div>
 
                         <div class="insc-field">
                             <label for="email">E-mail</label>
-                            <input id="email" name="email" type="email" autocomplete="email" placeholder="seu@exemplo.com" required>
+                            <input id="email" name="email" type="email" autocomplete="email"
+                                placeholder="seu@exemplo.com" required>
                         </div>
 
                         <div class="insc-field">
-                            <label for="empresa">Empresa <span style="color: #64748b; font-weight: normal; font-size: 11px;">(Opcional)</span></label>
+                            <label for="empresa">Empresa <span
+                                    style="color: #64748b; font-weight: normal; font-size: 11px;">(Opcional)</span></label>
                             <input id="empresa" name="empresa" type="text" placeholder="Empresa onde trabalha">
                         </div>
-                        
-                        <div class="insc-status" id="insc-status-step1" style="color: red; font-size: 13px; font-weight: 600; margin-top: 8px;"></div>
+
+                        <div class="insc-status" id="insc-status-step1"
+                            style="color: red; font-size: 13px; font-weight: 600; margin-top: 8px;"></div>
 
                         <div class="insc-navigation">
-                            <button type="button" class="insc-btn insc-btn-primary" onclick="validateAndGoToStep(2)">Avançar &rarr;</button>
+                            <button type="button" class="insc-btn insc-btn-primary"
+                                onclick="validateAndGoToStep(2)">Avançar &rarr;</button>
                         </div>
                     </div>
 
                     <!-- PASSO 2: ENDEREÇO -->
                     <div class="insc-step" id="step-2">
-                        <p style="font-size:14px; font-weight:600; margin:0 0 10px 0; color:var(--accent-600); text-align: left;">Endereço</p>
+                        <p
+                            style="font-size:14px; font-weight:600; margin:0 0 10px 0; color:var(--accent-600); text-align: left;">
+                            Endereço</p>
 
                         <div class="insc-field">
                             <label for="cep">CEP</label>
@@ -1009,7 +1191,8 @@
                                 <input id="bairro" name="bairro" type="text" required>
                             </div>
                             <div class="insc-field">
-                                <label for="complemento">Complemento <span style="font-weight:400; color:var(--muted);">(Opcional)</span></label>
+                                <label for="complemento">Complemento <span
+                                        style="font-weight:400; color:var(--muted);">(Opcional)</span></label>
                                 <input id="complemento" name="complemento" type="text">
                             </div>
                         </div>
@@ -1024,19 +1207,23 @@
                                 <input id="uf" name="uf" type="text" maxlength="2" required>
                             </div>
                         </div>
-                        
-                        <div class="insc-status" id="insc-status-step2" style="color: red; font-size: 13px; font-weight: 600; margin-top: 8px;"></div>
+
+                        <div class="insc-status" id="insc-status-step2"
+                            style="color: red; font-size: 13px; font-weight: 600; margin-top: 8px;"></div>
 
                         <div class="insc-navigation">
-                            <button type="button" class="insc-btn insc-btn-outline" onclick="goToStep(1)">&larr; Voltar</button>
-                            <button type="button" class="insc-btn insc-btn-primary" onclick="validateAndGoToStep(3)">Avançar &rarr;</button>
+                            <button type="button" class="insc-btn insc-btn-outline" onclick="goToStep(1)">&larr;
+                                Voltar</button>
+                            <button type="button" class="insc-btn insc-btn-primary"
+                                onclick="validateAndGoToStep(3)">Avançar &rarr;</button>
                         </div>
                     </div>
 
                     <!-- PASSO 3: PERFIL E MOTIVAÇÃO -->
                     <div class="insc-step" id="step-3">
                         <div class="insc-field">
-                            <label>Por que você quer fazer o treinamento? <span class="insc-helper">(Escolha uma ou mais)</span></label>
+                            <label>Por que você quer fazer o treinamento? <span class="insc-helper">(Escolha uma ou
+                                    mais)</span></label>
                             <div class="insc-checkbox-grid" role="group">
                                 <label class="insc-option">
                                     <input type="checkbox" name="motivo" value="Aprender algo novo">
@@ -1086,8 +1273,10 @@
                         <div class="insc-status" id="insc-status" role="status" aria-atomic="true"></div>
 
                         <div class="insc-navigation">
-                            <button type="button" class="insc-btn insc-btn-outline" onclick="goToStep(2)">&larr; Voltar</button>
-                            <button type="submit" id="insc-submitBtn" class="insc-btn insc-btn-primary" aria-live="polite">
+                            <button type="button" class="insc-btn insc-btn-outline" onclick="goToStep(2)">&larr;
+                                Voltar</button>
+                            <button type="submit" id="insc-submitBtn" class="insc-btn insc-btn-primary"
+                                aria-live="polite">
                                 <span id="insc-btnLabel">Enviar e ir para pagamento</span>
                                 <span id="insc-btnSpinner" class="insc-spinner" style="display:none"></span>
                             </button>
@@ -1098,50 +1287,61 @@
 
             <!-- CARD DE CHECKOUT (Wizard Passo 4) -->
             <section class="insc-card" id="insc-checkout-card" style="display:none;" aria-labelledby="checkout-title">
-                <button type="button" class="insc-close-btn" aria-label="Fechar" onclick="closeInscricaoModal()">&times;</button>
+                <button type="button" class="insc-close-btn" aria-label="Fechar"
+                    onclick="closeInscricaoModal()">&times;</button>
                 <div style="margin-bottom: 16px; text-align: left;">
-                    <button type="button" onclick="goBackToForm()" style="background: transparent; color: var(--muted); border: none; padding: 0; min-width: auto; justify-content: flex-start; font-size: 14px; font-weight: 500;">&larr; Voltar e editar dados</button>
+                    <button type="button" onclick="goBackToForm()"
+                        style="background: transparent; color: var(--muted); border: none; padding: 0; min-width: auto; justify-content: flex-start; font-size: 14px; font-weight: 500;">&larr;
+                        Voltar e editar dados</button>
                 </div>
                 <div class="insc-hero">
-                    <div style="width: 56px; height: 56px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">E</div>
+                    <div
+                        style="width: 56px; height: 56px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">
+                        E</div>
                     <div class="insc-titles">
                         <h1 id="checkout-title">Pagamento Seguro</h1>
                         <p class="insc-subtitle">Escolha como deseja finalizar sua inscrição.</p>
                     </div>
                 </div>
-        
+
                 <div style="margin-top:24px;">
-                    <label style="margin-bottom:8px; display:block; text-align: left; font-size:13px; font-weight:600; color:#23303a;">Selecione o método:</label>
+                    <label
+                        style="margin-bottom:8px; display:block; text-align: left; font-size:13px; font-weight:600; color:#23303a;">Selecione
+                        o método:</label>
                     <div class="insc-payment-methods">
-                        <button type="button" class="insc-btn insc-btn-outline" id="btn-pix" onclick="selectPayment('pix')">
-                        Pix (QR Code)
+                        <button type="button" class="insc-btn insc-btn-outline" id="btn-pix"
+                            onclick="selectPayment('pix')">
+                            Pix (QR Code)
                         </button>
-                        <button type="button" class="insc-btn insc-btn-outline" id="btn-card" onclick="selectPayment('card')">
-                        Cartão de Crédito
+                        <button type="button" class="insc-btn insc-btn-outline" id="btn-card"
+                            onclick="selectPayment('card')">
+                            Cartão de Crédito
                         </button>
                     </div>
-            
+
                     <div id="pix-area" class="insc-checkout-step" style="display:none;">
                         <div class="insc-pix-wrapper">
                             <p style="font-size:14px; margin:0;">Abra o app do seu banco e escaneie:</p>
-                            
+
                             <div class="insc-qr-container">
                                 <img id="pix-qr-img" src="" alt="QR Code Pix">
                             </div>
 
                             <div style="width:100%">
-                                <label style="font-size:12px; margin-bottom:4px; display:block; text-align:left;">Ou copie a chave pix abaixo, e cole no aplicativo do seu banco:</label>
+                                <label style="font-size:12px; margin-bottom:4px; display:block; text-align:left;">Ou
+                                    copie a chave pix abaixo, e cole no aplicativo do seu banco:</label>
                                 <div class="insc-pix-copy-box">
                                     <input type="text" id="pix-code-input" readonly>
-                                    <button type="button" class="insc-btn insc-btn-copy" onclick="copyPixCode()">Copiar</button>
+                                    <button type="button" class="insc-btn insc-btn-copy"
+                                        onclick="copyPixCode()">Copiar</button>
                                 </div>
                                 <div id="copy-feedback" class="insc-copy-feedback">Código copiado com sucesso!</div>
                             </div>
-                            
+
 
                         </div>
                     </div>
-            
+
                     <div id="card-area" class="insc-checkout-step" style="display:none; text-align:left;">
                         <!-- MODO 1: CHECKOUT TRANSPARENTE -->
                         <div id="cc-transparent-fields" style="display:none;">
@@ -1166,24 +1366,28 @@
                             <div class="insc-field">
                                 <label for="installments">Em quantas vezes deseja fazer?</label>
                                 <select id="installments">
-                                        <option value="" disabled selected>Selecione as parcelas...</option>
-                                        <option value="1">1x (À vista)</option>
-                                        <option value="3">3x sem juros</option>
-                                        <option value="6">6x sem juros</option>
-                                        <option value="10">10x sem juros</option>
-                                        <option value="12">12x sem juros</option>
+                                    <option value="" disabled selected>Selecione as parcelas...</option>
+                                    <option value="1">1x (À vista)</option>
+                                    <option value="3">3x sem juros</option>
+                                    <option value="6">6x sem juros</option>
+                                    <option value="10">10x sem juros</option>
+                                    <option value="12">12x sem juros</option>
                                 </select>
                             </div>
 
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; text-align: center;">
+                            <div
+                                style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; text-align: center;">
                                 <p style="margin: 0; font-size: 14px; color: var(--muted);">Valor do Investimento</p>
-                                <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span id="dynamic-price-display">...</span></h3>
+                                <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span
+                                        id="dynamic-price-display">...</span></h3>
                             </div>
 
                             <div class="insc-actions" style="margin-top:16px;">
-                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-card">Finalizar pagamento</button>
+                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-card">Finalizar
+                                    pagamento</button>
                             </div>
-                            <p id="card-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por favor, preencha todos os campos do cartão corretamente.</p>
+                            <p id="card-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por
+                                favor, preencha todos os campos do cartão corretamente.</p>
                         </div>
 
                         <!-- MODO 2: REDIRECIONAMENTO (LINKS) -->
@@ -1195,23 +1399,34 @@
                                 </select>
                             </div>
                             <div class="insc-actions" style="margin-top:16px;">
-                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-link" onclick="openPaymentLink()">Ir para pagamento</button>
+                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-link"
+                                    onclick="openPaymentLink()">Ir para pagamento</button>
                             </div>
-                            <p id="redirect-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por favor, selecione uma opção de pagamento.</p>
+                            <p id="redirect-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por
+                                favor, selecione uma opção de pagamento.</p>
                         </div>
                     </div>
                 </div>
             </section>
- 
+
             <!-- CARD DE SUCESSO (Wizard Passo 5) -->
-            <section class="insc-card" id="insc-success-card" style="display:none; text-align: center; padding: 40px 24px; border-top: 8px solid #10b981;">
-                <button type="button" class="insc-close-btn" aria-label="Fechar" onclick="closeInscricaoModal()">&times;</button>
-                <div style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 80px; border-radius: 50%; background-color: #d1fae5; color: #10b981; margin-bottom: 24px;">
-                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" style="width: 40px; height: 40px;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+            <section class="insc-card" id="insc-success-card"
+                style="display:none; text-align: center; padding: 40px 24px; border-top: 8px solid #10b981;">
+                <button type="button" class="insc-close-btn" aria-label="Fechar"
+                    onclick="closeInscricaoModal()">&times;</button>
+                <div
+                    style="display: inline-flex; justify-content: center; align-items: center; width: 80px; height: 80px; border-radius: 50%; background-color: #d1fae5; color: #10b981; margin-bottom: 24px;">
+                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"
+                        style="width: 40px; height: 40px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                    </svg>
                 </div>
-                <h1 style="font-size: 28px; color: var(--text); margin-bottom: 12px; font-weight: bold;">Inscrição Concluída!</h1>
-                <p style="color: var(--muted); font-size: 16px; margin-bottom: 24px;">Seu pagamento foi processado e sua vaga no treinamento está garantida.</p>
-                <p style="font-size: 14px; color: var(--text); font-weight: 500;">Enviaremos o comprovante e os próximos passos para o seu e-mail.</p>
+                <h1 style="font-size: 28px; color: var(--text); margin-bottom: 12px; font-weight: bold;">Inscrição
+                    Concluída!</h1>
+                <p style="color: var(--muted); font-size: 16px; margin-bottom: 24px;">Seu pagamento foi processado e sua
+                    vaga no treinamento está garantida.</p>
+                <p style="font-size: 14px; color: var(--text); font-weight: 500;">Enviaremos o comprovante e os próximos
+                    passos para o seu e-mail.</p>
             </section>
 
             <!-- Modal Pix -->
@@ -1220,23 +1435,33 @@
                     <button type="button" class="insc-modal-close" onclick="closePixModal()">&times;</button>
                     <div style="margin-bottom: 16px; text-align: left;">
                         <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1e293b;">Pagamento via Pix</h2>
-                        <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b; line-height: 1.4;">Escaneie o QR Code ou copie o código abaixo para finalizar sua inscrição.</p>
+                        <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b; line-height: 1.4;">Escaneie o QR
+                            Code ou copie o código abaixo para finalizar sua inscrição.</p>
                     </div>
                     <div style="text-align: center; margin: 20px 0;">
-                        <div class="insc-qr-container" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; display: inline-block;">
-                            <img id="pix-modal-qr-img" src="" alt="QR Code Pix" style="width: 180px; height: 180px; display: block; object-fit: contain;">
+                        <div class="insc-qr-container"
+                            style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; display: inline-block;">
+                            <img id="pix-modal-qr-img" src="" alt="QR Code Pix"
+                                style="width: 180px; height: 180px; display: block; object-fit: contain;">
                         </div>
                     </div>
                     <div style="width:100%">
-                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; text-align: left; color: #475569;">Código Pix (Copia e Cola):</label>
+                        <label
+                            style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; text-align: left; color: #475569;">Código
+                            Pix (Copia e Cola):</label>
                         <div class="insc-pix-copy-box" style="display: flex; gap: 8px;">
-                            <input type="text" id="pix-modal-code-input" readonly style="background: #f1f5f9; font-size: 13px; color: #334155; border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px; width: 100%;" onclick="this.select()">
-                            <button type="button" class="insc-btn insc-btn-copy" onclick="copyPixModalCode()" style="background: var(--text); color: white; border: none; border-radius: 8px; padding: 0 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Copiar</button>
+                            <input type="text" id="pix-modal-code-input" readonly
+                                style="background: #f1f5f9; font-size: 13px; color: #334155; border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px; width: 100%;"
+                                onclick="this.select()">
+                            <button type="button" class="insc-btn insc-btn-copy" onclick="copyPixModalCode()"
+                                style="background: var(--text); color: white; border: none; border-radius: 8px; padding: 0 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Copiar</button>
                         </div>
-                        <div id="modal-copy-feedback" class="insc-copy-feedback" style="margin-top: 6px; text-align: left;">Código copiado com sucesso!</div>
+                        <div id="modal-copy-feedback" class="insc-copy-feedback"
+                            style="margin-top: 6px; text-align: left;">Código copiado com sucesso!</div>
                     </div>
                     <div style="margin-top: 24px;">
-                        <button type="button" class="insc-btn insc-btn-primary" onclick="confirmPixModalPayment()" style="width: 100%; padding: 12px; border: none; border-radius: 8px; background: #10b981; color: white; font-weight: 600; cursor: pointer; text-align: center;">Concluir</button>
+                        <button type="button" class="insc-btn insc-btn-primary" onclick="confirmPixModalPayment()"
+                            style="width: 100%; padding: 12px; border: none; border-radius: 8px; background: #10b981; color: white; font-weight: 600; cursor: pointer; text-align: center;">Concluir</button>
                     </div>
                 </div>
             </div>
@@ -1276,18 +1501,18 @@
             })
         });
         const functions = getFunctions(app);
-        
+
         const STORAGE_PREFIX = 'einai_ser_';
-        
-        const PIX_IMG_URL = "data:image/png;base64,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"; 
+
+        const PIX_IMG_URL = "data:image/png;base64,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";
         const PIX_CODIGO = "00020126360014BR.GOV.BCB.PIX01142844177300012252040000530398654072598.005802BR5901N6001C62070503***6304991B";
-        
+
         const form = document.getElementById('insc-form');
         const submitBtn = document.getElementById('insc-submitBtn');
         const btnLabel = document.getElementById('insc-btnLabel');
         const btnSpinner = document.getElementById('insc-btnSpinner');
         const statusEl = document.getElementById('insc-status');
-        
+
         const regCard = document.getElementById('insc-registration-card');
         const checkoutCard = document.getElementById('insc-checkout-card');
         const pixArea = document.getElementById('pix-area');
@@ -1297,11 +1522,11 @@
         const installmentsSelect = document.getElementById('installments');
         const btnPayCard = document.getElementById('btn-pay-card');
         const cardError = document.getElementById('card-error');
-        
+
         const paymentLinkSelect = document.getElementById('payment-link-select');
         const btnPayLink = document.getElementById('btn-pay-link');
         const redirectError = document.getElementById('redirect-error');
-        
+
         const pixQrImg = document.getElementById('pix-qr-img');
         const pixInput = document.getElementById('pix-code-input');
         const copyFeedback = document.getElementById('copy-feedback');
@@ -1312,7 +1537,7 @@
         // Wizard Navigation and Control
         let currentStep = 1;
 
-        window.openInscricaoModal = function() {
+        window.openInscricaoModal = function () {
             const target = document.getElementById('inscricao-section');
             if (target) {
                 target.style.display = 'block';
@@ -1321,23 +1546,23 @@
             goToStep(1);
         };
 
-        window.closeInscricaoModal = function() {
+        window.closeInscricaoModal = function () {
             // No action needed for inline section
         };
 
-        window.goToStep = function(step) {
+        window.goToStep = function (step) {
             currentStep = step;
-            
+
             // Toggles cards
             const regCard = document.getElementById('insc-registration-card');
             const checkoutCard = document.getElementById('insc-checkout-card');
             const successCard = document.getElementById('insc-success-card');
-            
+
             if (step <= 3) {
                 if (regCard) regCard.style.display = 'block';
                 if (checkoutCard) checkoutCard.style.display = 'none';
                 if (successCard) successCard.style.display = 'none';
-                
+
                 // Toggle step divs
                 for (let i = 1; i <= 3; i++) {
                     const el = document.getElementById(`step-${i}`);
@@ -1354,11 +1579,11 @@
                 try {
                     localStorage.removeItem(STORAGE_PREFIX + 'form_data');
                     localStorage.removeItem(STORAGE_PREFIX + 'deal_id');
-                } catch(e) {}
+                } catch (e) { }
             }
-            
+
             updateProgress(step);
-            
+
             // Scroll to the start of the subscription block when step changes
             const target = document.getElementById('inscricao-section');
             if (target && step > 1) {
@@ -1366,11 +1591,11 @@
             }
         };
 
-        window.updateProgress = function(step) {
+        window.updateProgress = function (step) {
             const fill = document.getElementById('insc-progress-fill');
             const percentage = ((step - 1) / 4) * 100;
             if (fill) fill.style.width = `${percentage}%`;
-            
+
             for (let i = 1; i <= 5; i++) {
                 const dot = document.getElementById(`dot-${i}`);
                 const label = document.getElementById(`label-${i}`);
@@ -1389,7 +1614,7 @@
             }
         };
 
-        window.validateAndGoToStep = function(targetStep) {
+        window.validateAndGoToStep = function (targetStep) {
             if (targetStep === 2 && currentStep === 1) {
                 const nome = document.getElementById('nome').value.trim();
                 const nascimento = document.getElementById('nascimento').value;
@@ -1397,14 +1622,14 @@
                 const email = document.getElementById('email').value.trim();
                 const cpf = document.getElementById('cpf').value.trim();
                 const statusStep1 = document.getElementById('insc-status-step1');
-                
+
                 if (statusStep1) statusStep1.textContent = '';
-                
+
                 if (!nome || !nascimento || !telefone || !email || !cpf) {
                     if (statusStep1) statusStep1.textContent = 'Preencha todos os campos pessoais.';
                     return;
                 }
-                
+
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailPattern.test(email)) {
                     if (statusStep1) statusStep1.textContent = 'Digite um e-mail válido.';
@@ -1415,13 +1640,13 @@
                     if (statusStep1) statusStep1.textContent = 'Digite um CPF válido.';
                     return;
                 }
-                
+
                 if (telefone.replace(/\D/g, '').length < 10) {
                     if (statusStep1) statusStep1.textContent = 'Digite um telefone válido.';
                     return;
                 }
             }
-            
+
             if (targetStep === 3 && currentStep === 2) {
                 const cep = document.getElementById('cep').value.trim();
                 const logradouro = document.getElementById('logradouro').value.trim();
@@ -1430,61 +1655,61 @@
                 const cidade = document.getElementById('cidade').value.trim();
                 const uf = document.getElementById('uf').value.trim();
                 const statusStep2 = document.getElementById('insc-status-step2');
-                
+
                 if (statusStep2) statusStep2.textContent = '';
-                
+
                 if (!cep || !logradouro || !numero || !bairro || !cidade || !uf) {
                     if (statusStep2) statusStep2.textContent = 'Preencha todos os campos do endereço.';
                     return;
                 }
             }
-            
+
             goToStep(targetStep);
         };
 
-        function getCheckedValues(name){
-          const inputs = Array.from(document.querySelectorAll('input[name="'+name+'"]'));
-          return inputs.filter(i => i.checked).map(i => i.value);
+        function getCheckedValues(name) {
+            const inputs = Array.from(document.querySelectorAll('input[name="' + name + '"]'));
+            return inputs.filter(i => i.checked).map(i => i.value);
         }
 
-        function showLoading(on){
-          if(on){
-            btnSpinner.style.display = 'inline-block';
-            btnLabel.textContent = 'Aguarde...';
-            submitBtn.disabled = true;
-          } else {
-            btnSpinner.style.display = 'none';
-            btnLabel.textContent = 'Enviar e ir para pagamento';
-            submitBtn.disabled = false;
-          }
+        function showLoading(on) {
+            if (on) {
+                btnSpinner.style.display = 'inline-block';
+                btnLabel.textContent = 'Aguarde...';
+                submitBtn.disabled = true;
+            } else {
+                btnSpinner.style.display = 'none';
+                btnLabel.textContent = 'Enviar e ir para pagamento';
+                submitBtn.disabled = false;
+            }
         }
 
-        function validateForm(){
-          const nome = document.getElementById('nome').value.trim();
-          const nascimento = document.getElementById('nascimento').value;
-          const telefone = document.getElementById('telefone').value.trim();
-          const email = document.getElementById('email').value.trim();
-          const cpf = document.getElementById('cpf').value.trim();
-          const empresa = document.getElementById('empresa').value.trim();
-          const cep = document.getElementById('cep').value.trim();
-          const logradouro = document.getElementById('logradouro').value.trim();
-          const numero = document.getElementById('numero').value.trim();
-          const bairro = document.getElementById('bairro').value.trim();
-          const cidade = document.getElementById('cidade').value.trim();
-          const uf = document.getElementById('uf').value.trim();
-          const complemento = document.getElementById('complemento').value.trim();
-          const motivos = getCheckedValues('motivo');
+        function validateForm() {
+            const nome = document.getElementById('nome').value.trim();
+            const nascimento = document.getElementById('nascimento').value;
+            const telefone = document.getElementById('telefone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const empresa = document.getElementById('empresa').value.trim();
+            const cep = document.getElementById('cep').value.trim();
+            const logradouro = document.getElementById('logradouro').value.trim();
+            const numero = document.getElementById('numero').value.trim();
+            const bairro = document.getElementById('bairro').value.trim();
+            const cidade = document.getElementById('cidade').value.trim();
+            const uf = document.getElementById('uf').value.trim();
+            const complemento = document.getElementById('complemento').value.trim();
+            const motivos = getCheckedValues('motivo');
 
-          if(!nome || !nascimento || !telefone || !email || !cpf) return {ok:false, message: 'Preencha todos os campos pessoais.'};
-          if(!cep || !logradouro || !numero || !bairro || !cidade || !uf) return {ok:false, message: 'Preencha todos os campos do endereço.'};
-          if(motivos.length === 0) return {ok:false, message: 'Selecione pelo menos um motivo.'};
+            if (!nome || !nascimento || !telefone || !email || !cpf) return { ok: false, message: 'Preencha todos os campos pessoais.' };
+            if (!cep || !logradouro || !numero || !bairro || !cidade || !uf) return { ok: false, message: 'Preencha todos os campos do endereço.' };
+            if (motivos.length === 0) return { ok: false, message: 'Selecione pelo menos um motivo.' };
 
-          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if(!emailPattern.test(email)) return {ok:false, message: 'Digite um e-mail válido.'};
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) return { ok: false, message: 'Digite um e-mail válido.' };
 
-          const enderecoCompleto = `${logradouro}, ${numero}${complemento ? ' - ' + complemento : ''}, ${bairro}, ${cidade} - ${uf}, CEP: ${cep}`;
+            const enderecoCompleto = `${logradouro}, ${numero}${complemento ? ' - ' + complemento : ''}, ${bairro}, ${cidade} - ${uf}, CEP: ${cep}`;
 
-          return {ok:true, data:{nome,nascimento,telefone,email,cpf,empresa,enderecoCompleto,motivos}};
+            return { ok: true, data: { nome, nascimento, telefone, email, cpf, empresa, enderecoCompleto, motivos } };
         }
 
         let currentDealId = null;
@@ -1502,7 +1727,7 @@
                 const now = new Date();
                 const target = new Date();
                 target.setHours(23, 59, 59, 999);
-                
+
                 let diffMs = target.getTime() - now.getTime();
                 if (diffMs < 0) {
                     diffMs = 0;
@@ -1515,19 +1740,19 @@
                 const pad = (n) => String(n).padStart(2, '0');
                 countdownEl.innerText = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
             }
-            
+
             update();
             setInterval(update, 1000);
         }
 
-        window.renderDynamicInstallments = function(priceCentavos, installments = 12, installmentPrice = null) {
+        window.renderDynamicInstallments = function (priceCentavos, installments = 12, installmentPrice = null) {
             const select = document.getElementById('installments');
             if (!select) return;
-            
+
             const price = priceCentavos / 100;
             const basePrice = installmentPrice ? (installmentPrice * installments) : price;
             select.innerHTML = '<option value="" disabled selected>Selecione as parcelas...</option>';
-            
+
             for (let i = 1; i <= installments; i++) {
                 let val;
                 if (i === installments && installmentPrice) {
@@ -1536,35 +1761,35 @@
                     val = basePrice / i;
                 }
                 const label = i === 1 ? '1x (À vista)' : `${i}x`;
-                select.innerHTML += `<option value="${i}">${label} - R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})} sem juros</option>`;
+                select.innerHTML += `<option value="${i}">${label} - R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} sem juros</option>`;
             }
         };
 
-        window.openPaymentLink = async function() {
+        window.openPaymentLink = async function () {
             const select = document.getElementById('payment-link-select');
             const err = document.getElementById('redirect-error');
             if (err) err.style.display = 'none';
-            
+
             if (!select || !select.value) {
                 if (err) err.style.display = 'block';
                 return;
             }
-            
+
             if (currentDealId) {
                 try {
                     await updateDoc(doc(db, "deals", currentDealId), { stage: 'won' });
-                } catch(e) { console.error("Erro ao atualizar status CRM:", e); }
+                } catch (e) { console.error("Erro ao atualizar status CRM:", e); }
             }
-            
+
             window.open(select.value, '_blank');
             goToStep(5);
         };
 
-        window.confirmPixPayment = async function() {
+        window.confirmPixPayment = async function () {
             if (currentDealId) {
                 try {
                     await updateDoc(doc(db, "deals", currentDealId), { stage: 'won' });
-                } catch(e) { console.error("Erro ao atualizar status CRM:", e); }
+                } catch (e) { console.error("Erro ao atualizar status CRM:", e); }
             }
             goToStep(5);
         };
@@ -1574,34 +1799,34 @@
                 const docSnap = await getDoc(doc(db, "settings", "course_ser"));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if(data.date && document.getElementById('dynamic-date-ser')) document.getElementById('dynamic-date-ser').innerText = data.date;
-                    if(data.location && document.getElementById('dynamic-location-ser')) document.getElementById('dynamic-location-ser').innerText = data.location;
-                    if(data.priceText && document.getElementById('dynamic-price-display')) document.getElementById('dynamic-price-display').innerText = data.priceText;
-                    if(data.priceText && document.getElementById('dynamic-price-ser')) document.getElementById('dynamic-price-ser').innerText = data.priceText;
-                    
+                    if (data.date && document.getElementById('dynamic-date-ser')) document.getElementById('dynamic-date-ser').innerText = data.date;
+                    if (data.location && document.getElementById('dynamic-location-ser')) document.getElementById('dynamic-location-ser').innerText = data.location;
+                    if (data.priceText && document.getElementById('dynamic-price-display')) document.getElementById('dynamic-price-display').innerText = data.priceText;
+                    if (data.priceText && document.getElementById('dynamic-price-ser')) document.getElementById('dynamic-price-ser').innerText = data.priceText;
+
                     const installments = data.installments || 12;
                     const installmentPrice = data.installmentPrice || null;
                     if (document.getElementById('dynamic-installments-ser')) {
                         document.getElementById('dynamic-installments-ser').innerText = installments;
                     }
-                    if(data.priceCentavos) {
+                    if (data.priceCentavos) {
                         currentPriceCentavos = data.priceCentavos;
-                        if(document.getElementById('installment-price-ser')) {
+                        if (document.getElementById('installment-price-ser')) {
                             const instPrice = installmentPrice ? installmentPrice : (data.priceCentavos / installments / 100);
-                            document.getElementById('installment-price-ser').innerText = instPrice.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                            document.getElementById('installment-price-ser').innerText = instPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                         }
                     }
-                    
+
                     // Preço antigo (riscado)
-                    if(data.oldPriceText && document.getElementById('dynamic-old-price-ser')) {
+                    if (data.oldPriceText && document.getElementById('dynamic-old-price-ser')) {
                         document.getElementById('dynamic-old-price-ser').innerText = data.oldPriceText;
                         document.getElementById('old-price-container').classList.remove('d-none');
                     } else {
                         document.getElementById('old-price-container').classList.add('d-none');
                     }
-                    
+
                     // Cronômetro promocional
-                    if(data.promoTimer) {
+                    if (data.promoTimer) {
                         document.getElementById('promo-banner-container').classList.remove('d-none');
                         startPromoCountdown('promo-countdown', 'promo-banner-container');
                     } else {
@@ -1616,7 +1841,7 @@
                     if (mode === 'redirect') {
                         if (transparentDiv) transparentDiv.style.display = 'none';
                         if (redirectDiv) redirectDiv.style.display = 'block';
-                        
+
                         const links = data.redirectLinks || {};
                         const select = document.getElementById('payment-link-select');
                         if (select) {
@@ -1630,154 +1855,154 @@
                     } else {
                         if (transparentDiv) transparentDiv.style.display = 'block';
                         if (redirectDiv) redirectDiv.style.display = 'none';
-                        
+
                         if (data.priceCentavos) {
                             window.renderDynamicInstallments(data.priceCentavos, installments, installmentPrice);
                         }
                     }
                 }
-            } catch(e) { console.error("Erro ao carregar configurações", e); }
+            } catch (e) { console.error("Erro ao carregar configurações", e); }
         }
         loadCourseSettings();
 
-        form.addEventListener('submit', async function(e){
-          e.preventDefault();
-          statusEl.textContent = '';
-          const check = validateForm();
-          if(!check.ok){
-            statusEl.textContent = check.message;
-            return;
-          }
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            statusEl.textContent = '';
+            const check = validateForm();
+            if (!check.ok) {
+                statusEl.textContent = check.message;
+                return;
+            }
 
-          showLoading(true);
+            showLoading(true);
 
-          try {
-              const clientsRef = collection(db, "clients");
-              const q = query(clientsRef, where("email", "==", check.data.email));
-              const querySnapshot = await getDocs(q);
+            try {
+                const clientsRef = collection(db, "clients");
+                const q = query(clientsRef, where("email", "==", check.data.email));
+                const querySnapshot = await getDocs(q);
 
-              const clientData = {
-                  name: check.data.nome,
-                  email: check.data.email,
-                  cpf: check.data.cpf,
-                  phone: check.data.telefone,
-                  address: check.data.enderecoCompleto,
-                  birthDate: check.data.nascimento,
-                  company: check.data.empresa || '',
-                  updatedAt: new Date().toISOString()
-              };
+                const clientData = {
+                    name: check.data.nome,
+                    email: check.data.email,
+                    cpf: check.data.cpf,
+                    phone: check.data.telefone,
+                    address: check.data.enderecoCompleto,
+                    birthDate: check.data.nascimento,
+                    company: check.data.empresa || '',
+                    updatedAt: new Date().toISOString()
+                };
 
-              if (!querySnapshot.empty) {
-                  const docRef = querySnapshot.docs[0].ref;
-                  await updateDoc(docRef, clientData);
-              } else {
-                  clientData.classId = 'unassigned';
-                  clientData.role = '';
-                  clientData.tags = ['Inscrição SER'];
-                  clientData.createdAt = new Date().toISOString();
-                  await addDoc(clientsRef, clientData);
-              }
+                if (!querySnapshot.empty) {
+                    const docRef = querySnapshot.docs[0].ref;
+                    await updateDoc(docRef, clientData);
+                } else {
+                    clientData.classId = 'unassigned';
+                    clientData.role = '';
+                    clientData.tags = ['Inscrição SER'];
+                    clientData.createdAt = new Date().toISOString();
+                    await addDoc(clientsRef, clientData);
+                }
 
-              let targetPipelineId = 'p2';
-              const urlParams = new URLSearchParams(window.location.search);
-              const urlPipelineId = urlParams.get('pipeline') || urlParams.get('funnel') || urlParams.get('funil') || urlParams.get('p');
-              
-              if (urlPipelineId) {
-                  targetPipelineId = urlPipelineId;
-              } else {
-                  try {
-                      const pipelinesRef = collection(db, "pipelines");
-                      const pipeSnap = await getDocs(pipelinesRef);
-                      const pipeFound = pipeSnap.docs.find(doc => {
-                          const name = (doc.data().name || "").toLowerCase();
-                          return name.includes("ser");
-                      });
-                      if (pipeFound) {
-                          targetPipelineId = pipeFound.id;
-                      } else {
-                          const newPipe = await addDoc(pipelinesRef, { name: "Treinamento SER" });
-                          targetPipelineId = newPipe.id;
-                      }
-                  } catch(e) {
-                      console.error("Erro ao buscar pipeline", e);
-                  }
-              }
+                let targetPipelineId = 'p2';
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlPipelineId = urlParams.get('pipeline') || urlParams.get('funnel') || urlParams.get('funil') || urlParams.get('p');
 
-              const dealData = {
-                  title: `Inscrição SER - ${check.data.nome}`,
-                  contactName: check.data.nome,
-                  email: check.data.email,
-                  phone: check.data.telefone,
-                  value: 0, 
-                  crmTags: check.data.motivos,
-                  stage: 'lead', 
-                  pipelineId: targetPipelineId,
-                  createdAt: new Date().toISOString()
-              };
-              
-              if (currentDealId) {
-                  await updateDoc(doc(db, "deals", currentDealId), dealData);
-              } else {
-                  const docRef = await addDoc(collection(db, "deals"), dealData);
-                  currentDealId = docRef.id;
-              }
-              saveFormData();
+                if (urlPipelineId) {
+                    targetPipelineId = urlPipelineId;
+                } else {
+                    try {
+                        const pipelinesRef = collection(db, "pipelines");
+                        const pipeSnap = await getDocs(pipelinesRef);
+                        const pipeFound = pipeSnap.docs.find(doc => {
+                            const name = (doc.data().name || "").toLowerCase();
+                            return name.includes("ser");
+                        });
+                        if (pipeFound) {
+                            targetPipelineId = pipeFound.id;
+                        } else {
+                            const newPipe = await addDoc(pipelinesRef, { name: "Treinamento SER" });
+                            targetPipelineId = newPipe.id;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao buscar pipeline", e);
+                    }
+                }
 
-              showLoading(false);
-              goToStep(4);
+                const dealData = {
+                    title: `Inscrição SER - ${check.data.nome}`,
+                    contactName: check.data.nome,
+                    email: check.data.email,
+                    phone: check.data.telefone,
+                    value: 0,
+                    crmTags: check.data.motivos,
+                    stage: 'lead',
+                    pipelineId: targetPipelineId,
+                    createdAt: new Date().toISOString()
+                };
 
-              if (activeCheckoutMode === 'transparent_asaas') {
-                  pixPromise = (async () => {
-                      try {
-                          const nome = document.getElementById('nome').value.trim();
-                          const email = document.getElementById('email').value.trim();
-                          const telefone = document.getElementById('telefone').value.trim();
-                          const cpf = document.getElementById('cpf').value.trim();
-                          const cep = document.getElementById('cep').value.trim();
-                          const logradouro = document.getElementById('logradouro').value.trim();
-                          const numeroEndereco = document.getElementById('numero').value.trim();
-                          const bairro = document.getElementById('bairro').value.trim();
-                          const cidade = document.getElementById('cidade').value.trim();
-                          const uf = document.getElementById('uf').value.trim();
+                if (currentDealId) {
+                    await updateDoc(doc(db, "deals", currentDealId), dealData);
+                } else {
+                    const docRef = await addDoc(collection(db, "deals"), dealData);
+                    currentDealId = docRef.id;
+                }
+                saveFormData();
 
-                          const processarPagamentoAsaas = httpsCallable(functions, 'processarPagamentoAsaas');
-                          const result = await processarPagamentoAsaas({
-                              nome, email, telefone, cpf, cep, logradouro, numeroEndereco, bairro, cidade, uf,
-                              billingType: "PIX",
-                              valorEmCentavos: currentPriceCentavos,
-                              parcelas: 1
-                          });
+                showLoading(false);
+                goToStep(4);
 
-                          if (result.data && result.data.sucesso) {
-                              currentAsaasPaymentId = result.data.paymentId;
-                              return {
-                                  qrCodeBase64: result.data.qrCodeBase64,
-                                  copiaecola: result.data.copiaecola
-                              };
-                          } else {
-                              throw new Error(result.data.mensagem || "Erro ao pré-gerar Pix");
-                          }
-                      } catch (e) {
-                          console.error("Erro na pré-geração do Pix:", e);
-                          return null;
-                      }
-                  })();
-              }
+                if (activeCheckoutMode === 'transparent_asaas') {
+                    pixPromise = (async () => {
+                        try {
+                            const nome = document.getElementById('nome').value.trim();
+                            const email = document.getElementById('email').value.trim();
+                            const telefone = document.getElementById('telefone').value.trim();
+                            const cpf = document.getElementById('cpf').value.trim();
+                            const cep = document.getElementById('cep').value.trim();
+                            const logradouro = document.getElementById('logradouro').value.trim();
+                            const numeroEndereco = document.getElementById('numero').value.trim();
+                            const bairro = document.getElementById('bairro').value.trim();
+                            const cidade = document.getElementById('cidade').value.trim();
+                            const uf = document.getElementById('uf').value.trim();
 
-          } catch(error) {
-              console.error("Erro no Firebase:", error);
-              statusEl.textContent = 'Erro ao processar sua inscrição. Tente novamente.';
-              showLoading(false);
-          }
+                            const processarPagamentoAsaas = httpsCallable(functions, 'processarPagamentoAsaas');
+                            const result = await processarPagamentoAsaas({
+                                nome, email, telefone, cpf, cep, logradouro, numeroEndereco, bairro, cidade, uf,
+                                billingType: "PIX",
+                                valorEmCentavos: currentPriceCentavos,
+                                parcelas: 1
+                            });
+
+                            if (result.data && result.data.sucesso) {
+                                currentAsaasPaymentId = result.data.paymentId;
+                                return {
+                                    qrCodeBase64: result.data.qrCodeBase64,
+                                    copiaecola: result.data.copiaecola
+                                };
+                            } else {
+                                throw new Error(result.data.mensagem || "Erro ao pré-gerar Pix");
+                            }
+                        } catch (e) {
+                            console.error("Erro na pré-geração do Pix:", e);
+                            return null;
+                        }
+                    })();
+                }
+
+            } catch (error) {
+                console.error("Erro no Firebase:", error);
+                statusEl.textContent = 'Erro ao processar sua inscrição. Tente novamente.';
+                showLoading(false);
+            }
         });
 
-        window.selectPayment = function(method){
+        window.selectPayment = function (method) {
             btnPix.classList.remove('selected');
             btnCard.classList.remove('selected');
             pixArea.style.display = 'none';
             cardArea.style.display = 'none';
 
-            if(method === 'pix'){
+            if (method === 'pix') {
                 openPixModal();
             } else {
                 btnCard.classList.add('selected');
@@ -1790,7 +2015,7 @@
             if (modal) {
                 const modalQrImg = document.getElementById('pix-modal-qr-img');
                 const modalInput = document.getElementById('pix-modal-code-input');
-                
+
                 if (activeCheckoutMode === 'transparent_asaas') {
                     if (modalQrImg) modalQrImg.src = "";
                     if (modalInput) modalInput.value = "Gerando Pix...";
@@ -1904,11 +2129,11 @@
             }
         };
 
-        window.goBackToForm = function(){
+        window.goBackToForm = function () {
             goToStep(3);
         };
 
-        window.copyPixCode = function(){
+        window.copyPixCode = function () {
             const copyText = document.getElementById("pix-code-input");
             copyText.select();
             copyText.setSelectionRange(0, 99999);
@@ -1918,21 +2143,21 @@
             }).catch(err => { console.error('Erro ao copiar: ', err); });
         };
 
-        btnPayCard.addEventListener('click', async function(){
+        btnPayCard.addEventListener('click', async function () {
             const selectedOption = installmentsSelect.value;
-            
+
             const ccNumero = document.getElementById('cc-numero').value.replace(/\D/g, '');
             const ccNome = document.getElementById('cc-nome').value.trim();
             const ccValidade = document.getElementById('cc-validade').value;
             const ccCvv = document.getElementById('cc-cvv').value;
-            
+
             cardError.style.display = 'none';
-            if(!selectedOption || ccNumero.length < 13 || !ccNome || ccValidade.length !== 5 || ccCvv.length < 3){
+            if (!selectedOption || ccNumero.length < 13 || !ccNome || ccValidade.length !== 5 || ccCvv.length < 3) {
                 cardError.innerText = 'Por favor, preencha todos os campos do cartão corretamente.';
                 cardError.style.display = 'block';
                 return;
             }
-            
+
             const originalText = btnPayCard.innerText;
             btnPayCard.innerText = 'Processando...';
             btnPayCard.disabled = true;
@@ -1999,73 +2224,73 @@
             }
         });
 
-        document.getElementById('cc-numero')?.addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g,'');
-          if(v.length > 4) v = v.replace(/^(\d{4})(\d+)/g, '$1 $2');
-          if(v.length > 9) v = v.replace(/^(\d{4}) (\d{4})(\d+)/g, '$1 $2 $3');
-          if(v.length > 14) v = v.replace(/^(\d{4}) (\d{4}) (\d{4})(\d+)/g, '$1 $2 $3 $4');
-          e.target.value = v.substring(0, 19);
+        document.getElementById('cc-numero')?.addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 4) v = v.replace(/^(\d{4})(\d+)/g, '$1 $2');
+            if (v.length > 9) v = v.replace(/^(\d{4}) (\d{4})(\d+)/g, '$1 $2 $3');
+            if (v.length > 14) v = v.replace(/^(\d{4}) (\d{4}) (\d{4})(\d+)/g, '$1 $2 $3 $4');
+            e.target.value = v.substring(0, 19);
         });
 
-        document.getElementById('cc-validade')?.addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g, "");
-          if(v.length > 2) v = v.replace(/^(\d{2})(\d+)/g, '$1/$2');
-          e.target.value = v.substring(0, 5);
+        document.getElementById('cc-validade')?.addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            if (v.length > 2) v = v.replace(/^(\d{2})(\d+)/g, '$1/$2');
+            e.target.value = v.substring(0, 5);
         });
 
-        document.getElementById('cc-cvv')?.addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g, "");
-          e.target.value = v.substring(0, 4);
+        document.getElementById('cc-cvv')?.addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            e.target.value = v.substring(0, 4);
         });
 
-        document.getElementById('telefone').addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g,'');
-          if(v.length > 2) v = v.replace(/^(\d{2})(\d+)/g, '($1) $2');
-          if(v.length > 10) v = v.replace(/(\d{5})(\d{4})$/, '$1-$2'); 
-          e.target.value = v.substring(0, 15);
+        document.getElementById('telefone').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 2) v = v.replace(/^(\d{2})(\d+)/g, '($1) $2');
+            if (v.length > 10) v = v.replace(/(\d{5})(\d{4})$/, '$1-$2');
+            e.target.value = v.substring(0, 15);
         });
 
-        document.getElementById('cpf').addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g, "");
-          v = v.replace(/(\d{3})(\d)/, "$1.$2");
-          v = v.replace(/(\d{3})(\d)/, "$1.$2");
-          v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-          e.target.value = v.substring(0, 14);
+        document.getElementById('cpf').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            e.target.value = v.substring(0, 14);
         });
 
-        document.getElementById('nascimento').addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g, "");
-          if (v.length > 8) v = v.slice(0,8);
-          v = v.replace(/(\d{2})(\d)/, "$1/$2"); 
-          v = v.replace(/(\d{2})(\d)/, "$1/$2"); 
-          e.target.value = v;
+        document.getElementById('nascimento').addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            if (v.length > 8) v = v.slice(0, 8);
+            v = v.replace(/(\d{2})(\d)/, "$1/$2");
+            v = v.replace(/(\d{2})(\d)/, "$1/$2");
+            e.target.value = v;
         });
 
         const cepInput = document.getElementById('cep');
-        cepInput.addEventListener('input', function(e){
-           let v = e.target.value.replace(/\D/g, "");
-           if(v.length > 5) v = v.replace(/^(\d{5})(\d)/, "$1-$2");
-           e.target.value = v.substring(0, 9);
+        cepInput.addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            if (v.length > 5) v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+            e.target.value = v.substring(0, 9);
         });
 
-        cepInput.addEventListener('blur', function(e){
+        cepInput.addEventListener('blur', function (e) {
             let cep = e.target.value.replace(/\D/g, '');
-            if(cep.length === 8){
+            if (cep.length === 8) {
                 fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                .then(res => res.json())
-                .then(data => {
-                    if(!data.erro){
-                        document.getElementById('logradouro').value = data.logradouro;
-                        document.getElementById('bairro').value = data.bairro;
-                        document.getElementById('cidade').value = data.localidade;
-                        document.getElementById('uf').value = data.uf;
-                        document.getElementById('numero').focus();
-                        saveFormData();
-                    } else {
-                        alert('CEP não encontrado.');
-                    }
-                })
-                .catch(err => { console.error('Erro ao buscar CEP', err); });
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('logradouro').value = data.logradouro;
+                            document.getElementById('bairro').value = data.bairro;
+                            document.getElementById('cidade').value = data.localidade;
+                            document.getElementById('uf').value = data.uf;
+                            document.getElementById('numero').focus();
+                            saveFormData();
+                        } else {
+                            alert('CEP não encontrado.');
+                        }
+                    })
+                    .catch(err => { console.error('Erro ao buscar CEP', err); });
             }
         });
 
@@ -2117,7 +2342,7 @@
                     if (document.getElementById('cidade')) document.getElementById('cidade').value = data.cidade || '';
                     if (document.getElementById('uf')) document.getElementById('uf').value = data.uf || '';
                     if (document.getElementById('complemento')) document.getElementById('complemento').value = data.complemento || '';
-                    
+
                     if (data.motivos && Array.isArray(data.motivos)) {
                         const inputs = document.querySelectorAll('input[name="motivo"]');
                         inputs.forEach(input => {

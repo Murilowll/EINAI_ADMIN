@@ -19,7 +19,13 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        body, input, select, textarea, button, .btn {
+
+        body,
+        input,
+        select,
+        textarea,
+        button,
+        .btn {
             font-family: 'Poppins', sans-serif;
         }
 
@@ -38,6 +44,7 @@
 
         /* ========== Otimizações Mobile ========== */
         @media (max-width: 768px) {
+
             /* a foto some do fundo do bloco de texto; vira um cartão
                próprio no topo, e o texto passa a ficar sobre a cor
                sólida extraída da base da foto (mesmo tom, sem corte) */
@@ -226,6 +233,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -760,13 +768,25 @@
         }
 
         @keyframes insc-fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes insc-scaleIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -781,10 +801,10 @@
                         class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-end justify-content-md-start align-items-md-center justify-content-xl-center">
                         <div class="flex-column" style="display: flex;max-width: 90%;gap: 16px;">
                             <div class="d-flex align-items-end img-hero" data-aos="fade-down"><img
-                                    src="assets/img/introducao-logo.png" width="140" height="83"
-                                    alt="Introdução à PNL"></div>
+                                    src="assets/img/introducao-logo.png" width="140" height="83" alt="Introdução à PNL">
+                            </div>
                             <div class="div-text-hero" data-aos="fade-up" data-aos-delay="200">
-                                <h2 class="fw-bold color-white">A direção da sua vida muda quando você muda o mapa que
+                                <h2 class="fw-bold color-white">A direção da sua vida muda quando você amplia o mapa que
                                     está usando.</h2>
                                 <p class="my-3 color-white">Três noites, um novo jeito de pensar, agir e se comunicar
                                     com o mundo.</p><a class="btn btn-primary btn-lg btn-amarelo-printcipal"
@@ -822,7 +842,8 @@
                         essenciais da Programação Neurolinguística.<br><br>Você vai aprender a identificar os padrões
                         mentais e emocionais que guiam suas decisões&nbsp;e como mudar esses padrões para construir uma
                         comunicação mais clara, mais eficiente e mais poderosa.&nbsp;<br><br>Esse curso é para quem
-                        quer mais resultado com menos desgaste. E está pronto para assumir o controle da própria
+                        deseja melhorar seus resultados da forma mais eficiente, e está pronto para assumir o controle
+                        da própria
                         mente.&nbsp; </p>
                 </div>
             </div>
@@ -836,7 +857,7 @@
         <div class="container">
             <div class="row mb-5">
                 <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade-up">
-                    <h2 class="fw-bold color-white">Durante 3 dias de curso, você vai mergulhar em temas como:</h2>
+                    <h2 class="fw-bold color-white">Durante 3 dias de curso, você vai aprofundar em temas como:</h2>
                 </div>
             </div>
             <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
@@ -890,17 +911,8 @@
                         <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="51" height="51"
                                 src="assets/img/icons/niveis.svg">
                             <h4 class="card-title"> Níveis neurológicos:</h4>
-                            <p class="card-text">Estrutura interna de crenças, identidade e ação</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col" data-aos="fade-up" data-aos-delay="700">
-                    <div class="card h-100" style="background: #12362e;">
-                        <div class="card-body p-4 card-mergulho h-100"><img class="img-fluid" width="52" height="51"
-                                src="assets/img/icons/metas.svg">
-                            <h4 class="card-title">Metas e valores</h4>
-                            <p class="card-text">Como definir metas objetivos e alcança-los mesmo enfrentando
-                                obstáculos.</p>
+                            <p class="card-text">Estrutura interna de alinhamento: comportamentos, capacidades,
+                                crenças...</p>
                         </div>
                     </div>
                 </div>
@@ -919,9 +931,10 @@
                     style="background: linear-gradient(to bottom, rgba(255,255,255,0.52) 0%, transparent 100%);border-radius: 16px;"
                     data-aos="fade-up">
                     <h2 class="fw-bold color-white">E o melhor:</h2>
-                    <p class="my-3 color-white"> tudo com técnicas que você já pode aplicar no dia seguinte.</p><a
+                    <p class="my-3 color-white"> tudo com técnicas que você já pode aplicar no mesmo dia.</p><a
                         class="btn btn-primary btn-lg mt-4 btn-amarelo-printcipal" role="button"
-                        href="javascript:void(0)" onclick="openInscricaoModal()">QUERO APRENDER ESSAS TÉCNICAS </a>
+                        href="javascript:void(0)" onclick="openInscricaoModal()">QUERO APRENDER ESSAS TÉCNICAS E
+                        ESTRUTURAS </a>
                 </div>
             </div>
         </div>
@@ -966,7 +979,7 @@
                     <div class="card-body p-4 card-2-green"><img class="img-fluid" width="55" height="55"
                             src="assets/img/Frame47.png">
                         <h4 class="card-title"></h4>
-                        <p class="card-text">Criar conexões reais, sem esforço&nbsp;ou&nbsp;tensão</p>
+                        <p class="card-text">Criar conexões reais, sem esforço ou tensão</p>
                     </div>
                 </div>
             </div>
@@ -980,8 +993,8 @@
             <div class="col d-flex flex-column justify-content-start p-4" data-aos="fade-left">
                 <div style="max-width: 400px;height: 100%;">
                     <h1 class="fw-bold">Quem vai te conduzir?</h1>
-                    <p class="my-3">O curso é conduzido por Anderson Ávila, Trainer Master Practitioner em PNL e
-                        Coaching Practitioner, com anos de experiência formando pessoas e liderando processos de
+                    <p class="my-3">O curso é conduzido por Anderson Avila, Trainer Master Practitioner em PNL, com mais
+                        de 25 anos de experiência formando pessoas e liderando processos de
                         transformação profunda.<br>Junto da equipe do Instituto EINAI, você terá acompanhamento
                         próximo, com um método estruturado e apoio profissional em todas as etapas do curso.</p>
                 </div>
@@ -1044,8 +1057,8 @@
                             De R$ <span id="dynamic-old-price-pnl">---,---</span>
                         </div>
                         <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
-                            Por <span style="color: #DEAA4D;"><span id="dynamic-installments-pnl">12</span>x de <br class="d-md-none">R$ <span
-                                    id="installment-price-pnl">---,---</span></span>
+                            Por <span style="color: #DEAA4D;"><span id="dynamic-installments-pnl">12</span>x de <br
+                                    class="d-md-none">R$ <span id="installment-price-pnl">---,---</span></span>
                         </div>
                         <div style="font-size: 0.95rem; color: rgba(255,255,255,0.7);">
                             Ou R$ <span id="dynamic-price-pnl">Carregando...</span> à vista
@@ -1164,7 +1177,8 @@
                         </div>
 
                         <div class="insc-field">
-                            <label for="empresa">Empresa <span style="color: #64748b; font-weight: normal; font-size: 11px;">(Opcional)</span></label>
+                            <label for="empresa">Empresa <span
+                                    style="color: #64748b; font-weight: normal; font-size: 11px;">(Opcional)</span></label>
                             <input id="empresa" name="empresa" type="text" placeholder="Empresa onde trabalha">
                         </div>
 
@@ -1380,24 +1394,28 @@
                             <div class="insc-field">
                                 <label for="installments">Em quantas vezes deseja fazer?</label>
                                 <select id="installments">
-                                        <option value="" disabled selected>Selecione as parcelas...</option>
-                                        <option value="1">1x (À vista)</option>
-                                        <option value="3">3x sem juros</option>
-                                        <option value="6">6x sem juros</option>
-                                        <option value="10">10x sem juros</option>
-                                        <option value="12">12x sem juros</option>
+                                    <option value="" disabled selected>Selecione as parcelas...</option>
+                                    <option value="1">1x (À vista)</option>
+                                    <option value="3">3x sem juros</option>
+                                    <option value="6">6x sem juros</option>
+                                    <option value="10">10x sem juros</option>
+                                    <option value="12">12x sem juros</option>
                                 </select>
                             </div>
 
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; text-align: center;">
+                            <div
+                                style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; text-align: center;">
                                 <p style="margin: 0; font-size: 14px; color: var(--muted);">Valor do Investimento</p>
-                                <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span id="dynamic-price-display">...</span></h3>
+                                <h3 style="margin: 0; color: var(--accent-600); font-weight: 700;">R$ <span
+                                        id="dynamic-price-display">...</span></h3>
                             </div>
 
                             <div class="insc-actions" style="margin-top:16px;">
-                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-card">Finalizar pagamento</button>
+                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-card">Finalizar
+                                    pagamento</button>
                             </div>
-                            <p id="card-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por favor, preencha todos os campos do cartão corretamente.</p>
+                            <p id="card-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por
+                                favor, preencha todos os campos do cartão corretamente.</p>
                         </div>
 
                         <!-- MODO 2: REDIRECIONAMENTO (LINKS) -->
@@ -1409,9 +1427,11 @@
                                 </select>
                             </div>
                             <div class="insc-actions" style="margin-top:16px;">
-                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-link" onclick="openPaymentLink()">Ir para pagamento</button>
+                                <button type="button" class="insc-btn insc-btn-primary" id="btn-pay-link"
+                                    onclick="openPaymentLink()">Ir para pagamento</button>
                             </div>
-                            <p id="redirect-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por favor, selecione uma opção de pagamento.</p>
+                            <p id="redirect-error" style="color:red; font-size:12px; margin-top:8px; display:none;">Por
+                                favor, selecione uma opção de pagamento.</p>
                         </div>
                     </div>
                 </div>
@@ -1443,23 +1463,33 @@
                     <button type="button" class="insc-modal-close" onclick="closePixModal()">&times;</button>
                     <div style="margin-bottom: 16px; text-align: left;">
                         <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #1e293b;">Pagamento via Pix</h2>
-                        <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b; line-height: 1.4;">Escaneie o QR Code ou copie o código abaixo para finalizar sua inscrição.</p>
+                        <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b; line-height: 1.4;">Escaneie o QR
+                            Code ou copie o código abaixo para finalizar sua inscrição.</p>
                     </div>
                     <div style="text-align: center; margin: 20px 0;">
-                        <div class="insc-qr-container" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; display: inline-block;">
-                            <img id="pix-modal-qr-img" src="" alt="QR Code Pix" style="width: 180px; height: 180px; display: block; object-fit: contain;">
+                        <div class="insc-qr-container"
+                            style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; display: inline-block;">
+                            <img id="pix-modal-qr-img" src="" alt="QR Code Pix"
+                                style="width: 180px; height: 180px; display: block; object-fit: contain;">
                         </div>
                     </div>
                     <div style="width:100%">
-                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; text-align: left; color: #475569;">Código Pix (Copia e Cola):</label>
+                        <label
+                            style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block; text-align: left; color: #475569;">Código
+                            Pix (Copia e Cola):</label>
                         <div class="insc-pix-copy-box" style="display: flex; gap: 8px;">
-                            <input type="text" id="pix-modal-code-input" readonly style="background: #f1f5f9; font-size: 13px; color: #334155; border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px; width: 100%;" onclick="this.select()">
-                            <button type="button" class="insc-btn insc-btn-copy" onclick="copyPixModalCode()" style="background: var(--text); color: white; border: none; border-radius: 8px; padding: 0 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Copiar</button>
+                            <input type="text" id="pix-modal-code-input" readonly
+                                style="background: #f1f5f9; font-size: 13px; color: #334155; border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px; width: 100%;"
+                                onclick="this.select()">
+                            <button type="button" class="insc-btn insc-btn-copy" onclick="copyPixModalCode()"
+                                style="background: var(--text); color: white; border: none; border-radius: 8px; padding: 0 16px; font-size: 13px; font-weight: 600; cursor: pointer;">Copiar</button>
                         </div>
-                        <div id="modal-copy-feedback" class="insc-copy-feedback" style="margin-top: 6px; text-align: left;">Código copiado com sucesso!</div>
+                        <div id="modal-copy-feedback" class="insc-copy-feedback"
+                            style="margin-top: 6px; text-align: left;">Código copiado com sucesso!</div>
                     </div>
                     <div style="margin-top: 24px;">
-                        <button type="button" class="insc-btn insc-btn-primary" onclick="confirmPixModalPayment()" style="width: 100%; padding: 12px; border: none; border-radius: 8px; background: #10b981; color: white; font-weight: 600; cursor: pointer; text-align: center;">Concluir</button>
+                        <button type="button" class="insc-btn insc-btn-primary" onclick="confirmPixModalPayment()"
+                            style="width: 100%; padding: 12px; border: none; border-radius: 8px; background: #10b981; color: white; font-weight: 600; cursor: pointer; text-align: center;">Concluir</button>
                     </div>
                 </div>
             </div>
@@ -1574,11 +1604,11 @@
                 try {
                     localStorage.removeItem(STORAGE_PREFIX + 'form_data');
                     localStorage.removeItem(STORAGE_PREFIX + 'deal_id');
-                } catch(e) {}
+                } catch (e) { }
             }
 
             updateProgress(step);
-            
+
             // Scroll to the start of the subscription block when step changes
             const target = document.getElementById('inscricao-section');
             if (target && step > 1) {
@@ -1740,12 +1770,12 @@
             setInterval(update, 1000);
         }
 
-        window.renderDynamicInstallments = function(priceCentavos, installments = 12, installmentPrice = null) {
+        window.renderDynamicInstallments = function (priceCentavos, installments = 12, installmentPrice = null) {
             const select = document.getElementById('installments');
             if (!select) return;
-            
+
             select.innerHTML = '<option value="" disabled selected>Selecione as parcelas...</option>';
-            
+
             const options = [
                 { count: 1, val: 630.00, label: '1x (À vista) - R$ 630,00' },
                 { count: 3, val: 227.00, label: '3x de R$ 227,00' },
@@ -1760,7 +1790,7 @@
             });
         };
 
-        document.getElementById('installments')?.addEventListener('change', function(e) {
+        document.getElementById('installments')?.addEventListener('change', function (e) {
             const select = e.target;
             const selectedOption = select.options[select.selectedIndex];
             const total = parseFloat(selectedOption.getAttribute('data-total'));
@@ -1773,31 +1803,31 @@
             }
         });
 
-        window.openPaymentLink = async function() {
+        window.openPaymentLink = async function () {
             const select = document.getElementById('payment-link-select');
             const err = document.getElementById('redirect-error');
             if (err) err.style.display = 'none';
-            
+
             if (!select || !select.value) {
                 if (err) err.style.display = 'block';
                 return;
             }
-            
+
             if (currentDealId) {
                 try {
                     await updateDoc(doc(db, "deals", currentDealId), { stage: 'won' });
-                } catch(e) { console.error("Erro ao atualizar status CRM:", e); }
+                } catch (e) { console.error("Erro ao atualizar status CRM:", e); }
             }
-            
+
             window.open(select.value, '_blank');
             goToStep(5);
         };
 
-        window.confirmPixPayment = async function() {
+        window.confirmPixPayment = async function () {
             if (currentDealId) {
                 try {
                     await updateDoc(doc(db, "deals", currentDealId), { stage: 'won' });
-                } catch(e) { console.error("Erro ao atualizar status CRM:", e); }
+                } catch (e) { console.error("Erro ao atualizar status CRM:", e); }
             }
             goToStep(5);
         };
@@ -1811,7 +1841,7 @@
                     if (data.location && document.getElementById('dynamic-location-pnl')) document.getElementById('dynamic-location-pnl').innerText = data.location;
                     if (data.priceText && document.getElementById('dynamic-price-display')) document.getElementById('dynamic-price-display').innerText = data.priceText;
                     if (data.priceText && document.getElementById('dynamic-price-pnl')) document.getElementById('dynamic-price-pnl').innerText = data.priceText;
-                    
+
                     const installments = data.installments || 12;
                     const installmentPrice = data.installmentPrice || null;
                     if (document.getElementById('dynamic-installments-pnl')) {
@@ -1849,7 +1879,7 @@
                     if (mode === 'redirect') {
                         if (transparentDiv) transparentDiv.style.display = 'none';
                         if (redirectDiv) redirectDiv.style.display = 'block';
-                        
+
                         const links = data.redirectLinks || {};
                         const select = document.getElementById('payment-link-select');
                         if (select) {
@@ -1863,7 +1893,7 @@
                     } else {
                         if (transparentDiv) transparentDiv.style.display = 'block';
                         if (redirectDiv) redirectDiv.style.display = 'none';
-                        
+
                         if (data.priceCentavos) {
                             window.renderDynamicInstallments(data.priceCentavos, installments, installmentPrice);
                         }
@@ -2023,7 +2053,7 @@
             if (modal) {
                 const modalQrImg = document.getElementById('pix-modal-qr-img');
                 const modalInput = document.getElementById('pix-modal-code-input');
-                
+
                 if (activeCheckoutMode === 'transparent_asaas') {
                     if (modalQrImg) modalQrImg.src = "";
                     if (modalInput) modalInput.value = "Gerando Pix...";
@@ -2153,19 +2183,19 @@
 
         btnPayCard.addEventListener('click', async function () {
             const selectedOption = installmentsSelect.value;
-            
+
             const ccNumero = document.getElementById('cc-numero').value.replace(/\D/g, '');
             const ccNome = document.getElementById('cc-nome').value.trim();
             const ccValidade = document.getElementById('cc-validade').value;
             const ccCvv = document.getElementById('cc-cvv').value;
-            
+
             cardError.style.display = 'none';
-            if(!selectedOption || ccNumero.length < 13 || !ccNome || ccValidade.length !== 5 || ccCvv.length < 3){
+            if (!selectedOption || ccNumero.length < 13 || !ccNome || ccValidade.length !== 5 || ccCvv.length < 3) {
                 cardError.innerText = 'Por favor, preencha todos os campos do cartão corretamente.';
                 cardError.style.display = 'block';
                 return;
             }
-            
+
             const originalText = btnPayCard.innerText;
             btnPayCard.innerText = 'Processando...';
             btnPayCard.disabled = true;
@@ -2232,23 +2262,23 @@
             }
         });
 
-        document.getElementById('cc-numero')?.addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g,'');
-          if(v.length > 4) v = v.replace(/^(\d{4})(\d+)/g, '$1 $2');
-          if(v.length > 9) v = v.replace(/^(\d{4}) (\d{4})(\d+)/g, '$1 $2 $3');
-          if(v.length > 14) v = v.replace(/^(\d{4}) (\d{4}) (\d{4})(\d+)/g, '$1 $2 $3 $4');
-          e.target.value = v.substring(0, 19);
+        document.getElementById('cc-numero')?.addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 4) v = v.replace(/^(\d{4})(\d+)/g, '$1 $2');
+            if (v.length > 9) v = v.replace(/^(\d{4}) (\d{4})(\d+)/g, '$1 $2 $3');
+            if (v.length > 14) v = v.replace(/^(\d{4}) (\d{4}) (\d{4})(\d+)/g, '$1 $2 $3 $4');
+            e.target.value = v.substring(0, 19);
         });
 
-        document.getElementById('cc-validade')?.addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g, "");
-          if(v.length > 2) v = v.replace(/^(\d{2})(\d+)/g, '$1/$2');
-          e.target.value = v.substring(0, 5);
+        document.getElementById('cc-validade')?.addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            if (v.length > 2) v = v.replace(/^(\d{2})(\d+)/g, '$1/$2');
+            e.target.value = v.substring(0, 5);
         });
 
-        document.getElementById('cc-cvv')?.addEventListener('input', function(e){
-          let v = e.target.value.replace(/\D/g, "");
-          e.target.value = v.substring(0, 4);
+        document.getElementById('cc-cvv')?.addEventListener('input', function (e) {
+            let v = e.target.value.replace(/\D/g, "");
+            e.target.value = v.substring(0, 4);
         });
 
         document.getElementById('telefone').addEventListener('input', function (e) {
@@ -2350,7 +2380,7 @@
                     if (document.getElementById('cidade')) document.getElementById('cidade').value = data.cidade || '';
                     if (document.getElementById('uf')) document.getElementById('uf').value = data.uf || '';
                     if (document.getElementById('complemento')) document.getElementById('complemento').value = data.complemento || '';
-                    
+
                     if (data.motivos && Array.isArray(data.motivos)) {
                         const inputs = document.querySelectorAll('input[name="motivo"]');
                         inputs.forEach(input => {
