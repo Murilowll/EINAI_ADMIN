@@ -1026,8 +1026,7 @@
                                 <line x1="8" y1="2" x2="8" y2="6"></line>
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
-                            <span id="dynamic-date-pnl" style="font-weight: 500; font-size: 14px;">Carregando
-                                data...</span>
+                            <span id="dynamic-date-pnl" style="font-weight: 500; font-size: 14px;">29 e 30 de Setembro e 01 de Outubro</span>
                         </div>
                         <div class="d-flex align-items-center gap-2 px-3 py-2"
                             style="background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
@@ -1837,7 +1836,7 @@
                 const docSnap = await getDoc(doc(db, "settings", "course_pnl"));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if (data.date && document.getElementById('dynamic-date-pnl')) document.getElementById('dynamic-date-pnl').innerText = data.date;
+                    // data fixa no HTML (turma 29/09 a 01/10); o campo date do Firestore não sobrescreve mais
                     if (data.location && document.getElementById('dynamic-location-pnl')) document.getElementById('dynamic-location-pnl').innerText = data.location;
                     if (data.priceText && document.getElementById('dynamic-price-display')) document.getElementById('dynamic-price-display').innerText = data.priceText;
                     if (data.priceText && document.getElementById('dynamic-price-pnl')) document.getElementById('dynamic-price-pnl').innerText = data.priceText;
